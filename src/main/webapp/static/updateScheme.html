@@ -217,8 +217,8 @@ label {
 						    background-image: none;
 						    border: 1px solid #ccc;" name="fanDian" id="fanDian">
 						    <option ></option>
-						  <option value ="0">区间式</option>
-						  <option value ="1">浮点式</option>
+						  <option id="wqjs" value ="0">区间式</option>
+						  <option id="wfds" value ="1">浮点式</option>
 						</select>
 					</div>
 					<div style="display:none;" id="fdz">
@@ -246,8 +246,8 @@ label {
 						    background-image: none;
 						    border: 1px solid #ccc;" name="agentFanDian" id="agent">
 								<option ></option>
-								<option value ="0">区间式</option>
-								<option value ="1">浮点式</option>
+								<option id="sqjs" value ="0">区间式</option>
+								<option id="sfds" value ="1">浮点式</option>
 							</select>
 						</div>
 						<div style="display:none;" id="fdz2">
@@ -298,6 +298,51 @@ label {
 			$("#fanDianScheme1").val(result.content.fanDianScheme);
 			$("#disanfang").val(result.content.disanfang);
 			$("#agentScheme").val(result.content.agentFanDianScheme);
+			//正常返点
+			if(result.content.fanDian==0){//区间
+				$("#wqjs").attr("selected", "selected");
+                $("#fdz").show();
+                if($(this).val() == 1) {
+                    $("#fdzLable").text("返点百分比:");
+                    $("#dw").show();
+                }  else {
+                    $("#fdzLable").text("返利金额:");
+                    $("#dw").hide();
+                }
+			}else if(result.content.fanDian==1){//浮点
+                $("#wfds").attr("selected", "selected");
+                $("#fdz").show();
+                if($(this).val() == 1) {
+                    $("#fdzLable").text("返点百分比:");
+                    $("#dw").show();
+                }  else {
+                    $("#fdzLable").text("返利金额:");
+                    $("#dw").hide();
+                }
+			}
+			//代理返点
+            if(result.content.agentFanDian==0){//区间
+                $("#sqjs").attr("selected", "selected");
+                $("#fdz2").show();
+                if($(this).val() == 1) {
+                    $("#fdzLable2").text("返点百分比:");
+                    $("#dw2").show();
+                }  else {
+                    $("#fdzLable2").text("返利金额:");
+                    $("#dw2").hide();
+                }
+
+            }else if(result.content.agentFanDian==1){//浮点
+                $("#sqjs").attr("selected", "selected");
+                $("#fdz2").show();
+                if($(this).val() == 1) {
+                    $("#fdzLable2").text("返点百分比:");
+                    $("#dw2").show();
+                }  else {
+                    $("#fdzLable2").text("返利金额:");
+                    $("#dw2").hide();
+                }
+            }
 			var a = result.content.shangjia;
 			if(a=='2'){
 				$("#pc").prop('checked','true');
