@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>数据中心 - 修改密码</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="css/thirdParty/bootstrap.css">
+<link href="css/thirdParty/font-awesome.min.css" rel="stylesheet">
+<link href="css/animate.min.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+</head>
+<body class="gray-bg">
+	<div class="middle-box text-center loginscreen  animated fadeInDown">
+		<div>
+			<h3>修改密码</h3>
+			<i class="text-danger"></i>
+			<form id="change" action="change.do" class="m-t" method="post"
+				role="form">
+				<input name="__RequestVerificationToken" type="hidden"
+					value="8oO92LaNwmUAHdLjAFGlqBk8Uovx56yGY5-crftTb4rNuMsEdI-ttDdmCGKZ6S6yDni1SJ7FbVLbxhIzBdQz08Hm0pOo3txwPbwVp7x6bxo1" />
+				<div class="form-group">
+					<input type="password" class="form-control" placeholder="原密码"
+						required="" name="oldpwd" id="oldpwd">
+				</div>
+				<div class="form-group">
+					<input type="password" class="form-control" placeholder="新密码"
+						required="" name="newpwd1" id="newpwd1">
+				</div>
+				<div class="form-group">
+					<input type="password" class="form-control" placeholder="再次输入密码"
+						equalTo="'#newpwd1'" required="" name="newpwd2">
+				</div>
+				<button type="submit" class="btn btn-primary block full-width m-b">确
+					定</button>
+			</form>
+		</div>
+	</div>
+	<script src="js/thirdParty/jquery.min.js"></script>
+	<script src="js/thirdParty/bootstrap.js"></script>
+	<script src="js/thirdParty/jquery.form.min.js"></script>
+	<script>
+		(function() {
+			//表单验证异步提交
+			function bindsumbit() {
+				var $submit_application = $('#change');
+				var options = {
+					beforeSerialize : function() {
+					},
+					beforeSubmit : function() {
+						$('.m-b').button('loading');
+					},
+					success : function(data) {
+						if (data.code == 0)
+							layer.msg("修改成功");
+						else
+							layer.msg(data.message);
+						$('.m-b').button('reset');
+					},
+					error : function() {
+						//layer.msg("提交失败，请检查网络是否正常，或者刷新试试！");
+						$('.m-b').button('reset');
+					}
+				};
+				$submit_application.ajaxForm(options);
+			}
+			$().ready(function() {
+				bindsumbit();
+			});
+		})();
+	</script>
+</body>
+</html>

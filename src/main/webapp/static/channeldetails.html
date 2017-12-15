@@ -1,0 +1,1164 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<title>渠道审核详情页</title>
+<link rel="stylesheet" href="../css/thirdParty/bootstrap.css">
+<link rel="stylesheet" href="../css/thirdParty/bootstrap-table.min.css">
+<link rel="stylesheet" href="../plugins/layui/css/layui.css">
+<style>
+h1 {
+	font-size: 36px;
+}
+</style>
+<style>
+.panel-heading button {
+	padding: 2px 4px;
+}
+
+.list-group span {
+	float: right;
+	margin-right: 200px;
+}
+
+.submit-serviceinfo {
+	margin: 10px 10px;
+}
+
+.enter-pass {
+	display: none;
+	margin: 15px 15px 0 15px;
+}
+
+.turndown-info {
+	display: none;
+	margin: 15px 15px 0 15px;
+}
+
+.basictable td:nth-child(2n+1) {
+	width: 200px;
+	background-color: #eee;
+}
+
+.row {
+	margin: 0 5px;
+}
+</style>
+</head>
+
+<body>
+	
+	<div class="container-fluid">
+		<div class="row" style="margin-top: 20px;">
+			<div class="col-lg-5 col-lg-offset-5">
+				<button class="btn btn-default" id="claim-application">认领此申请</button>
+				<div class="show-appbtn" style="display: none;">
+					<button class="btn btn-default" id="release-application">释放此申请</button>
+					<button class="btn btn-default" id="enter-appliction">确认通过</button>
+					<button class="btn btn-default" id="trundown-application">驳回申请</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="channel-application">
+			<div class="row">
+				<div class="col-lg-12">
+					<h1 id="oop">申请信息</h1>
+
+				</div>
+
+			</div>
+			<hr />
+			<div class="row basictable" id="ui1" style="display: none;">
+				<table class="table table-bordered">
+					<tr>
+						<td>渠道名称</td>
+						<td id="qdmc"></td>
+						<td>公司名称</td>
+						<td id="gsmc"></td>
+					</tr>
+					<tr>
+						<td>联系人名称</td>
+						<td id="lxr"></td>
+						<td>联系方式</td>
+						<td id="lx"></td>
+					</tr>
+					<tr>
+						<td>展现形式</td>
+						<td id="zx"></td>
+						<td>发起时间</td>
+						<td id="cjtime"></td>
+					</tr>
+					<tr>
+						<td>渠道描述</td>
+						<td colspan="3" id="qdms"></td>
+					</tr>
+					<tr>
+						<td>提交人</td>
+						<td id="tjr"></td>
+						<td>提交组</td>
+						<td id="tjz"></td>
+					</tr>
+				</table>
+			</div>
+			<div class="row basictable" id="ui2" style="display: none;">
+				<table class="table table-bordered">
+					<tr>
+						<td>公众号名称</td>
+						<td id="gzhmc5"></td>
+						<td>公众号类型</td>
+						<td id="gzhlx5"></td>
+					</tr>
+					<tr>
+						<td>微信名称</td>
+						<td id="wxmc5"></td>
+						<td>公司名称</td>
+						<td id="gsmc5"></td>
+					</tr>
+					<tr>
+						<td>联系人</td>
+						<td id="lxr5"></td>
+						<td>联系方式</td>
+						<td id="lx5"></td>
+					</tr>
+					<tr>
+						<td>粉丝数</td>
+						<td id="fss5"></td>
+						<td>头条近七天阅读量</td>
+						<td id="tq5"></td>
+					</tr>
+					<tr>
+						<td>次条近七天阅读量</td>
+						<td id="cq5"></td>
+						<td>发起时间</td>
+						<td id="cjtime5"></td>
+					</tr>
+					<tr>
+						<td>渠道描述</td>
+						<td colspan="3" id="qdms5"></td>
+					</tr>
+					<tr>
+						<td>提交人</td>
+						<td id="tjr5"></td>
+						<td>提交组</td>
+						<td id="tjz5"></td>
+					</tr>
+				</table>
+			</div>
+			<div class="row basictable" id="ui3" style="display: none;">
+				<table class="table table-bordered">
+					<tr>
+						<td>渠道名称</td>
+						<td id="qdmc1"></td>
+						<td>公司名称</td>
+						<td id="gsmc1"></td>
+					</tr>
+					<tr>
+						<td>联系人名称</td>
+						<td id="lxr1"></td>
+						<td>联系方式</td>
+						<td id="lx1"></td>
+					</tr>
+					<tr>
+						<td>发起时间</td>
+						<td colspan="3" id="cjtime1"></td>
+					</tr>
+					<tr>
+						<td>渠道描述</td>
+						<td colspan="3" id="qdms1"></td>
+					</tr>
+					<tr>
+						<td>提交人</td>
+						<td id="tjr1"></td>
+						<td>提交组</td>
+						<td id="tjz1"></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<div class="serviceprovider-info" style="display: none;">
+
+			<div class="row">
+				<div class="col-lg-12">
+					<h1 id="fwsxx">服务商信息</h1>
+				</div>
+			</div>
+			<hr />
+			<div class="service-info-added">
+				<!--两套模板渲染官方和代理服务商信息-->
+				<div class="row" style="margin-bottom: 10px;">
+					<table id="addserviceinfo"></table>
+				</div>
+
+			</div>
+
+			<div class="service-form" style="border: 1px solid #eee;" id="uiuo">
+				<!--新增服务商信息表单-->
+				<form class="submit-serviceinfo" action="../provider/save.do"
+					method="post" id="service">
+					<input type="hidden" value='' name="idd" id="idd"/>
+					<div class="form-group">
+						<div class="row">
+							<div class="col-lg-1">
+								<label>是否官方：</label>
+							</div>
+							<div class="col-lg-1">
+								<label class="radio-inline"> 
+									<input type="radio" name="Type" id="change-office" value="0">
+									官方
+								</label>
+							</div>
+							<div class="col-lg-1">
+								<label class="radio-inline"> <input type="radio"
+									name="Type" id="change-agent" value="1"> 代理
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="service-info"></div>
+				</form>
+			</div>
+
+
+		</div>
+
+		<div class="office-info" style="display: none;">
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="channelname">首投金额:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" name="FirstInvest"
+							required placeholder="只允许数字" onkeyup="keepNumOrDecimal(this)"
+							onblur="keepNumOrDecimal(this)">
+					</div>
+
+
+					<div class="col-lg-1">
+						<label for="companyname">报价:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" name="Offer" required
+							placeholder="只允许数字" onkeyup="keepNumOrDecimal(this)"
+							onblur="keepNumOrDecimal(this)">
+					</div>
+
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="channelname">返点:</label>
+					</div>
+					<div class="col-lg-2">
+						<select class="form-control" name="RebateType" id="fandian">
+							<option value="2">首返</option>
+							<option value="1">续返</option>
+							<option value="0">无</option>
+						</select>
+					</div>
+					<div class="col-lg-1">
+						<label for="channelname">返点比例(%):</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" name="RebateProportion"
+							placeholder="只允许数字" onkeyup="keepNumOrDecimal(this)" required
+							onblur="keepNumOrDecimal(this)" id="fandianbili">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="show">发票类型:</label>
+					</div>
+					<div class="col-lg-2">
+						<select class="form-control" name="InvoiceType">
+							<option value="0">增值税专票</option>
+							<option value="1">增值税普票</option>
+							<option value="2">普通发票</option>
+							<option value="3">无</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label>是否可退款：</label>
+					</div>
+					<div class="col-lg-1">
+						<label class="radio-inline"> <input type="radio"
+							name="CanRefund" id="is" value="1" checked="checked"> 是
+						</label>
+					</div>
+					<div class="col-lg-1">
+						<label class="radio-inline"> <input type="radio"
+							name="CanRefund" id="none" value="2"> 否
+						</label>
+					</div>
+				</div>
+			</div>
+			<hr />
+			<div class="row">
+				<div class="col-lg-1 col-lg-offset-3">
+					<input type="submit" class="btn btn-default save" value="保存" />
+				</div>
+			</div>
+		</div>
+		<div class="agent-info" style="display: none;">
+			<input type="hidden" id="proId" name="ProviderId">
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="channelname">代理商名称:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" 
+						autocomplete="off" class="form-control" id="agentname11" list="agentname" name="Name" placeholder="" required>
+						<datalist id="agentname">
+						</datalist>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact">联系人:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="contact" required autocomplete="off"
+							placeholder="" name="ContactName">
+					</div>
+					<div class="col-lg-1">
+						<label for="contactway">联系方式:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="contactway" required autocomplete="off"
+							placeholder="" name="ContactWay">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="show">发票类型:</label>
+					</div>
+					<div class="col-lg-2">
+						<select class="form-control" name="InvoiceType" id="leixing">
+
+							<option value="0">增值税专票</option>
+							<option value="1">增值税普票</option>
+							<option value="2">普通发票</option>
+							<option value="3">无</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label>是否可退款：</label>
+					</div>
+					<div class="col-lg-1">
+						<label class="radio-inline"> <input type="radio"
+							name="CanRefund" value="1"> 是
+						</label>
+					</div>
+					<div class="col-lg-1">
+						<label class="radio-inline"> <input type="radio"
+							name="CanRefund" value="2"> 否
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="companyname">报价:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="companyname" required
+							placeholder="只允许数字" onkeyup="keepNumOrDecimal(this)"
+							onblur="keepNumOrDecimal(this)" name="Offer">
+					</div>
+					<div class="col-lg-1">
+						<label for="show">返点:</label>
+					</div>
+					<div class="col-lg-2">
+						<select class="form-control" name="RebateType" id="fandian1">
+							<option value="2">首返</option>
+							<option value="1">续返</option>
+							<option value="0">无</option>
+						</select>
+					</div>
+					<div class="col-lg-1">
+						<label for="companyname">返点比例（%）:</label>
+					</div>
+					<div class="col-lg-2" >
+						<input type="text" class="form-control" id="fdbl" required
+							placeholder="只允许数字" onkeyup="keepNumOrDecimal(this)"
+							onblur="keepNumOrDecimal(this)" name="RebateProportion">
+					</div>
+				</div>
+			</div>
+			<hr />
+			<div class="row">
+				<div class="col-lg-1 col-lg-offset-3">
+					<input type="submit" class="btn btn-default save1" value="保存" />
+				</div>
+				<div class="col-lg-2">
+					<input type="submit" class="btn btn-default"
+						id="save-and-add-agentinfo" value="保存并新增一条" />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="enter-pass">
+		<div class="form-group">
+			<label for="last-agent">请选择最终代理商：</label> <select
+				class="form-control" id="last-agent">
+				
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="last-price">请输入最终成交价：</label> <input type="text" required
+				class="form-control" id="last-price" placeholder="只允许数字"
+				onkeyup="keepNumOrDecimal(this)" onblur="keepNumOrDecimal(this)">
+		</div>
+	</div>
+	<div class="turndown-info">
+		<textarea class="form-control" rows="6"
+			placeholder="请输入驳回原因，字数200字以内！" maxlength="200" id="po"></textarea>
+	</div>
+
+
+
+	<div id="serviceprov" style="display: none;">
+		<div class="row">
+			<div class="col-lg-12">
+				<h1>复审驳回理由</h1>
+			</div>
+		</div>
+		<hr>
+		<div class="service-info-added">
+			<div class="row" style="margin-left: 10px;" id="iji"></div>
+		</div>
+	</div>
+
+
+	<div id="uiui"></div>
+
+	<div class="row" style="margin-top: 20px;">
+		<div class="col-lg-12">
+			<h1>审核记录</h1>
+		</div>
+	</div>
+	<hr>
+	<div class="row optb">
+		<table class="table table-bordered" id="tb_oplog">
+			<tr>
+				<td id="tttt">2017-07-07 15:21</td>
+				<td id="ttttt">数据研发中心 张云观</td>
+				<td id="tttttt">申请渠道</td>
+			</tr>
+		</table>
+	</div>
+	
+
+	<script src="../js/thirdParty/jquery.min.js"></script>
+	<script src="../js/thirdParty/bootstrap.js"></script>
+	<script src="../js/thirdParty/bootstrap-table.min.js"></script>
+	<script src="../js/thirdParty/bootstrap-table-zh-CN.min.js"></script>
+	<script src="../plugins/layui/layui.js"></script>
+	<script src="../scripts/channeldetails.js"></script>
+	<script src="../js/thirdParty/jquery.form.min.js"></script>
+	<script type="text/javascript">
+	$(function(){
+		$("#change-office").attr("checked","checked");
+	});
+		
+	
+	</script>
+	<script>
+		$(function(){
+				
+				var id= parent.$('#id').data("shenheid");
+				$("#idd").val(id);
+				
+				var url = "../apply/readChannel.do";
+				var data = {
+					"id" : id
+				};
+				$.post(url, data, function(result) {
+					if (result.state == 0) {
+						var ls = result.data;
+						var map = ls[0];
+						
+						$('#qdmc').html(map.Name);
+						$('#gsmc').html(map.CompanyName);
+						$('#lxr').html(map.ContactName);
+						$('#lx').html(map.ContactWay);
+						$('#zx').html(map.DisplayWay);
+						$('#cjtime').html(
+								map.StartDate + "--" + map.EndDate);
+						$('#qdms').html(map.Details);
+						$('#tjr').html(map.pesonName);
+						$('#tjz').html(map.UserGroup);
+						
+						
+						$('#qdmc1').html(map.Name);
+						$('#gsmc1').html(map.CompanyName);
+						$('#lxr1').html(map.ContactName);
+						$('#lx1').html(map.ContactWay);
+						$('#cjtime1').html(
+								map.StartDate + "--" + map.EndDate);
+						$('#qdms1').html(map.Details);
+						$('#tjr1').html(map.pesonName);
+						$('#tjz1').html(map.UserGroup);
+						
+						$('#gzhmc5').html(map.Name);
+						$('#gzhlx5').html(map.yuyu);
+						$('#wxmc5').html(map.WeiXinName);
+						$('#gsmc5').html(map.CompanyName);
+						$('#lxr5').html(map.ContactName);
+						$('#lx5').html(map.ContactWay);
+						$('#fss5').html(map.ContactWay);
+						$('#tq5').html(map.HeadlineReading);
+						$('#cq5').html(map.SecondaryReading);
+						$('#qdms5').html(map.Details);
+						$('#cjtime5').html(
+								map.StartDate + "--" + map.EndDate);
+						$('#tjr5').html(map.pesonName);
+						$('#tjz5').html(map.UserGroup);
+						
+						if (map.TypeId == 0 || map.TypeId == 1) {
+							$('#ui1').show();
+							$('#ui2').hide();
+							$('#ui3').hide();
+
+						} else if (map.TypeId == 2 || map.TypeId == 3) {
+							$('#ui1').hide();
+							$('#ui2').show();
+							$('#ui3').hide();
+						} else {
+							$('#ui1').hide();
+							$('#ui2').hide();
+							$('#ui3').show();
+						}
+
+						$('#tttt').html(map.CreateTime);
+						$('#ttttt').html(
+								map.UserGroup + " " + map.pesonName);
+
+						if (map.State == 1) {
+							$claim_application.hide();
+							$serviceprovider_info.show();
+							//显示另外三个按钮操作信息
+							$show_appbtn.show();
+							//渲染表单信息
+							init_service_info_form();
+							var pro = ls[1];
+							$('#addserviceinfo').bootstrapTable("load",pro);
+						}
+						var userid = document.cookie.match(new RegExp(
+								"(^| )userid=([^;]*)(;|$)"));
+						if (userid == null)
+							return;
+
+						if (map.Auditor != userid[2]) {
+							$show_appbtn.hide();
+						}
+						if ( map.State == 3 || map.State == 4
+								|| map.State == 5 || map.State == 6) {
+							$claim_application.hide();
+							$serviceprovider_info.show();
+							$('#uiuo').hide();
+							init_service_info_form();
+
+							var pro = ls[1];
+							$('#addserviceinfo').bootstrapTable("load",pro);
+
+						}
+
+						if (map.State == 2) {
+							$('#serviceprov').show();
+							$claim_application.hide();
+							//	$serviceprovider_info.show();
+							$('#iji').html(map.RejectedReason);
+						}
+
+						
+
+						if (map.ReceiveTime != null) {
+							$('#tb_oplog')
+									.append(
+											$('<tr>' + '<td>'
+													+ map.ReceiveTime
+													+ '</td>' + '<td>'
+													+ map.dep + " "
+													+ map.renPer
+													+ '</td>'
+													+ '<td>认领渠道</td>'
+													+ '</tr>'));
+						}
+						if (map.AuditTime != null) {
+							$('#tb_oplog').append(
+									$('<tr>' + '<td>' + map.AuditTime
+											+ '</td>' + '<td>'
+											+ map.dep + " "
+											+ map.renPer + '</td>'
+											+ '<td>渠道审核通过</td>'
+											+ '</tr>'));
+						}
+						if (map.State == 2) {
+							$('#tb_oplog').append(
+									$('<tr>' + '<td>'
+											+ map.RejectedTime
+											+ '</td>' + '<td>'
+											+ map.dep + " "
+											+ map.renPer + '</td>'
+											+ '<td>已驳回申请</td>'
+											+ '</tr>'));
+						}
+						if (map.ReviewTime != null) {
+							$('#tb_oplog').append(
+									$('<tr>' + '<td>' + map.ReviewTime
+											+ '</td>' + '<td>'
+											+ map.dep1 + " "
+											+ map.renPer1 + '</td>'
+											+ '<td>待上传合同</td>'
+											+ '</tr>'));
+						}
+						if (map.State == 7) {
+							$('#serviceprov').show();
+							//	$serviceprovider_info.show();
+							$claim_application.hide();
+							$('#iji').html(map.ReviewRejectedReason);
+
+							$('#tb_oplog').append(
+									$('<tr>' + '<td>'
+											+ map.RejectedTime
+											+ '</td>' + '<td>'
+											+ map.dep + " "
+											+ map.renPer
+											+'</td>'
+											+ '<td>复审已驳回申请</td>'
+											+ '</tr>'));
+						}
+					} else {
+						parent.layer.msg(result.message);
+					}
+				});
+		});
+			
+
+	
+		var $serviceprovider_info = $('.serviceprovider-info'), $claim_application = $('#claim-application'), $service_info = $('.service-info'), $office_info = $('.office-info'), $agent_info = $('.agent-info'), $change_office = $('#change-office'), $change_agent = $('#change-agent'), $save_and_add_agentinfo = $('#save-and-add-agentinfo'), $show_appbtn = $('.show-appbtn'), $release_application = $('#release-application'), $enter_appliction = $('#enter-appliction'), $trundown_application = $('#trundown-application'), $turndown_info = $('.turndown-info');
+
+		$claim_application.on('click', function() {
+			//默认官方选中
+			$change_office.click();
+
+			//发送一个领取的请求，请求成功之后显示服务商信息
+			$claim_application.hide();
+
+			$serviceprovider_info.show();
+
+			//显示另外三个按钮操作信息
+			$show_appbtn.show();
+
+			//渲染表单信息
+			init_service_info_form();
+
+			
+			updateAuditor();//更新认领
+
+
+		});
+		$release_application.on('click', function() {
+			//点击释放申请按钮，请求数据成功，隐藏其他三个按钮，显示认领按钮
+			$show_appbtn.hide();
+			$claim_application.show();
+			//删除服务商信息，并隐藏服务商添加表单
+
+			$service_info.empty();
+			$serviceprovider_info.hide();
+
+			updateAuditor0();
+		});
+		$trundown_application.on('click', function() {
+			layer.open({
+				type : 1,
+				shade : false,
+				area : [ '420px', '260px' ],
+				btn : [ '确认' ],
+				yes : function(index, layero) {
+					//点击确认之后验证输入框信息
+					//若驳回原因未填写，则点击确定不予通过，并且
+					//提示用户填写驳回原因
+					var url = "../apply/trundown.do";
+					var content = $('#po').val();
+
+					if(content==null||content==""){
+						parent.layer.msg("驳回原因未填写,请填写");
+						return false;
+					}
+
+					var idd = $("#idd").val();
+					var data = {
+						"idd" : idd,
+						"content" : content
+					};
+
+					$.post(url, data, function(result) {
+
+						if (result.state == 0) {
+							var data = result.data;
+							//	console.log(data);
+							/* $(".layui-body-container").load(
+									"static/channelreview.html"); */
+							parent.$(".layui-show iframe").attr("src","static/channelreview.html"); 
+						} else {
+							parent.layer.msg(result.message);
+						}
+					});
+
+				},
+				content : $turndown_info
+			});
+		});
+		
+		
+		//初始化服务商信息提交表单
+		function init_service_info_form() {
+			//首先显示官方服务商表单
+			$service_info.append($office_info);
+			$office_info.show();
+			//绑定官方与代理商的表单切换
+			officetoagent_change();
+		}
+		
+
+		//事件切换
+		function officetoagent_change() {
+			$change_office.on('click', function() {
+				$service_info.empty();
+				$service_info.append($office_info);
+				$office_info.show();
+				//返点类型发生改变时判断
+				$("#fandian").change(function(){
+					//官方的返点
+					if($("#fandian").val()==0){
+						$("#fandianbili").attr("disabled",true);
+					}else{
+						$("#fandianbili").attr("disabled",false);
+					}
+				});
+			});
+			$change_agent.on('click', function() {
+				$service_info.empty();
+				$service_info.append($agent_info);
+				$agent_info.show();
+				//绑定保存并新增按钮事件
+
+				//载入代理商
+				loadAgent();
+				
+				$("#fandian1").change(function(){
+					//代理的返点
+					if($("#fandian1").val()==0){
+						$("#fdbl").attr("disabled",true);
+					}else{
+						$("#fdbl").attr("disabled",false);
+					}
+				});
+				
+				$("#agentname11").change(function(){
+					
+					
+					var value = $("#agentname11").val();
+					if(value!=""){
+						var a = $("#agentname").find("option[value="+value+"]").data("neirong");
+						
+						if(a==null||a==""){
+							parent.layer.msg("没有对应的服务商，请重新填写");
+							$("#agentname11").val("");
+							$("#contact").val("");
+							$("#contactway").val("");
+							$("#leixing").children().eq(0).attr("selected",'selected');
+							return false;
+						}
+						$("#proId").val(a.id);
+						$("#contact").val(a.ContactName);
+						$("#contactway").val(a.ContactWay);
+						var b = $("#leixing").children();
+						
+						for(var i=0;i<b.length;i++){
+								$(b[i]).removeAttr("selected");
+						}
+						for(var i=0;i<b.length;i++){
+							if(b[i].value==a.InvoiceType){
+								$(b[i]).attr("selected",'selected');
+							}
+						}
+					}else{
+						$("#proId").val("");
+						$("#contact").val("");
+						$("#contactway").val("");
+						var b = $("#leixing").children();
+						for(var i=0;i<b.length;i++){
+							$(b[i]).removeAttr("selected");
+					}
+					}
+					
+					
+				});
+			});
+		}
+		
+		function loadAgent(){
+			var url = "../provider/loadagent.do";
+			var data = {};
+			$.post(url, data, function(result) {
+
+				if (result.state == 0) {
+					$('#agentname').empty();
+					var data = result.data;
+					for(var i=0;i<data.length;i++){
+						$('#agentname').append('<option id="abc'+data[i].id+'" lable="'+data[i].id+'" value="'+data[i].Name+'">');	
+						$("#abc"+data[i].id+"").data("neirong",data[i]);
+					} 
+			//		$("#agentname").data("agent",data);
+				} else {
+					parent.layer.msg(result.message);
+				}
+			});
+			
+		}
+		
+		
+
+		//保存并新增代理商信息事件绑定
+		function saveAndAdd_angentInfo() {
+			//表单提交成功并返回插入的记录
+			//将返回的信息写入服务商信息显示栏
+		}
+
+		layui.use([ 'layer' ], function() {
+			var layer = layui.layer, $ = layui.jquery;
+			$enter_appliction.on('click', function() {
+				
+				var url = "../provider/readP.do";
+				var data = {"idd" : $('#idd').val()};
+				$.ajax({  
+			          type : "post",  
+			          url : url,  
+			          data : data,  
+			          async : false,   //同步
+			          success : function(result){  
+			        	  if (result.state == 0) {
+								var d = result.data;
+								if(d==null||d==""){
+									parent.layer.msg("请填写服务商");
+									return false;
+								}else{
+									layer.open({
+										type : 1,
+										shade : false,
+										area : [ '420px', '260px' ],
+										btn : [ '确认' ],
+										success : function(layero, index) {
+											$("#last-agent").empty();
+											var fws = d;
+											if (fws[0].Type == 0) {
+												$("#last-agent").append("<option value='"+fws[0].Id+"'>官方</option>");
+											} else {
+												for (var i = 0; i < fws.length; i++) {
+													if (fws[i] != "" && fws[i] != null) {
+														
+														$("#last-agent").append(
+															"<option value='"+fws[i].Id+"'>"
+																				+ fws[i].Name
+																				+ "</option>");
+													}
+
+												}
+											}
+										},
+										yes : function(index, layero) {
+											//点击确认之后验证输入框信息
+											//点击弹窗页面的确定按钮后页面跳转至渠道审核页面并且更新该渠道审核状态
+											queren();
+										},
+										content : $('.enter-pass')
+									});
+								}
+							} else {
+								parent.layer.msg(result.message);
+							}
+			          }  
+			     }); 
+			});
+			
+		});
+
+		//初始化代理商列表显示表格
+		//删除服务商
+		function f2(id,ChannelAppId) {
+ 			var url = "../provider/del.do";
+			var data = {
+					"id":id,
+					"ChannelAppId":ChannelAppId
+			};
+			$.post(url,data,function(result){
+				if(result.state==0){
+					$('#addserviceinfo').bootstrapTable("load",result);
+				}else{
+					parent.layer.msg(result.message);
+				}
+			});
+		}
+
+		$('#addserviceinfo')
+				.bootstrapTable(
+						{
+
+							columns : [
+									{
+										field : 'Type',
+										title : '是否官方',
+										formatter : function(value, row, index) {
+											var a = "";
+											if (value == 0) {
+												a = "官方";
+											}
+											if (value == 1) {
+												a = "非官方";
+											}
+											return a;
+										}
+
+									},
+									{
+										field : 'Name',
+										title : '代理商名称',
+
+										formatter : function(value, row, index) {
+											var a = "";
+											if (0 == row.Type) {
+												a = "官方";
+											}
+											if (1 == row.Type) {
+												a = value;
+											}
+											return a;
+										}
+
+									},
+									{
+										field : 'ContactName',
+										title : '联系人'
+									},
+									{
+										field : 'ContactWay',
+										title : '联系方式'
+									},
+									{
+										field : 'InvoiceType',
+										title : '发票类型',
+
+										formatter : function(value, row, index) {
+											var a = "";
+											if (0 == value) {
+												a = "增值税发票";
+											} else if (1 == value) {
+												a = "增值税普票";
+											} else if (2 == value) {
+												a = "普通发票";
+											} else {
+												a = "无";
+											}
+											return a;
+										}
+									},
+									{
+										field : 'CanRefund',
+										title : '是否可退款',
+										formatter : function(value, row, index) {
+											var a = "";
+											if (value == 1) {
+												a = "是";
+											} else {
+												a = "否";
+											}
+											return a;
+										}
+									},
+									{
+										field : 'Offer',
+										title : '报价'
+									},{
+										field : 'FinalPrice',
+										title : '最终报价'
+
+									},
+									{
+										field : 'RebateType',
+										title : '返点',
+										formatter : function(value, row, index) {
+											var a = "";
+											if (value == 1) {
+												a = "首返";
+											} else if (value == 2) {
+												a = "续返";
+											} else {
+												a = "无";
+											}
+											return a;
+										}
+									},
+									{
+										field : 'RebateProportion',
+										title : '返点比例'
+									},
+									{
+										field : 'cz',
+										title : '操作',
+										formatter : function(value, row, index) {
+													if(value !=1){
+														return '<button type="text" onClick="f2('
+														+ row.ProviderId+','+row.ChannelApplyId
+														+ ');" class="btn btn-danger btn-xs"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button >';
+
+													}
+													
+											
+										}
+									} ],
+						});
+		
+		(function() {
+			var arr;
+			//表单验证异步提交
+			function bindsumbit() {
+				var $submit_application = $('#service');
+				var flag= true;
+				var options = {
+					data : {
+						idd : $('#idd').val()
+					},
+					beforeSerialize : function() {
+						//选中的是官方还是代理
+						var type=  $('input[name="Type"]:checked').val();
+						
+						var url = "../provider/readP.do";
+						var data = {"idd" : $('#idd').val()};
+						$.ajax({  
+					          type : "post",  
+					          url : url,  
+					          data : data,  
+					          async : false,   //同步
+					          success : function(result){  
+						        	  if (result.state == 0) {
+											var d = result.data;
+											arr = d;
+											//如果arr为空  跳过之后的判断
+										 	if(arr==null||arr==""){
+											//	alert(1);
+											}else{
+													if(arr[0].Type==0){//第一条是官方
+														parent.layer.msg("官方只能添加一条");
+														flag= false;
+														
+													}
+													if(arr[0].Type==1){//第一条是代理
+														if(type==0){
+															parent.layer.msg("代理商不能和官方同时加");
+															flag= false;
+															
+														}
+													} 
+													for(var i=0;i<arr.length;i++){
+														if($("#agentname11").val()==arr[i].Name){
+															parent.layer.msg("代理商不能重复加入");
+															flag= false;
+														}
+													}
+											}
+									} else {
+										parent.layer.msg(result.message);
+										
+									}
+					          }  
+					     });  
+						if(!flag){
+							flag = true;
+							return false;
+							
+						}
+						
+						
+					},
+
+					beforeSubmit : function() {
+						$('.save').button('loading');
+						$('.save1').button('loading');
+						
+							
+					},
+					success : function(data) {
+						$('.save').button('reset');
+						$('.save1').button('reset');
+						
+						
+						if (data.state == 0) {
+							 
+							var pro = data.data;
+							$('#addserviceinfo').bootstrapTable("load",data);
+							
+							/* arr = new Array();
+							for(var i =0;i<pro.length;i++){
+								arr.push(pro[i]);
+							} */
+							$('#fwsxx').data("fws", pro);
+						} else {
+							parent.layer.msg(data.message);
+							
+						} 
+					},
+					error : function() {
+						parent.layer.msg("提交失败，请检查网络是否正常，或者刷新试试！");
+						$('.save').button('reset');
+						$('.save1').button('reset');
+					}
+				};
+
+				$submit_application.ajaxForm(options);
+			}
+
+			$().ready(function() {
+				bindsumbit();
+			});
+
+		})();
+
+		//只允许输入数字或小数
+		function keepNumOrDecimal(obj) {
+			//先把非数字的都替换掉，除了数字和.  
+			obj.value = obj.value.replace(/[^\d.]/g, "");
+			//必须保证第一个为数字而不是.  
+			obj.value = obj.value.replace(/^\./g, "");
+			//保证只有出现一个.而没有多个.  
+			obj.value = obj.value.replace(/\.{2,}/g, ".");
+			//保证.只出现一次，而不能出现两次以上  
+			obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+		}
+		
+	</script>
+</body>
+
+</html>

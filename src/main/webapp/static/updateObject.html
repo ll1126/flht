@@ -1,0 +1,443 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<title>修改标的信息</title>
+<link rel="stylesheet" href="../css/thirdParty/bootstrap.css">
+<link rel="stylesheet"
+	href="../css/thirdParty/bootstrap-datetimepicker.css">
+<link rel="stylesheet" href="../css/thirdParty/bootstrap-multiselect.css">
+
+
+<style>
+.row {
+	margin-top: 10px;
+}
+
+label {
+	font-size: 16px;
+}
+</style>
+
+
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-12">
+				<h1>修改标的信息</h1>
+			</div>
+		</div>
+		<hr />
+		<form id="submit-application" action="../objectList/updateObject.do"  enctype="multipart/form-data"
+			method="post">
+			<!-- 存放渠道ID -->
+			<div class="col-lg-2" style="display:none;">
+                <select id="channel-type" class="form-control">
+                	<option value=""></option>
+                    <option value="">银行存管</option>
+                    <option value="">上市背景</option>
+                </select>
+            </div>
+			<input type="hidden" id="Id"  name="ChannelId" value=""/>
+
+			<div class="channel-type"></div>
+			<hr />
+
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-offset-3">
+						<button type="submit" style="width: 100px;"
+							class="btn btn-default apply">提交</button>
+					</div>
+				</div>
+			</div>
+		</form>
+		<div class="channel-type-one" style="display: none; disabled: true;">
+		
+				<div class="form-group" style="display:none">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="channelname">标的编号:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="objetID"
+							name="ID" required placeholder="">
+					</div>
+				</div>
+			</div>
+		
+			<div class="form-group">
+				<div class="row">
+					<!-- <div class="col-lg-1">
+						<label for="channelname">平台名称:</label>
+					</div>
+					<div class="col-lg-2">
+						<div class="dowebok">
+							<select class="form-control" name="platformID" id="platformID"  >
+								<option></option>
+							</select>
+						</div>
+					</div> -->
+					<div class="col-lg-1">
+						<label for="contactway">项目名称:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="platform"
+							name="platform" required placeholder="">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1"><!-- 上传图片 -->
+						<label for="companyname">平台LOGO:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="file" class="form-control" id="file"
+							name="file"  placeholder="">
+					</div>
+					
+					
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact">类型:</label>
+					</div>
+					<div class="col-lg-1">
+						<label class="radio-inline"> <input type="radio"
+							name="type" id="shoutou" value="1"> 首投
+						</label>
+					</div>
+					<div class="col-lg-1">
+						<label class="radio-inline"> <input type="radio"
+							name="type" id="futou" value="2"> 复投
+						</label>
+					</div>
+					
+						<div class="col-lg-1">
+						<label for="contact">上下架:</label>
+					</div>
+					<div class="col-lg-1">
+						<label class="radio-inline"> <input type="radio"
+							name="objectState" id="shangjia" value="1"> 上架
+						</label>
+					</div>
+					<div class="col-lg-1">
+						<label class="radio-inline"> <input type="radio"
+							name="objectState" id="xiajia" value="2">下架
+						</label>
+					</div>
+					
+						<div class="col-lg-1">
+						<label for="contact">是否置顶:</label>
+					</div>
+					<div class="col-lg-1">
+						<label class="radio-inline"> <input type="radio"
+							name="zhiding" id="app" value=0> 否
+						</label>
+					</div>
+					<div class="col-lg-1">
+						<label class="radio-inline"> <input type="radio"
+							name="zhiding" id="pc" value=1>是
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact">排序:</label>
+					</div>
+					<div class="col-lg-1" style="width:280px">
+						<input type="number" class="form-control" id="paixu" name="paixu"  placeholder="项目排序(只能输入数字)">
+					</div>
+					<div class="col-lg-1">
+						<label for="contactway">综合年化:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text"   class="form-control" id="annualizedReturnsMin" maxlength="5"
+							name="AnnualizedReturnsMin" required placeholder="请输入数字" style="width:100px;display:inline-block">%
+						--
+						<input type="text"  class="form-control" id="annualizedReturnsMax" maxlength="5"
+							name="AnnualizedReturnsMax" required placeholder="请输入数字" style="width:100px;display:inline-block">%
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact">原年化区间:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text"  maxlength="5" class="form-control" id="annualSectionMin"
+							name="annualSectionMin" required placeholder="请输入数字" style="width:100px;display:inline-block">%
+						--
+						<input type="text" maxlength="5"  class="form-control" id="annualSectionMax"
+							name="annualSectionMax" required placeholder="请输入数字" style="width:100px;display:inline-block">%
+					</div>
+					<div class="col-lg-1"><!-- 下拉 -->
+						<label for="contactway">标的期限:</label>
+					</div>
+					 <div class="col-lg-2">
+					 <input type="number" class="form-control" id=objectDeadline
+							name="objectDeadline" required placeholder="输入数字" style="width:100px;display:inline-block">
+	                     <select id="objectTian" class="form-control" name="objectTian"  style="width:120px;display:inline-block">
+	                        <option  value="天及以上">天及以上</option>
+	                        <option value="个月及以上">个月及以上</option>
+	                    </select> 
+                	</div>
+				</div>
+			</div>
+			
+					
+			<div class="form-group">
+				<div class="row">
+				<div class="col-lg-1">
+						<label for="contact">PC直达链接:</label>
+					</div>
+					<div class="col-lg-1" style="width:280px">
+						<input type="text" class="form-control" id="zdljpc" 
+							name="zdljpc"  placeholder="直达链接">
+					</div>
+					
+					<div class="col-lg-1">
+						<label for="contact">APP直达链接:</label>
+					</div>
+					<div class="col-lg-1" style="width:280px">
+						<input type="text" class="form-control" id="zdljapp" 
+							name="zdljapp"  placeholder="直达链接">
+					</div>
+					
+					
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact">起投金额:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="minMoney"
+							name="minMoney" required placeholder="请输入数字">
+					</div>
+					<div class="col-lg-1">
+						<label for="contactway">最高限额:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="maxMoney"
+							name="maxMoney" required placeholder="请输入数字">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1"><!-- 下拉 -->
+						<label for="contact">标签:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="tag"
+							name="tag" required placeholder="请输入多个标签，用中文“，”分隔开">
+	                    <!-- <select id="channel-type" class="form-control">
+	                    	<option value=""></option>
+	                        <option value="">银行存管</option>
+	                        <option value="">上市背景</option>
+	                    </select> -->
+                	</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact">平台网址:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="platformAddress"
+							name="platformAddress" required placeholder="">
+					</div>
+					<div class="col-lg-1">
+						<label for="contactway">平台上线时间:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="objectUpTime"
+							name="objectUpTime" required placeholder="">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact">最高返利金额:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="maxReturnMoney"
+							name="maxReturnMoney" required placeholder="请输入数字">
+					</div>
+					<div class="col-lg-1">
+						<label for="contactway">投资额度范围:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="investmentSection"
+							name="investmentSection" required placeholder="">
+					</div>
+				</div>
+			</div>
+			
+			
+		<hr />
+		</div>
+	</div>
+	<script src="../js/thirdParty/jquery.min.js"></script>
+	<script src="../js/thirdParty/bootstrap.js"></script>
+	<script src="../js/thirdParty/bootstrap-datetimepicker.js"></script>
+	<script src="../js/thirdParty/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="../js/thirdParty/jquery.form.min.js"></script>
+	<script src="../js/thirdParty/bootstrap-multiselect.js"></script>
+	<script>
+	 $('[name="zhiding"]').change(function(){
+		$('[name="zhiding"]').prop('checked','false');
+		$(this).prop('checked','true');
+	}); 
+	
+ 	$('[name="type"]').change(function(){
+		$('[name="type"]').prop('checked','false');
+		$(this).prop('checked','true');
+	});
+	$('[name="objectState"]').change(function(){
+		$('[name="objectState"]').prop('checked','false');
+		$(this).prop('checked','true');
+	});
+	
+
+		(function() {
+			var id = parent.$("#iframeid").val();
+			 $.get("../objectList/getOneObject.do?objectID="+id,function(result){
+				$("#objetID").val(id);
+				$("#platform").val(result.content.platform);
+				$("#annualizedReturnsMin").val(result.content.annualizedReturnsMin);
+				$("#annualizedReturnsMax").val(result.content.annualizedReturnsMax);
+				$("#annualSectionMin").val(result.content.annualSectionMin);
+				$("#annualSectionMax").val(result.content.annualSectionMax);
+                 $("#paixu").val(result.content.paixu);
+//              $("#objectTian").attr("value",result.content.objectTian);
+			//	$("#objectTian").val(result.content.objectTian);
+			//	$("#app").attr('checked','true');
+				 var ff = result.content.objectTian;
+				 if(ff=='天及以上'){
+                     $("#objectTian").val("天及以上");
+                 }else {
+                     $("#objectTian").val("个月及以上");
+				 }
+
+				var a = result.content.type;
+				if(a=='1'){
+					$("#shoutou").prop('checked','true');
+
+				}else{
+					$("#futou").prop('checked','true');
+				}
+				var b = result.content.objectState;
+				if(b=='1'){
+					$("#shangjia").prop('checked','true');
+					
+				}else{
+					$("#xiajia").prop('checked','true');
+				}
+				 var c = result.content.zhiding;
+				if(c=='0'){
+					$("#app").prop('checked','true');
+					
+				}else{
+					$("#pc").prop('checked','true');
+				} 
+				
+				$("#objectDeadline").val(result.content.objectDeadline);
+				$("#minMoney").val(result.content.minMoney);
+				$("#maxMoney").val(result.content.maxMoney);
+				$("#tag").val(result.content.tag);
+				$("#platformAddress").val(result.content.platformAddress);
+				$("#maxReturnMoney").val(result.content.maxReturnMoney);
+				$("#investmentSection").val(result.content.investmentSection);
+				$("#objectUpTime").val(result.content.objectUpTime);
+				$("#zdljpc").val(result.content.zdljpc);
+				$("#zdljapp").val(result.content.zdljapp);
+				
+			}); 
+			
+			
+			
+			 //初始化日期选择器
+			function init_date_choose($start, $end) {
+				$start.datetimepicker({
+					format : 'yyyy-mm-dd',
+					minView : 'month',
+					autoclose : true,
+					//startDate : new Date(),
+					language : 'zh-CN'
+				}).on("click", function() {
+					$start.datetimepicker("setStartDate", new Date());
+				});
+				$end.datetimepicker({
+					format : 'yyyy-mm-dd',
+					minView : 'month',
+					autoclose : true,
+					language : 'zh-CN'
+				}).on("click", function() {
+					$end.datetimepicker("setStartDate", $start.val());
+				});
+			} 
+
+			var $channel_type_one = $(".channel-type-one");
+			var $channel_type_two = $(".channel-type-two");
+			var $channel_type_three = $(".channel-type-three");
+			var $channel_type = $('.channel-type');
+			var $channel_type_four = $(".channel-type-four");
+			var $app = $("#app");
+			var $pc = $("#pc");
+			var $internal = $("#internal");
+			var $abroad = $("#abroad");
+			var $other = $("#other");
+			
+
+			//异步提交表单
+			function bindsumbit() {
+				
+				var $submit_application = $('#submit-application');
+				var options = {
+					beforeSubmit : function() {
+						$('.loginbtn').button('loading');
+					},
+					success : function(data) {
+						if (data.code == 0) {
+							parent.layer.msg("修改项目信息成功");
+							parent.$("#main").attr("src","static/objectList.html");
+						}
+					},
+					error : function() {
+						parent.layer.msg("修改项目信息失败");
+						$('.apply').button('reset');
+					}
+				};
+				$submit_application.ajaxForm(options);
+			}
+			$(document).ready(function() {
+				$channel_type.append($channel_type_one);
+				init_date_choose($('#start-date-one'), $('#end-date-one'));
+				$channel_type_one.show();
+				bindsumbit();
+
+			});
+			$('#channel-type').multiselect();
+			$('#channelshowfour').multiselect();
+
+		})();
+
+	</script>
+</body>
+
+</html>

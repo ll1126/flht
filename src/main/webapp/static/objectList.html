@@ -1,0 +1,300 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>项目列表</title>
+    <link rel="stylesheet" href="../css/thirdParty/bootstrap.css">
+    <link rel="stylesheet" href="../css/thirdParty/bootstrap-table.min.css">
+    <link rel="stylesheet" href="../css/thirdParty/bootstrap-editable.css">
+
+    <style>
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+	<img id ="img" src="">
+	<input type="hidden" id="State" value="3"/>
+    <div class="container-fluid">
+       <!-- <div class="row">
+            <div class="col-lg-12">
+                <h1>项目列表</h1>
+            </div>
+        </div>-->
+        <hr />
+        <div class="channel-sreach">
+            <div class="row">
+                
+                <div class="col-lg-1">
+                    <label for="">上下架:</label>
+                </div>
+                <div class="col-lg-2">
+                    <div class="dowebok">
+							<select class="form-control" name="shangjia" id="shangjia"  >
+								<option></option>
+								<option value="2">下架</option>
+								<option value="1">上架</option>
+							</select>
+						</div>
+                </div>
+            </div>
+        </div>
+        <div class="channel-sreach">
+            <div class="row">
+                
+                <div class="col-lg-1">
+                    <label for="">项目名称关键字搜索:</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" class="form-control" id="txtSearch"
+							name="limitedDuration" required placeholder="">
+                </div>
+                <div class="col-lg-offset-3">
+                    <button type="button" style="width:100px;" class="btn btn-default btn1">查询</button>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row" style="margin:0 5px;">
+            <table id="channel-application"></table>
+
+        </div>
+
+    </div>
+    <script src="../js/thirdParty/jquery.min.js"></script>
+    <script src="../js/thirdParty/bootstrap.js"></script>
+    <script src="../js/thirdParty/bootstrap-table.min.js"></script>
+    <script src="../js/thirdParty/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../js/thirdParty/bootstrap-editable.js"></script>
+    <script src="../js/thirdParty/bootstrap-editable.min.js"></script>
+    <script src="../js/thirdParty/bootstrap-table-editable.js"></script>
+    <script src="../js/thirdParty/bootstrap-table-editable.min.js"></script>
+
+    <script>
+        $('#channel-application').bootstrapTable({
+            method:'POST',
+            dataType:'json',
+            contentType: "application/x-www-form-urlencoded",
+            cache: false,
+        	striped: true,
+            editable:true,//开启编辑模式
+        	pagination: true, 			//是否显示分页（*）
+        	pageNumber:1,               //初始化加载第一页，默认第一页                
+        	pageSize: 8,               //每页的记录行数（*）               
+        	pageList: [10, 25, 50, 100],
+            onEditableSave: function (field, row, oldValue, $el) {
+                $.ajax({
+                    type: "post",
+                    url: "../objectList/updatePaixu.do",
+                    data: {paixu:row.paixu,id:row.id},/*strJson: JSON.stringify(row)*/
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.code == 0) {
+                            parent.layer.msg("编辑成功");
+                     //       alert("编辑成功");
+                        }
+                    },
+                    error: function () {
+                        alert("Error");
+                    },
+                    complete: function () {
+
+                    }
+                });
+            },
+            columns: [{
+                field: 'id',
+                title: '标的编号'
+            }, {
+                field: 'platform',
+                title: '项目名称'
+                
+            }, {
+                field: 'paixu',
+                title: '项目排序',
+                editable: {
+                    type: 'text',
+                    title: '项目排序',
+                    validate: function (v) {
+                        if (!v) return '排序不能为空';
+
+                    }
+                }
+               /* formatter: function (value, row, index) {
+                    return "<a href=\"#\" name=\"paixu\" data-type=\"text\" data-pk=\""+row.id+"\" data-title=\"用户名\">" + value + "</a>";
+                }*/
+
+            }, {
+                field: 'type',
+                title: '类型'
+            }, {
+                field: 'objectDeadline',
+                title: '标期'
+            }, {
+                field: 'minMoney',
+                title: '起投金额'
+            }, {
+                field: 'maxMoney',
+                title: '最高限额'
+            }, {
+                field: 'tag',
+                title: '标签'
+            } , {
+                field: 'platformAddress',
+                title: '平台网址'
+            }, {
+                field: 'investmentSection',
+                title: '投资额度范围'
+            }, {
+                field: 'fangan',
+                title:'查看返利方案',
+                formatter:function(value,row,index){
+                	 return '<a href="#" onclick="chakan('+row.id+');" >'+ '查看'+ '</a>';
+            }
+            
+            }, {
+                field: 'caozuo',
+                title:'操作',
+                formatter:function(value,row,index){
+                	 return '<a href="#" onclick="update('+row.id+');" >'+ '修改'+ '</a>'
+                	 +'<br>'+'<a href="#" onclick="delete1('+row.id+');" >'+ '删除'+ '</a>';
+            }
+            
+            }
+            
+            ],
+
+            /*onClickRow: function (row, $element) {
+                curRow = row;
+            },
+            onLoadSuccess: function (aa, bb, cc) {
+                $("#channel-application").editable({
+                    url: function (params) {
+                        var sName = $(this).attr("paixu");
+                        curRow[sName] = params.value;
+                        $.ajax({
+                            type: 'POST',
+                            url: "/Editable/Edit",
+                            data: curRow,
+                            dataType: 'JSON',
+                            success: function (data, textStatus, jqXHR) {
+                                alert('保存成功！');
+                            },
+                            error: function () { alert("error");}
+                        });
+                    },
+                    type: 'text'
+                });
+            },*/
+            data: []
+        });
+
+
+
+        function delete1(id){
+        	
+        	var r=confirm("是否删除");
+			if (r==true)
+			  {
+        	$.get("../objectList/deleteObject.do?objectID="+id,function(result){
+        		if(result.code==0){
+        			parent.layer.msg("标的删除成功");
+        		//	document.frames('framemain').location.reload();
+        			 $.ajax({
+
+        					"url":"../objectList/getObjectList.do",
+
+        					"type":"post",
+
+        					"data":{},
+
+        					"datatype":"json",
+
+        					"success":function(result){
+
+        						if(result.code==0){
+        							var data=result.content;
+        							$('#channel-application').bootstrapTable("load",data);
+        					//		$("#img").attr("src",data[1].platformLogo);
+        						}
+
+        					}
+
+        				});
+        		}
+        	});
+			  }else{
+				  alert("取消");
+			  }
+        	
+        }
+        
+        function update(id){
+        	parent.$("#iframeid").val(id);
+        	document.location.href="updateObject.html";
+        	
+        }
+        
+        function chakan(id){
+        	parent.$("#iframeid").val(id);
+        	document.location.href="schemeList222.html";
+        }
+        
+        $.ajax({
+
+				"url":"../objectList/getObjectList.do",
+
+				"type":"post",
+
+				"data":{},
+
+				"datatype":"json",
+
+				"success":function(result){
+
+					if(result.code==0){
+						var data=result.content;
+						console.log(data);
+						$('#channel-application').bootstrapTable("load",data);						
+				//		$("#img").attr("src",data[1].platformLogo);
+					}
+
+				}
+
+			});
+        
+        $(".btn1").click(function () {
+			var platform= $("#txtSearch").val();
+			var shangjia=$("#shangjia").val();
+			 $.ajax({
+
+					"url":"../objectList/getObjectList.do",
+
+					"type":"post",
+
+					"data":{"platform":platform,"shangjia":shangjia},
+
+					"datatype":"json",
+
+					"success":function(result){
+
+						if(result.code==0){
+							var data=result.content;
+							console.log(data);
+							$('#channel-application').bootstrapTable("load",data);
+							parent.layer.msg("查询成功");
+						}
+
+					}
+
+				});
+			
+		});
+    </script>
+</body>
+
+</html>

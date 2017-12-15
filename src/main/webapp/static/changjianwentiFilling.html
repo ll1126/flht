@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<title >常见问题录入</title>
+
+<link rel="stylesheet" href="../css/thirdParty/bootstrap.css">
+    <link rel="stylesheet" href="../css/thirdParty/bootstrap-table.min.css">
+ <link rel="stylesheet" href="../css/thirdParty/font-awesome.min.css">
+<link rel="stylesheet" href="../css/modules/index.css">  
+
+
+<style>
+.row {
+	margin-top: 10px;
+}
+
+label {
+	font-size: 16px;
+}
+</style>
+
+</head>
+
+<body>
+
+		<form id="fff" name="fff" action="../question/addQuestion.do" method="post">
+		<!--<div class="row">
+			<div class="col-lg-12"  >
+				<h1 >常见问题录入</h1>
+			</div>
+		</div>-->
+		<hr />
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact" >常见问题标题:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="questionTitle"
+							name="questionTitle" required placeholder="常见问题标题">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact">内容:</label>
+					</div>
+					<div class="col-lg-2">
+						<textarea id="questionContent" name="questionContent" cols="100" rows="8" style="width:700px;height:200px;"></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-offset-3">
+						<button type="submit" style="width: 100px;"
+							class="btn btn-default apply">提交</button>
+					</div>
+				</div>
+			</div>
+	</form>
+	<script src="../js/thirdParty/jquery.min.js"></script>
+    <script src="../js/thirdParty/bootstrap.js"></script>
+	<script src="../js/thirdParty/jquery.form.min.js"></script>
+	<script>
+			//异步提交表单
+			function bindsumbit() {
+
+				var $submit_application = $('#fff');
+				var options = {
+					beforeSubmit : function() {
+						$('.loginbtn').button('loading');
+					},
+					success : function(data) {
+						if (data.code == 0) {
+                            parent.$("#main").attr("src","static/changjianwentiList.html");
+							parent.layer.msg("录入成功！");
+						}
+					},
+					error : function() {
+						parent.layer.msg("录入失败");
+					}
+				};
+				$submit_application.ajaxForm(options);
+			}
+
+	</script>
+	
+</body>
+
+</html>

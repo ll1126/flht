@@ -1,0 +1,321 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>用户数据列表</title>
+    <link rel="stylesheet" href="../css/thirdParty/bootstrap.css">
+    <link rel="stylesheet" href="../css/thirdParty/bootstrap-table.min.css">
+    <!--  <link rel="stylesheet" href="../plugins/layui/css/layui.css">  -->
+    <link rel="stylesheet" href="../css/thirdParty/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/modules/index.css">
+    <link rel="stylesheet" href="../css/thirdParty/bootstrap-datetimepicker.css">
+    <style>
+        .row {
+            margin-top: 10px;
+        }
+        .nihao{
+            border:1px solid #BCEE68;
+            padding:20px;
+            margin-bottom: 10px;
+        }
+        .form-group{
+            border:1px solid #cccccc;
+            padding:20px;
+
+        }
+    </style>
+</head>
+
+<body>
+	<input type="hidden" id="State" value="3"/>
+    <div class="container-fluid">
+        <div class="form">
+            <div class="row">
+                <div class="col-lg-1">
+                    <label for="" style="padding-right: 37px;">日期选择:</label>
+                </div>
+
+                <div class="col-lg-2" style="width: 30%">
+                    <input type="text" class="form-control" id="datetime-start" style="width:150px;display:inline-block"
+
+                    > <label for=""
+                             style="padding: 0 35px;">至</label> <input type="text" class="form-control" id="datetime-end" style="width:150px;display:inline-block">
+                </div>
+                <div class="col-lg-offset-3">
+                    <button id="search2" type="button" style="width: 100px;" class="btn btn-default sendbtn5">查询</button>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="nihao">
+        <div class="tongji">
+            <div class="row">
+                <div class="col-lg-1">
+                    <label>注册人数：</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" readonly="true" style="color:red;text-align: center;width: 100px;border: none" id="regestPeople"/>位
+                </div>
+                <div class="col-lg-1">
+                    <label>绑卡人数：</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" readonly="true" style="color:red;text-align: center;width: 100px;border: none" id="bangkaPeople"/>位
+                </div>
+
+                <div class="col-lg-1">
+                    <label>回执单数：</label>
+                </div>
+                <div  class="col-lg-2">
+                    <input type="text" readonly="true" style="color:red;text-align: center;width: 100px;border: none" id="receiptNumber"/>笔
+                </div>
+                <div class="col-lg-1">
+                    <label>投资金额：</label>
+                </div>
+                <div  class="col-lg-2">
+                    <input type="text" readonly="true" style="color:red;text-align: center;width: 100px;border: none" id="investMoney"/>元
+                </div>
+            </div>
+
+        </div>
+
+        <div class="tongji">
+            <div class="row">
+                <div class="col-lg-1">
+                    <label>总注册人数：</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" readonly="true" style="color:red;text-align: center;width: 100px;border: none" id="regestPeopleSum"/>位
+                </div>
+                <div class="col-lg-1">
+                    <label>总绑卡人数：</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" readonly="true" style="color:red;text-align: center;width: 100px;border: none" id="bangkaPeopleSum"/>位
+                </div>
+
+                <div class="col-lg-1">
+                    <label>总回执单数：</label>
+                </div>
+                <div  class="col-lg-2">
+                    <input type="text" readonly="true" style="color:red;text-align: center;width: 100px;border: none" id="receiptNumberSum"/>笔
+                </div>
+                <div class="col-lg-1">
+                    <label>总投资额：</label>
+                </div>
+                <div  class="col-lg-2">
+                    <input type="text" readonly="true" style="color:red;text-align: center;width: 100px;border: none" id="investMoneySum"/>元
+                </div>
+            </div>
+
+        </div>
+
+        </div>
+        <hr>
+        <div class="form">
+            <div class="row">
+                <div class="col-lg-1" style="width: 200px">
+                    <label for="" style="padding-right: 37px;">回执单提交时间:</label>
+                </div>
+
+                <div class="col-lg-2" style="width: 30%">
+                    <input type="text" class="form-control" id="start_time_one" style="width:150px;display:inline-block"
+
+                    > <label for=""
+                             style="padding: 0 35px;">至</label> <input type="text" class="form-control" id="end_time_one" style="width:150px;display:inline-block">
+                </div>
+                <div class="col-lg-offset-3">
+                    <button id="search" type="button" style="width: 100px;" class="btn btn-default sendbtn3">查询</button>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row" style="margin:0 5px;">
+            <table id="channel-application"></table>
+            
+        </div>
+
+    </div>
+    <script src="../js/thirdParty/jquery.min.js"></script>
+    <script src="../js/thirdParty/bootstrap.js"></script>
+    <script src="../js/thirdParty/bootstrap-table.min.js"></script>
+    <script src="../js/thirdParty/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../js/thirdParty/bootstrap-datetimepicker.js"></script>
+    <script src="../js/thirdParty/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script src="../js/thirdParty/jquery.form.min.js"></script>
+    <script src="../js/thirdParty/bootstrap-multiselect.js"></script>
+    <script>
+
+        //初始化日期选择器
+        function init_date_choose($datetimestart,$datetimeend,$start, $end) {
+            $datetimestart.datetimepicker({
+                format : 'yyyy-mm-dd',
+                autoclose : true,
+                todayBtn : true,
+                minView: 2,
+                //startDate : new Date(),
+                language : 'zh-CN'
+            }).on("click", function() {
+                //$start.datetimepicker("setStartDate", new Date());
+            });
+            $datetimeend.datetimepicker({
+                format : 'yyyy-mm-dd',
+                autoclose : true,
+                todayBtn : true,
+                minView: 2,
+                //startDate : new Date(),
+                language : 'zh-CN'
+            }).on("click", function() {
+                $datetimeend.datetimepicker("setStartDate", $datetimestart.val());
+            });
+
+
+            $start.datetimepicker({
+                format : 'yyyy-mm-dd',
+                autoclose : true,
+                todayBtn : true,
+                minView: 2,
+                //startDate : new Date(),
+                language : 'zh-CN'
+            }).on("click", function() {
+                //$start.datetimepicker("setStartDate", new Date());
+            });
+            $end.datetimepicker({
+                format : 'yyyy-mm-dd',
+                autoclose : true,
+                todayBtn : true,
+                minView: 2,
+                language : 'zh-CN'
+            }).on("click", function() {
+                $end.datetimepicker("setStartDate", $start.val());
+            });
+        }
+        init_date_choose($('#datetime-start'),$('#datetime-end'),$('#start_time_one'), $('#end_time_one'));
+
+
+        $('#channel-application').bootstrapTable({
+            columns: [{
+                field: 'platform',
+                title: '平台名称'
+            },{
+                field: 'registerNum',
+                title: '投资人数'
+            }, {
+                field: 'commitReceiptNum',
+                title: '提交投资回单数'
+            }, {
+                field: 'checkReceiptNum',
+                title: '待审核回单数'
+            }, {
+                field: 'auditedReceiptNum',
+                title:'已审核回单数'
+            }, {
+                field: 'rejectReceiptNum',
+                title:'驳回回单数'
+            }, {
+                field: 'rebateMoney',
+                title:'累计返利总额'
+            }, {
+                field: 'investMoney',
+                title:'累计投资总额'
+            }
+            ],
+            data: []
+        });
+        
+        
+        $.ajax({
+
+				"url":"../count/getCountMessage.do",
+
+				"type":"post",
+
+				"data":{},
+
+				"datatype":"json",
+
+				"success":function(result){
+
+					if(result.code==0){
+						var data=result.content;
+						$('#channel-application').bootstrapTable("load",data);
+					}
+				}
+
+			});
+
+      /*  $.get("../count/getZuoRiShuJu.do",function (result) {
+            if(result.code==0){
+                var data = result.content;
+                $("#regestPeople").val(data[1].RegistPeople);
+                $("#receiptNumber").val(data[0].ReceiptNumber);
+                $("#investMoney").val(data[2].InvestmentMoney);
+                $("#bangkaPeople").val(data[3].bangkaPeople);
+                $("#regestPeopleSum").val(data[4].RegistPeopleSum);
+                $("#bangkaPeopleSum").val(data[5].BangKaSum);
+                $("#receiptNumberSum").val(data[6].ReceiptSum);
+                $("#investMoneySum").val(data[7].InvestmentMoneySum);
+            }
+            
+        });*/
+
+        $(".sendbtn3").click(function () {
+            var start_time_one= $("#start_time_one").val();
+            var end_time_one= $("#end_time_one").val();
+
+            $.get("../count/getCountMessage.do?submissionTimeStart="+start_time_one+'&submissionTimeEnd='+end_time_one,function(result){
+                if(result.code==0){
+                    var data = result.content;
+                    console.log(data);
+                    $('#channel-application').bootstrapTable("load",data);
+                    parent.layer.msg("查询成功");
+                }
+
+            });
+
+        });
+
+        $.get("../count/getTotalShuJu.do",function (result) {
+            if(result.code==0){
+                var data = result.content;
+                $("#regestPeopleSum").val(data[0].RegistPeopleSum);
+                $("#bangkaPeopleSum").val(data[1].BangKaSum);
+                $("#receiptNumberSum").val(data[2].ReceiptSum);
+                $("#investMoneySum").val(data[3].InvestmentMoneySum);
+            }
+
+        });
+
+        /*加载今日实时数据*/
+        $.get("../count/getNowShuJu.do",function (result) {
+            if(result.code==0){
+                var data = result.content;
+                $("#regestPeople").val(data[1].RegistPeople);
+                $("#receiptNumber").val(data[0].ReceiptNumber);
+                $("#investMoney").val(data[2].InvestmentMoney);
+                $("#bangkaPeople").val(data[3].bangkaPeople);
+            }
+
+        });
+
+        $(".sendbtn5").click(function () {
+            var date_start= $("#datetime-start").val();
+            var date_end= $("#datetime-end").val();
+
+            $.get("../count/getZuoRiShuJu.do?date_start="+date_start+'&date_end='+date_end,function(result){
+                if(result.code==0){
+                    var data = result.content;
+                    $("#regestPeople").val(data[1].RegistPeople);
+                    $("#receiptNumber").val(data[0].ReceiptNumber);
+                    $("#investMoney").val(data[2].InvestmentMoney);
+                    $("#bangkaPeople").val(data[3].bangkaPeople);
+                }
+
+            });
+
+        });
+    </script>
+</body>
+
+</html>

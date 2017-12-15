@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>去哪理财</title>
+<link rel="stylesheet" href="plugins/layui/css/layui.css">
+<!-- <link rel="stylesheet" href="css/thirdParty/bootstrap.css"> -->
+<link rel="stylesheet" href="css/thirdParty/font-awesome.min.css">
+<link rel="stylesheet" href="css/modules/index.css">
+</head>
+<script>
+	window.onbeforeunload = onbeforeunload_handler;
+	window.onunload = onunload_handler;
+	//window.onload = onload_handler;
+ 	function onbeforeunload_handler() {
+		var warning = "确认退出?";
+		return warning;
+	}
+	function onunload_handler() {
+		//logout(1);
+	}
+
+	function logout() {
+		var data = {};
+		$.post("user/logout.do", data, function(result) {
+			
+			if (result.code == 0){
+
+				document.location.href = "login.html";
+			}
+		}); 
+	}
+/*	function change() {
+		document.location.href="updatePassword.html";
+	}*/
+</script>
+<body onload="load()">
+	<input type="hidden" id ="iframeid"/>
+	<div class="layui-layout layui-layout-admin">
+		<div class="layui-header">
+			<!-- 头部区域（可配合layui已有的水平导航） -->
+			<div class="logo">
+				<a href="">去哪理财后台管理</a>
+			</div>
+			<ul class="layui-nav layui-user" lay-filter="">
+				<li id="name" class="layui-nav-item"><i class="fa fa-user"
+					aria-hidden="true"></i>admin</li>
+				<li class="layui-nav-item"><a href="updatePassword.html"><i
+						class="fa fa-pencil-square-o" aria-hidden="true"></i>修改密码</a></li>
+				<li class="layui-nav-item"><a href="#" onclick="logout(0)"><i
+						class="fa fa-sign-out" aria-hidden="true"></i>退出登录</a></li>
+			</ul>
+		</div>
+		<div class="layui-side layui-bg-black">
+			<div class="layui-side-scroll">
+				<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+				<ul class="layui-nav layui-nav-tree" lay-filter="nav">
+					<!-- 侧边导航: <ul class="layui-nav layui-nav-tree layui-nav-side"> -->
+					<li class="layui-nav-item"><a id="apply9" href="static/userShuJu.html" target="framemain">平台数据统计信息</a></li>
+					<li id="sq" class="layui-nav-item" ><a href="javascript:">信息填写</a>
+						<dl class="layui-nav-child">
+						<dd id="ht7">
+							<a href="static/zhengHe.html" target="framemain">信息录入</a>
+						</dd>
+							<dd>
+								<a id="apply4" href="static/noticeFilling.html" target="framemain">公告内容填写</a>
+							</dd>
+							<dd>
+								<a id="apply5" href="static/changjianwentiFilling.html" target="framemain">常见问题填写</a>
+							</dd>
+							<dd>
+								<a id="apply6" href="static/bannerFilling.html" target="framemain">轮播Banner填写</a>
+							</dd>
+						</dl></li>
+						<li class="layui-nav-item"><a href="javascript:">信息列表管理</a>
+						<dl class="layui-nav-child">
+							<dd id="ht">
+								<a href="static/platforminformationlist.html" target="framemain">平台列表</a>
+							</dd>
+							<dd id="ht1">
+								<a href="static/objectList.html" target="framemain">项目列表</a>
+							</dd>
+							<dd id="ht2">
+								<a href="static/schemeList.html" target="framemain">返利方案列表</a>
+							</dd>
+							 <dd id="ht3">
+								<a href="static/noticeList.html" target="framemain">后台公告列表</a>
+							</dd>
+							<dd id="ht4">
+								<a href="static/changjianwentiList.html" target="framemain">常见问题列表</a>
+							</dd>
+							<dd id="ht5">
+								<a href="static/bannerList.html" target="framemain">Banner列表</a>
+							</dd>
+						</dl>
+					</li>
+					<li class="layui-nav-item"><a href="javascript:">回执单管理</a>
+						<dl class="layui-nav-child">
+							<dd>
+								<a href="static/receipt.html" target="framemain">第一次回执单审核</a>
+							</dd>
+							<dd>
+								<a href="static/waitMoneyReceipt.html" target="framemain">财务回执单审核</a>
+							</dd>
+							<dd>
+								<a href="static/daidakuan.html" target="framemain">已审核回执单列表</a>
+							</dd>
+							<dd>
+								<a href="static/rejectReceipt.html" target="framemain">已驳回回执单列表</a>
+							</dd>
+							<dd>
+								<a href="static/caiwudakuan.html" target="framemain">财务待打款回执单列表</a>
+							</dd>
+						</dl>
+					</li>
+					
+					<li class="layui-nav-item"><a href="javascript:">用户信息管理</a>
+						<dl class="layui-nav-child">
+							<dd id="ht8">
+								<a href="static/userlist.html" target="framemain">用户信息列表</a>
+							</dd>
+							<!--<dd id="ht6">
+								<a href="static/TestFenYe.html" target="framemain">测试分页</a>
+							</dd>-->
+							<dd id="ht9">
+								<a href="static/queryCode.html" target="framemain">查询验证码</a>
+							</dd>
+
+						</dl>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="layui-body">
+			<!-- 内容主体区域 -->
+			<div class="layui-body-top layui-bg-gray" style="position:absolute;width:100%;margin:0;">
+				<blockquote class="layui-elem-quote" style="width:100%">平台数据统计信息</blockquote>
+			</div>
+			<div class="layui-tab-content" style="min-height: 750px;height:100%; padding-top:70px;box-sizing:border-box;">
+				<div class="layui-tab-item layui-show" style="height:100%;">
+					<IFRAME id="main" name="framemain" border=0 frameBorder=0 frameSpacing=0 height=100% marginHeight=0 marginWidth=0 noResize scrolling=yes src="" width=100% vspale="0" allowtransparency="ture"></IFRAME>
+				</div>
+			  </div>
+		</div>
+		<!-- <div class="layui-footer">
+			底部固定区域
+			<p>
+				2017 &copy; <a href="javascript:;">数据研发中心</a>
+			</p>
+		</div> -->
+	</div>
+	
+	<script src="js/thirdParty/jquery.min.js"></script>
+	<script src="myjs/cookie_util.js"></script>
+		<script src="plugins/layui/layui.js"></script>
+	<script src="js/modules/index.js"></script>
+	<script>
+        function load(){
+            document.getElementById("apply9").click();
+        }
+		(function() {
+			var arr = document.cookie.match(new RegExp(
+					"(^| )power=([^;]*)(;|$)"));
+			if (arr == null)
+				return;
+			if (arr[2] == 1 || arr[2] == 11)
+
+            function getCookieVal(offset) {
+				var endstr = document.cookie.indexOf(";", offset);
+				if (endstr == -1)
+					endstr = document.cookie.length;
+				return unescape(document.cookie.substring(offset, endstr));
+			}
+			function GetCookie(name) {
+				var arg = name + "=";
+				var alen = arg.length;
+				var clen = document.cookie.length;
+				var i = 0;
+				while (i < clen) {
+					var j = i + alen;
+					//alert(j);
+					if (document.cookie.substring(i, j) == arg)
+						return getCookieVal(j);
+					i = document.cookie.indexOf(" ", i) + 1;
+					if (i == 0)
+						break;
+				}
+				return null;
+			}
+			arr = GetCookie("name");
+			document.getElementById("name").innerHTML = arr;
+		})();
+	</script>
+</body>
+
+</html>

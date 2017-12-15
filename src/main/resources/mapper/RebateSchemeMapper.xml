@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.wsloan.fanLiWang.dao.RebateSchemeDao">
+	
+
+	<!--返利方案的录入  -->
+
+	<insert id="addScheme" parameterType="com.wsloan.fanLiWang.entity.RebateScheme" keyProperty="ID" useGeneratedKeys="true" >
+		INSERT INTO RebateScheme
+		(<trim suffixOverrides=",">
+		<if test="limitedDuration !=null ">LimitedDuration</if>
+		<if test="effectiveProject !=null">,EffectiveProject</if>
+		<if test="investmentLimit !=null ">,InvestmentLimit</if>
+		<if test="rebateImmediately !=null">,RebateImmediately</if>
+		<if test="platformRate !=null">,PlatformRate</if>
+		<if test="redPacket !=null">,RedPacket</if>
+		<if test="rest !=null ">,Rest</if>
+		<if test="totalRevenue !=null">,TotalRevenue</if>
+		<if test="primaryRate !=null ">,PrimaryRate</if>
+		<if test="synthesizeRate !=null">,SynthesizeRate</if>
+		<if test="rebateDuration !=null ">,RebateDuration</if>
+		<if test="objectID !=null ">,ObjectID</if>
+		<if test="fanDian !=null ">,FanDian</if>
+		<if test="fanDianScheme !=null ">,FanDianScheme</if>
+		<if test="disanfang !=null ">,disanfang</if>
+		<if test="shangjia !=null ">,shangjia</if>
+		<if test="agentFanDian !=null ">,agentFanDian</if>
+		<if test="agentFanDianScheme !=null ">,agentFanDianScheme</if>
+		</trim>)
+	  VALUES
+		(<trim suffixOverrides=",">
+		<if test="limitedDuration !=null ">#{limitedDuration}</if>
+		<if test="effectiveProject !=null">,#{effectiveProject}</if>
+		<if test="investmentLimit !=null ">,#{investmentLimit}</if>
+		<if test="rebateImmediately !=null">,#{rebateImmediately}</if>
+		<if test="platformRate !=null">,#{platformRate}</if>
+		<if test="redPacket !=null">,#{redPacket}</if>
+		<if test="rest !=null ">,#{rest}</if>
+		<if test="totalRevenue !=null">,#{totalRevenue}</if>
+		<if test="primaryRate !=null ">,#{primaryRate}</if>
+		<if test="synthesizeRate !=null">,#{synthesizeRate}</if>
+		<if test="rebateDuration !=null ">,#{rebateDuration}</if>
+		<if test="objectID !=null ">,#{objectID}</if>
+		<if test="fanDian !=null ">,#{fanDian}</if>
+		<if test="fanDianScheme!=null">,#{fanDianScheme}</if>
+		<if test="disanfang!=null">,#{disanfang}</if>
+		<if test="shangjia!=null">,#{shangjia}</if>
+		<if test="agentFanDian!=null">,#{agentFanDian}</if>
+		<if test="agentFanDianScheme!=null">,#{agentFanDianScheme}</if>
+		</trim>)
+	</insert>
+	
+	<!--获取返利方案列表  -->
+	
+	
+	 <!-- 返利方案映射类 -->
+      <resultMap type="com.wsloan.fanLiWang.entity.RebateScheme" id="rebate">
+		<result property="objectName" column="Platform"/>
+		</resultMap>
+	<select id="getScheme" resultMap="rebate" >
+		select rs.ID,rs.LimitedDuration,rs.EffectiveProject,rs.InvestmentLimit,rs.RebateImmediately,rs.PlatformRate,
+		rs.RedPacket,rs.Rest,rs.TotalRevenue,rs.PrimaryRate,rs.SynthesizeRate,rs.RebateDuration,bi.Platform from  RebateScheme rs left join BrandInformation bi 
+		on rs.ObjectID =  bi.ID  where 1=1
+		<if test="objectID !=null and objectID !=''">
+		 	and bi.id= #{objectID} 
+		 </if>
+		<if test="objectName !=null and objectName !=''">
+		
+			and bi.Platform LIKE concat(concat('%',#{objectName}),'%')
+		</if>
+		<if test="shangjia !=null and shangjia !=''">
+		
+			and rs.shangjia= #{shangjia}
+		</if>
+		order by rs.ID desc
+		 
+		<!-- select rs.ID,rs.LimitedDuration,rs.EffectiveProject,rs.InvestmentLimit,rs.RebateImmediately,rs.PlatformRate,
+		rs.RedPacket,rs.Rest,rs.TotalRevenue,rs.PrimaryRate,rs.SynthesizeRate,rs.RebateDuration,
+		ol.Platform
+		 from RebateScheme rs left join ObjectList ol
+		 on rs.ObjectID =  ol.ID  where 1=1
+		 <if test="objectID !=null and objectID !=''">
+		 	and ol.id= #{objectID} 
+		 </if>
+		<if test="objectName !=null and objectName !=''">
+		
+			and ol.Platform LIKE concat(concat('%',#{objectName}),'%')
+		</if>
+		<if test="shangjia !=null and shangjia !=''">
+		
+			and rs.shangjia= #{shangjia}
+		</if>
+		order by rs.ID desc -->
+	</select>
+	
+	<!-- 删除返利方案 -->
+	<delete id="deleteScheme"  >
+		delete from RebateScheme where ID=#{schemeID}
+	</delete>
+	
+	<!-- 方案的修改  -->
+	
+	<update id="updateScheme" parameterType="com.wsloan.fanLiWang.entity.RebateScheme">
+		UPDATE RebateScheme
+       SET  
+       		<if test="limitedDuration !=null and limitedDuration != ''">LimitedDuration=#{limitedDuration}</if>
+			<if test="effectiveProject !=null and effectiveProject !=''">,EffectiveProject=#{effectiveProject}</if>
+			<if test="investmentLimit !=null and investmentLimit !=''">,InvestmentLimit=#{investmentLimit}</if>
+			<if test="rebateImmediately !=null and rebateImmediately != ''">,RebateImmediately=#{rebateImmediately}</if>
+			<if test="platformRate !=null and platformRate != ''">,PlatformRate=#{platformRate}</if>
+			<if test="redPacket !=null and redPacket != ''">,RedPacket=#{redPacket}</if>
+			<if test="rest !=null and rest != ''">,Rest=#{rest}</if>
+			<if test="totalRevenue !=null and totalRevenue != ''">,TotalRevenue=#{totalRevenue}</if>
+			<if test="primaryRate !=null and primaryRate != ''">,PrimaryRate=#{primaryRate}</if>
+			<if test="synthesizeRate !=null and synthesizeRate != ''">,SynthesizeRate=#{synthesizeRate}</if>
+			<if test="rebateDuration !=null and rebateDuration != ''">,RebateDuration=#{rebateDuration}</if>
+			<if test="fanDian !=null">,FanDian=#{fanDian}</if>
+			<if test="fanDianScheme !=null and fanDianScheme != ''">,FanDianScheme=#{fanDianScheme}</if>
+			<if test="disanfang !=null and disanfang != ''">,disanfang=#{disanfang}</if>
+			<if test="shangjia !=null and shangjia != ''">,shangjia=#{shangjia}</if>
+			<if test="agentFanDian !=null">,agentFanDian=#{agentFanDian}</if>
+			<if test="agentFanDianScheme !=null ">,agentFanDianScheme=#{agentFanDianScheme}</if>
+			
+			where ID=#{ID}
+	</update>
+	
+	<!-- 获取一条方案详情 -->
+	<select id="getOneScheme" resultType="com.wsloan.fanLiWang.entity.RebateScheme">
+		select 
+		rs.[LimitedDuration]
+      ,rs.[EffectiveProject]
+      ,rs.[InvestmentLimit]
+      ,rs.[RebateImmediately]
+      ,rs.[PlatformRate]
+      ,rs.[RedPacket]
+      ,rs.[Rest]
+      ,rs.[TotalRevenue]
+      ,rs.[PrimaryRate]
+      ,rs.[SynthesizeRate]
+      ,rs.[RebateDuration]
+      ,rs.[ObjectID]
+      ,rs.[FanDian]
+      ,rs.[FanDianScheme]
+      ,rs.[disanfang]
+      ,rs.[shangjia]
+      ,rs.[agentFanDian]
+      ,rs.[agentFanDianScheme]
+      ,ol.Platform as objectName
+
+	 from RebateScheme rs left join ObjectList ol 
+	 on rs.ObjectID=ol.ID
+		
+		 where rs.ID=#{schemeID}
+	</select>
+	
+</mapper>
+
+

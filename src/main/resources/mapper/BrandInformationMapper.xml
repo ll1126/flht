@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.wsloan.fanLiWang.dao.BrandInformationDao">
+	
+
+	<!--平台信息的录入  -->
+
+	<insert id="addBrand" parameterType="com.wsloan.fanLiWang.entity.BrandInformation"  >
+		INSERT INTO BrandInformation
+		(<trim suffixOverrides=",">
+		<if test="platform !=null ">Platform</if>
+		<if test="operator !=null">,Operator</if>
+		<if test="onlineTime !=null ">,OnlineTime</if>
+		<if test="interestRate !=null">,InterestRate</if>
+		<if test="investmentHorizon !=null ">,InvestmentHorizon</if>
+		<if test="registeredFund !=null">,RegisteredFund</if>
+		<if test="depositFund !=null ">,DepositFund</if>
+		<if test="guaranteeCompany !=null">,GuaranteeCompany</if>
+		<if test="withdraw !=null ">,Withdraw</if>
+		<if test="phoneNumber !=null">,PhoneNumber</if>
+		<if test="backgroundPedestal !=null ">,BackgroundPedestal</if>
+		<if test="backgroundFinancing !=null">,BackgroundFinancing</if>
+		<if test="address !=null ">,Address</if>
+		<if test="riskAssessment !=null ">,RiskAssessment</if>
+		<if test="fengxianbq !=null ">,fengxianbq</if>
+		<if test="tzgl !=null ">,tzgl</if>
+		<if test="zyts !=null ">,zyts</if>
+		<if test="tjly !=null ">,tjly</if>
+		<if test="shangjia !=null ">,shangjia</if>
+		</trim>)
+	  VALUES
+		(<trim suffixOverrides=",">
+		<if test="platform !=null ">#{platform}</if>
+		<if test="operator !=null">,#{operator}</if>
+		<if test="onlineTime !=null ">,#{onlineTime}</if>
+		<if test="interestRate !=null">,#{interestRate}</if>
+		<if test="investmentHorizon !=null ">,#{investmentHorizon}</if>
+		<if test="registeredFund !=null">,#{registeredFund}</if>
+		<if test="depositFund !=null ">,#{depositFund}</if>
+		<if test="guaranteeCompany !=null">,#{guaranteeCompany}</if>
+		<if test="withdraw !=null ">,#{withdraw}</if>
+		<if test="phoneNumber !=null">,#{phoneNumber}</if>
+		<if test="backgroundPedestal !=null ">,#{backgroundPedestal}</if>
+		<if test="backgroundFinancing !=null">,#{backgroundFinancing}</if>
+		<if test="address !=null ">,#{address}</if>
+		<if test="riskAssessment !=null ">,#{riskAssessment}</if>
+		<if test="fengxianbq !=null ">,#{fengxianbq}</if>
+		<if test="tzgl !=null">,#{tzgl}</if>
+		<if test="zyts !=null ">,#{zyts}</if>
+		<if test="tjly !=null ">,#{tjly}</if>
+		<if test="shangjia !=null ">,#{shangjia}</if>
+		</trim>)
+	</insert>
+
+	<!-- 平台信息删除 -->
+	<delete id="deleteBrand" parameterType="Integer" >
+		delete from BrandInformation where ID=#{brandID}
+		
+	</delete>
+	
+	<!--平台列表查询  -->
+	<select id="getBrandList"   resultType="com.wsloan.fanLiWang.entity.BrandInformation">
+		select  * from BrandInformation  where 1=1
+		<if test="shangjia!=null and shangjia!=''">
+		 and shangjia =#{shangjia}
+		 </if>
+		<if test="platform!=null and platform!=''">
+		 and Platform LIKE concat(concat('%',#{platform}),'%')
+		 </if>
+		 order by ID desc
+
+	</select>
+	
+	<!-- 平台个数 -->
+	<select id="getCountBrand" resultType="Integer">
+		select count(ID) from BrandInformation
+	</select>
+	
+	<!--  平台详情-->
+	<select id ="getBrandDetails" parameterType="Integer" resultType="com.wsloan.fanLiWang.entity.BrandInformation">
+		select * from BrandInformation where ID=#{brandID}
+	</select>
+	
+	<!-- 平台信息的修改  -->
+	<update id="updateBrand" parameterType="com.wsloan.fanLiWang.entity.BrandInformation">
+		UPDATE BrandInformation
+       SET  
+       
+       	<if test="platform!=null and platform!=''">Platform=#{platform},</if>
+		<if test="operator!=null and operator!=''">Operator=#{operator},</if>
+		<if test="onlineTime!=null and onlineTime!='' ">OnlineTime=#{onlineTime},</if>
+		<if test="interestRate!=null and interestRate!=''">InterestRate=#{interestRate},</if>
+		<if test="investmentHorizon!=null and investmentHorizon!='' ">InvestmentHorizon=#{investmentHorizon},</if>
+		<if test="registeredFund !=null and investmentHorizon!=''">RegisteredFund=#{registeredFund},</if>
+		<if test="depositFund !=null and depositFund !=''">DepositFund=#{depositFund},</if>
+		<if test="guaranteeCompany !=null and  guaranteeCompany!=''">GuaranteeCompany=#{guaranteeCompany},</if>
+		<if test="withdraw !=null and withdraw!=''">Withdraw=#{withdraw},</if>
+		<if test="phoneNumber !=null and phoneNumber!=''">PhoneNumber=#{phoneNumber},</if>
+		<if test="backgroundPedestal !=null and backgroundPedestal!='' ">BackgroundPedestal=#{backgroundPedestal},</if>
+		<if test="backgroundFinancing !=null and backgroundFinancing!=''">BackgroundFinancing=#{backgroundFinancing},</if>
+		<if test="address !=null and address!=''">Address=#{address},</if>
+		<if test="riskAssessment !=null and riskAssessment!=''">RiskAssessment=#{riskAssessment},</if>
+		<if test="fengxianbq !=null and fengxianbq!=''">fengxianbq=#{fengxianbq},</if>
+		<if test="tzgl !=null and tzgl!=''">tzgl=#{tzgl},</if>
+		<if test="zyts !=null and zyts!=''">zyts=#{zyts},</if>
+		<if test="tjly !=null and tjly!=''">tjly=#{tjly},</if>
+		<if test="shangjia !=null and shangjia!=''">shangjia=#{shangjia}</if>
+		where ID=#{ID}
+	</update>
+	
+
+	<!-- 删除平台，则删除所有的标 -->
+	<select id="getAllObject" parameterType="Integer" resultType="com.wsloan.fanLiWang.entity.ObjectList">
+	
+		select * from ObjectList ol left join  BrandInformation bi
+		on ol.PlatformID=bi.ID  
+		where bi.ID=#{ID} 
+	
+	</select>
+	
+	<!--删除平台，删除所有的标  -->
+	<delete id="deleteAllObjectList" parameterType="Integer">
+		delete  from ObjectList where ID=#{ID}
+	
+	</delete>
+
+	<!--下架平台，同时下架所有的项目和返利方案-->
+	<update id = "xiajiaBrand">
+		UPDATE  BrandInformation SET  shangjia=#{platState} WHERE  ID=#{brandID}
+
+	</update>
+
+	<update id="xiajiaObject">
+		UPDATE ObjectList SET ObjectState = #{platState} WHERE  PlatformID=#{brandID}
+	</update>
+
+	<!--获取项目一个平台对应所有的项目的项目ID-->
+	<select id="getxiajiaObjectID" resultType="integer">
+		select ol.PlatformID AS objectID from ObjectList ol  join BrandInformation br on br.ID=ol.PlatformID AND  br.ID=#{brandID}
+
+	</select>
+
+	<update id="xiajiaScheme">
+		UPDATE  RebateScheme SET  shangjia=#{platState} WHERE ObjectID =#{objectID}
+	</update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

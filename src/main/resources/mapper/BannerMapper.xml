@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.wsloan.fanLiWang.dao.BannerDao">
+	
+
+	<!--Banner的PC端信息录入  -->
+
+	<insert id="addPCBanner" parameterType="com.wsloan.fanLiWang.entity.Banner" keyProperty="id" useGeneratedKeys="true" >
+		INSERT INTO banner
+		(<trim suffixOverrides=",">
+		<if test="image !=null ">image</if>
+		<if test="wangzhi !=null ">,wangzhi</if>
+		<if test="shuoming !=null ">,shuoming</if>
+		<if test="paixu !=null">,paixu</if>
+		<!--<if test="appimage !=null">,appimage</if>
+		<if test="appwangzhi !=null">,appwangzhi</if>
+		<if test="appshuoming !=null">,appshuoming</if>
+		<if test="apppaixu !=null">,apppaixu</if>-->
+		</trim>)
+	  VALUES
+		(<trim suffixOverrides=",">
+		<if test="image !=null">#{image}</if>
+		<if test="wangzhi !=null ">,#{wangzhi}</if>
+		<if test="shuoming !=null ">,#{shuoming}</if>
+		<if test="paixu !=null">,#{paixu}</if>
+		<!--<if test="appimage !=null">,#{appimage}</if>
+		<if test="appwangzhi !=null">,#{appwangzhi}</if>
+		<if test="appshuoming !=null">,#{appshuoming}</if>
+		<if test="apppaixu !=null">,#{apppaixu}</if>-->
+		</trim>)
+	</insert>
+
+<!--Banner的APP端录入-->
+	<insert id="addAPPBanner" parameterType="com.wsloan.fanLiWang.entity.Banner" keyProperty="id" useGeneratedKeys="true" >
+		INSERT INTO banner
+		(<trim suffixOverrides=",">
+		<if test="appimage !=null">appimage</if>
+		<if test="appwangzhi !=null">,appwangzhi</if>
+		<if test="appshuoming !=null">,appshuoming</if>
+		<if test="apppaixu !=null">,apppaixu</if>
+	</trim>)
+		VALUES
+		(<trim suffixOverrides=",">
+		<if test="appimage !=null">#{appimage}</if>
+		<if test="appwangzhi !=null">,#{appwangzhi}</if>
+		<if test="appshuoming !=null">,#{appshuoming}</if>
+		<if test="apppaixu !=null">,#{apppaixu}</if>
+	</trim>)
+	</insert>
+
+	<!-- 标的删除 -->
+	<delete id="deleteBanner" parameterType="integer" >
+		delete from banner where id=#{bannerID}
+		
+	</delete>
+	
+	
+	<!-- pc端banner的修改  -->
+	
+	<update id="updatePCBanner" parameterType="map">
+		UPDATE banner
+       SET  
+       		<if test="image !=null and image != ''">image=#{image},</if>
+			<if test="wangzhi !=null and wangzhi !=''">wangzhi=#{wangzhi},</if>
+			<if test="shuoming !=null and shuoming !=''">shuoming=#{shuoming},</if>
+			<if test="paixu !=null and paixu != ''">paixu=#{paixu}</if>
+			<!--<if test="appimage !=null and appimage != ''">,appimage=#{appimage}</if>
+			<if test="appwangzhi !=null and appwangzhi != ''">,appwangzhi=#{appwangzhi}</if>
+			<if test="appshuoming !=null and appshuoming != ''">,appshuoming=#{appshuoming}</if>
+			<if test="apppaixu !=null and apppaixu != ''">,apppaixu=#{apppaixu}</if>-->
+
+			where id=#{id}
+	</update>
+
+	<!-- app 端banner的修改  -->
+
+	<update id="updateAPPBanner" parameterType="map">
+		UPDATE banner
+		SET
+		<if test="appimage !=null and appimage != ''">appimage=#{appimage},</if>
+        <if test="appwangzhi !=null and appwangzhi != ''">appwangzhi=#{appwangzhi},</if>
+        <if test="appshuoming !=null and appshuoming != ''">appshuoming=#{appshuoming},</if>
+        <if test="apppaixu !=null and apppaixu != ''">apppaixu=#{apppaixu}</if>
+
+		where id=#{id}
+	</update>
+	
+	<!--标的列表查询  -->
+	<select id="queryBanner"  resultType="com.wsloan.fanLiWang.entity.Banner">
+		select * from banner order by id desc
+	</select>
+
+	<!-- 查看一条标的详细信息 -->
+	<select id="getOneBanner" parameterType="integer"  resultType="com.wsloan.fanLiWang.entity.Banner">
+	
+		select * from banner where  id=#{bannerID}
+	</select>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

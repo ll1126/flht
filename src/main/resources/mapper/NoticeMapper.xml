@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.wsloan.fanLiWang.dao.NoticeDao">
+	
+
+	<!--公告信息录入  -->
+
+	<insert id="addNotice" parameterType="com.wsloan.fanLiWang.entity.Notice" keyProperty="id" useGeneratedKeys="true" >
+		INSERT INTO Notice
+		(<trim suffixOverrides=",">
+		<if test="noticeTitle !=null ">NoticeTitle</if>
+		<if test="noticeContent !=null ">,NoticeContent</if>
+		<if test="noticeTime !=null ">,NoticeTime</if>
+		</trim>)
+	  VALUES
+		(<trim suffixOverrides=",">
+		<if test="noticeTitle !=null">#{noticeTitle}</if>
+		<if test="noticeContent !=null ">,#{noticeContent}</if>
+		<if test="noticeTime !=null ">,#{noticeTime}</if>
+		</trim>)
+	</insert>
+
+	 <!-- 公告删除 -->
+	
+	<delete id="deleteNotice" parameterType="Integer" >
+		delete from Notice where ID=#{noticeID}
+		
+	</delete>
+	
+	<!-- 标的列表查询  -->
+	<select id="getNoticeList"  resultType="com.wsloan.fanLiWang.entity.Notice">
+		SELECT [id]
+      ,[NoticeTitle]
+      ,[NoticeTime]
+  		 from Notice order by ID desc
+
+	</select>
+	
+	<!-- 查看一条标的详细信息 -->
+	<select id="getOneNotice"  resultType="com.wsloan.fanLiWang.entity.Notice">
+	
+		select * from Notice ot where  ot.ID=#{noticeID}
+	</select>
+	
+	
+	<!-- 公告的修改  -->
+	
+	<update id="updateNotice" parameterType="com.wsloan.fanLiWang.entity.Notice">
+		UPDATE Notice
+       SET  
+       		<if test="noticeTitle !=null and noticeTitle != ''">NoticeTitle=#{noticeTitle}</if>
+			<if test="noticeContent !=null and noticeContent !=''">,NoticeContent=#{noticeContent}</if>
+			<if test="noticeTime !=null and noticeTime !=''">,NoticeTime=#{noticeTime}</if>
+			where ID=#{ID}
+	</update>
+	
+	<!--
+	标的记录数的查询
+
+	<select id="getCountObject" resultType="Integer">
+		select count(*) from ObjectList
+	</select>	
+	
+	 -->
+	
+	
+	
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

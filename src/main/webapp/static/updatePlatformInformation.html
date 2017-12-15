@@ -1,0 +1,413 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<title >平台品牌信息修改</title>
+
+<link rel="stylesheet" href="../css/thirdParty/bootstrap.css">
+<link rel="stylesheet"
+	href="../css/thirdParty/bootstrap-datetimepicker.css">
+<link rel="stylesheet" href="../css/thirdParty/bootstrap-multiselect.css">
+
+
+<style>
+.row {
+	margin-top: 10px;
+}
+
+label {
+	font-size: 16px;
+}
+</style>
+
+
+</head>
+	<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-12"  >
+				<h1 >平台品牌信息修改</h1>
+			</div>
+		</div>
+		<hr />
+		<form id="submit-application" action="../brandInformation/updateBrand.do"   
+			method="post">
+			<input type="hidden" id="Id"  name="BrandID" value=""/>
+
+			<div class="channel-type"></div>
+
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-offset-3">
+						<button type="submit" style="width: 100px;"
+							class="btn btn-default apply">提交</button>
+					</div>
+				</div>
+			</div>
+		</form>
+		<div class="channel-type-one" style="display: none; disabled: true;">
+		<div class="form-group"  style="display: none">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="platform">平台编号:</label>
+					</div>
+					<div class="col-lg-2">
+						<div class="dowebok">
+							<input type="text" class="form-control" 
+							id="platformID"	name="ID" required="required" placeholder=""  autocomplete="off">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="platform">平台名称:</label>
+					</div>
+					<div class="col-lg-2">
+						<div class="dowebok">
+							<input type="text" class="form-control" 
+							id="platform"	name="Platform" required="required" placeholder=""  autocomplete="off">
+						</div>
+					</div>
+					<div class="col-lg-1">
+						<label for="operator">运营公司:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="operator"
+							name="Operator" required placeholder="">
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact" >上线时间:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="onlineTime"
+							name="OnlineTime" required placeholder="">
+					</div>
+					
+					 <div class="col-lg-1">
+						<label for="contactway">利息水平:</label>
+					</div> 
+					<div class="col-lg-2">
+						 <input type="text" class="form-control" id="interestRate"  name="InterestRate"> 
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact">投资期限:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="investmentHorizon"
+							name="InvestmentHorizon" required placeholder="">
+					</div>
+					<div class="col-lg-1">
+						<label for="contactway">注册资金:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="registeredFund"
+							name="RegisteredFund" required placeholder="">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact">资金存管:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="depositFund"
+							name="DepositFund" required placeholder="">
+					</div>
+					<div class="col-lg-1">
+						<label for="contactway">担保公司:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="guaranteeCompany"
+							name="GuaranteeCompany" required placeholder="">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact">提现到账:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="withdraw"
+							name="Withdraw" required placeholder="">
+					</div>
+					<div class="col-lg-1">
+						<label for="contactway">客服电话:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="phoneNumber"
+							name="PhoneNumber" required placeholder="">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact">平台背景:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="backgroundPedestal"
+							name="BackgroundPedestal" required placeholder="">
+					</div>
+					<div class="col-lg-1">
+						<label for="contactway">融资背景:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="backgroundFinancing"
+							name="BackgroundFinancing" required placeholder="">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact">公司地址:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="address"
+							name="Address" required placeholder="">
+					</div>
+					<div class="col-lg-1">
+						<label for="contact">风险评估分数:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="number" class="form-control" id="riskAssessment"
+							name="RiskAssessment" required placeholder="输入数字">
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact">上下架:</label>
+					</div>
+					<div class="col-lg-1">
+						<label class="radio-inline"> <input type="radio"
+							name="shangjia" id="shangjia" value="1"> 上架
+						</label>
+					</div>
+					<div class="col-lg-1">
+						<label class="radio-inline"> <input type="radio"
+							name="shangjia" id="xiajia" value="2"> 下架
+						</label>
+					</div>
+				</div>
+			</div>
+			
+				<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact">投资攻略:</label>
+					</div>
+					<div class="col-lg-2">
+					<textarea  style="width:650px;height:50px;" id="tzgl" class="form-control" required placeholder=""
+							name="tzgl"></textarea>
+					</div>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact">重要提示:</label>
+					</div>
+					<div class="col-lg-2">
+					<textarea  style="width:650px;height:50px;" id="zyts" class="form-control" required placeholder=""
+							name="zyts"></textarea>
+				</div>
+			</div>
+			
+		</div>
+		
+		<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact">风险小组推荐理由:</label>
+					</div>
+					<div class="col-lg-2">
+					<textarea  style="width:650px;height:50px;" id="tjly" class="form-control" required placeholder=""
+							name="tjly"></textarea>
+				</div>
+			</div>
+			
+		</div>
+			
+		<hr />
+		</div>
+	</div>
+	<script src="../js/thirdParty/jquery.min.js"></script>
+	<script src="../js/thirdParty/bootstrap.js"></script>
+	<script src="../js/thirdParty/bootstrap-datetimepicker.js"></script>
+	<script src="../js/thirdParty/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="../js/thirdParty/jquery.form.min.js"></script>
+	<script src="../js/thirdParty/bootstrap-multiselect.js"></script>
+	<script>
+		$('[name="pcapp"]').change(function(){
+			$('[name="pcapp"]').prop('checked','false');
+			$(this).prop('checked','true');
+		});
+		
+		$('[name="shangjia"]').change(function(){
+			$('[name="shangjia"]').prop('checked','false');
+			$(this).prop('checked','true');
+		});
+		var id = parent.$("#iframeid").val();
+		$.get("../brandInformation/getBrandDetails.do?brandID="+id,function(result){
+			$("#platformID").val(id);
+			$("#platform").val(result.content.platform);
+			$("#operator").val(result.content.operator);
+			$("#onlineTime").val(result.content.onlineTime);
+			$("#interestRate").val(result.content.interestRate);
+			$("#investmentHorizon").val(result.content.investmentHorizon);
+			$("#registeredFund").val(result.content.registeredFund);
+			$("#depositFund").val(result.content.depositFund);
+			$("#guaranteeCompany").val(result.content.guaranteeCompany);
+			$("#withdraw").val(result.content.withdraw);
+			$("#phoneNumber").val(result.content.phoneNumber);
+			$("#backgroundPedestal").val(result.content.backgroundPedestal);
+			$("#backgroundFinancing").val(result.content.backgroundFinancing);
+			$("#address").val(result.content.address);
+			$("#riskAssessment").val(result.content.riskAssessment);
+			$("#tzgl").val(result.content.tzgl);
+			$("#zyts").val(result.content.zyts);
+			$("#zdlj").val(result.content.zdlj);
+			$("#tjly").val(result.content.tjly);
+			
+			var b = result.content.shangjia;
+			if(b=='1'){
+				$("#shangjia").prop('checked','true');
+				
+			}else{
+				$("#xiajia").prop('checked','true');
+			}
+			
+			var c = result.content.pcapp;
+			if(c=='0'){
+				$("#pc2").prop('checked','true');
+				
+			}else{
+				$("#app2").prop('checked','true');
+			}
+			
+			
+		});
+		
+		(function() {
+			
+				$('#fileinput').on('change', function() {
+					var filename = this.value;
+					var filepoint = filename.lastIndexOf('.');
+					var fileext = filename.substr(filepoint + 1);
+
+					if (isfiletype(fileext) === 0) {
+						$('.fileinputhelp').text('不支持该文件类型上传');
+						this.value = '';
+					} else {
+						$('.fileinputhelp').text('');
+					}
+				});
+
+				function isfiletype(fileext) {
+					var fileextarr = [ 'docx', 'doc', 'jpg', 'png', 'pdf','xls','txt' ];
+					var isfile = 0;
+					for (var i = 0; i < fileextarr.length; i++) {
+						if (fileext === fileextarr[i]) {
+							isfile++;
+							return;
+						}
+					}
+					return isfile;
+				}
+
+				$('.deletefilebtn').on('click', function(e) {
+					e.preventDefault();
+					$('#fileinput').val('');
+				});
+			
+
+			//初始化日期选择器
+			function init_date_choose($start, $end) {
+				$start.datetimepicker({
+					format : 'yyyy-mm-dd',
+					minView : 'month',
+					autoclose : true,
+					//startDate : new Date(),
+					language : 'zh-CN'
+				}).on("click", function() {
+					$start.datetimepicker("setStartDate", new Date());
+				});
+				$end.datetimepicker({
+					format : 'yyyy-mm-dd',
+					minView : 'month',
+					autoclose : true,
+					language : 'zh-CN'
+				}).on("click", function() {
+					$end.datetimepicker("setStartDate", $start.val());
+				});
+			}
+
+			var $channel_type_one = $(".channel-type-one");
+			var $channel_type_two = $(".channel-type-two");
+			var $channel_type_three = $(".channel-type-three");
+			var $channel_type = $('.channel-type');
+			var $channel_type_four = $(".channel-type-four");
+			var $app = $("#app");
+			var $pc = $("#pc");
+			var $internal = $("#internal");
+			var $abroad = $("#abroad");
+			var $other = $("#other");
+			
+
+			//异步提交表单
+			function bindsumbit() {
+				
+				var $submit_application = $('#submit-application');
+				var options = {
+					beforeSubmit : function() {
+						$('.loginbtn').button('loading');
+					},
+					success : function(data) {
+						if (data.code == 0) {
+							parent.layer.msg("修改平台信息成功");
+							parent.$("#main").attr("src","static/platforminformationlist.html");
+						}
+					},
+					error : function() {
+						layer.msg("修改平台信息失败");
+						$('.apply').button('reset');
+					}
+				};
+				$submit_application.ajaxForm(options);
+			}
+			$(document).ready(function() {
+				$channel_type.append($channel_type_one);
+				init_date_choose($('#start-date-one'), $('#end-date-one'));
+				$channel_type_one.show();
+				bindsumbit();
+
+			});
+			$('#channel-type').multiselect();
+			$('#channelshowfour').multiselect();
+
+		})();
+
+	</script>
+</body>
+
+
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta name="renderer" content="webkit">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>去哪理财后台管理系统 - 登录</title>
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="stylesheet" href="plugins/layui/css/layui.css">
+<link rel="stylesheet" href="css/thirdParty/bootstrap.css">
+<link rel="stylesheet"
+	href="css/thirdParty/bootstrap-datetimepicker.css">
+<link rel="stylesheet" href="css/thirdParty/font-awesome.min.css">
+<style>
+.gray-bg {
+	background-color: #eee;
+}
+
+.container .login {
+	margin: 25% auto;
+	width: 280px;
+}
+
+.container button {
+	width: 280px;
+}
+</style>
+<script type="text/javascript">
+	window.onload = function onLoginLoaded() {
+		if (isPostBack == "False") {
+			GetLastUser();
+		}
+	}
+	function GetLastUser() {
+		var id = "49BAC005-7D5B-4231-8CEA-16939BEACD67";//GUID标识符
+		var user = GetCookie(id);
+		if (user != null) {
+			document.getElementById('username').value = user;
+		} else {
+			document.getElementById('username').value = "001";
+		}
+		GetPwdAndChk();
+	}
+	//点击登录时触发客户端事件
+	function SetPwdAndChk() {
+		//取用户名
+		var user = document.getElementById('username').value;
+		//将最后一个用户信息写入到Cookie
+		SetLastUser(user);
+		//如果记住密码选项被选中
+		if (document.getElementById('rememberme').checked == true) {
+			//取密码值
+			var pwd = document.getElementById('pwd').value;
+			var expdate = new Date();
+			expdate.setTime(expdate.getTime() + 14 * (24 * 60 * 60 * 1000));
+			//将用户名和密码写入到Cookie
+			SetCookie(user, pwd, expdate);
+		} else {
+			//如果没有选中记住密码,则立即过期
+			ResetCookie();
+		}
+	}
+	function SetLastUser(user) {
+		var id = "49BAC005-7D5B-4231-8CEA-16939BEACD67";
+		var expdate = new Date();
+		//当前时间加上两周的时间
+		expdate.setTime(expdate.getTime() + 14 * (24 * 60 * 60 * 1000));
+		SetCookie(id, user, expdate);
+	}
+	//用户名失去焦点时调用该方法
+	function GetPwdAndChk() {
+		var user = document.getElementById('username').value;
+		var pwd = GetCookie(user);
+		if (pwd != null) {
+			document.getElementById('rememberme').checked = true;
+			document.getElementById('password').value = pwd;
+		} else {
+			document.getElementById('rememberme').checked = false;
+			document.getElementById('password').value = "";
+		}
+	}
+	//取Cookie的值
+	function GetCookie(name) {
+		var arg = name + "=";
+		var alen = arg.length;
+		var clen = document.cookie.length;
+		var i = 0;
+		while (i < clen) {
+			var j = i + alen;
+			//alert(j);
+			if (document.cookie.substring(i, j) == arg)
+				return getCookieVal(j);
+			i = document.cookie.indexOf(" ", i) + 1;
+			if (i == 0)
+				break;
+		}
+		return null;
+	}
+	var isPostBack = "<%= IsPostBack %>";
+	function getCookieVal(offset) {
+		var endstr = document.cookie.indexOf(";", offset);
+		if (endstr == -1)
+			endstr = document.cookie.length;
+		return unescape(document.cookie.substring(offset, endstr));
+	}
+	//写入到Cookie
+	function SetCookie(name, value, expires) {
+		var argv = SetCookie.arguments;
+		//本例中length = 3
+		var argc = SetCookie.arguments.length;
+		var expires = (argc > 2) ? argv[2] : null;
+		var path = (argc > 3) ? argv[3] : null;
+		var domain = (argc > 4) ? argv[4] : null;
+		var secure = (argc > 5) ? argv[5] : false;
+		document.cookie = name
+				+ "="
+				+ escape(value)
+				+ ((expires == null) ? "" : ("; expires=" + expires
+						.toGMTString()))
+				+ ((path == null) ? "" : ("; path=" + path))
+				+ ((domain == null) ? "" : ("; domain=" + domain))
+				+ ((secure == true) ? "; secure" : "");
+	}
+	function ResetCookie() {
+		var user = document.getElementById('username').value;
+		var expdate = new Date();
+		SetCookie(user, null, expdate);
+	}
+</script>
+
+</head>
+
+<body class="gray-bg">
+	<div class="container">
+		<div class="login">
+			<h1>登录去哪理财管理系统</h1>
+			<i class="text-danger"></i>
+
+			<form action="user/login.do" class="m-t" method="post" id="login">
+				<input type="hidden" name="ReturnUrl" value="" />
+				<div class="form-group">
+					<input id="username" type="text" class="form-control"
+						placeholder="用户名" required="true" name="username"
+						onblur="GetPwdAndChk()">
+				</div>
+				<div class="form-group">
+					<input id="pwd" type="password" class="form-control"
+						placeholder="密码" required="true" name="pwd">
+				</div>
+				<div class="form-group">
+					<label for="rememberme"> <input type="checkbox"
+						name="rememberMe" id="rememberme"><i></i> 记住密码
+					</label>
+				</div>
+				<button type="submit" class="btn btn-default loginbtn"
+					style="background-color: #009688; color: #fff;"
+					OnClick="SetPwdAndChk()">登 录</button>
+			</form>
+		</div>
+	</div>
+
+	<script src="js/thirdParty/jquery.min.js"></script>
+	<script src="js/thirdParty/bootstrap.min.js"></script>
+	<script src="js/thirdParty/bootstrap-datetimepicker.js"></script>
+	<script src="js/thirdParty/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="js/thirdParty/jquery.form.min.js"></script>
+	<script src="plugins/layui/layui.js"></script>
+	<script>
+		layui.config({
+			base : '/js/modules/'
+		}).use([ 'layer' ], function() {
+
+		});
+
+		(function() {
+			//表单验证异步提交
+			function bindsumbit() {
+				var $submit_application = $('#login');
+				var options = {
+					beforeSerialize : function() {
+					},
+					beforeSubmit : function() {
+						$('.loginbtn').button('loading');
+					},
+					success : function(data) {
+						if (data.code == 0) {
+							var Days = 300; //此 cookie 将被保存 30 天
+							var exp = new Date(); //new Date("December 31, 9998");
+							exp.setTime(exp.getTime() + Days * 24 * 60 * 60
+									* 1000);
+							document.cookie = "userid=" + escape(data.content.ID)
+									+ ";expires=" + exp.toGMTString();
+							document.cookie = "name=" + escape(data.content.userName)
+									+ ";expires=" + exp.toGMTString();
+							document.cookie = "power="
+									+ escape(data.content.power) + ";expires="
+									+ exp.toGMTString();
+							console.log(data.content.name);
+							document.location.href = "index.html";
+							//layer.msg("success");
+						} else {
+							layer.msg(data.message);
+						}
+						$('.loginbtn').button('reset');
+					},
+					error : function() {
+						layer.msg("登录失败，账号或密码错误！");
+						$('.loginbtn').button('reset');
+					}
+				};
+				$submit_application.ajaxForm(options);
+			}
+			$().ready(function() {
+				bindsumbit();
+			});
+		})();
+	</script>
+</body>
+
+</html>

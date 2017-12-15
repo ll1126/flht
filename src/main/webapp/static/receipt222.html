@@ -1,0 +1,358 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<title>财务待审核回执单列表</title>
+<link rel="stylesheet" href="../css/thirdParty/bootstrap.css">
+    <link rel="stylesheet" href="../css/thirdParty/bootstrap-table.min.css">
+ <!--  <link rel="stylesheet" href="../plugins/layui/css/layui.css">  -->
+ <link rel="stylesheet" href="../css/thirdParty/font-awesome.min.css">
+<link rel="stylesheet" href="../css/modules/index.css">  
+<link rel="stylesheet" href="../css/thirdParty/bootstrap-datetimepicker.css">
+<style>
+.row {
+	margin-top: 10px;
+}
+
+label {
+	font-size: 16px;
+}
+
+.ui_flt {
+	float: left;
+}
+
+.ui_frt {
+	float: right;
+}
+</style>
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-12">
+				<h1>待审核回执单</h1>
+			</div>
+		</div>
+		<hr />
+		<div class="channel-sreach">
+		<div class="form-group">
+			<div class="row">
+				<div class="col-lg-1">
+					<label for="">平台筛选:</label>
+				</div>
+				<div class="col-lg-2">
+					 <input class="form-control" id="platformID"/>
+				</div>
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<div class="row">
+				<div class="col-lg-1">
+						<label for="contactway">回执单状态:</label>
+					</div>
+					<div class="col-lg-2">
+						<select  style="width:248.83px;display: block;height: 34px;padding: 6px 12px;font-size: 14px;
+							line-height: 1.42857143;color: #555;
+						    background-color: #fff;
+						    background-image: none;
+						    border: 1px solid #ccc;" name="receiptState" id="receiptState">
+						    <option ></option>
+						  <option value ="1">待审核</option>
+						  <option value ="2">审核中</option>
+						  <option value ="3">已审核</option>
+						  <option value ="4">驳回</option>
+						</select>
+					</div>
+			</div>
+		</div>
+			<div class="form-group">
+			<div class="row">
+			<div class="col-lg-1">
+					<label for="" style="padding-right: 37px;">提交时间:</label> 
+					</div>
+					
+					<div class="col-lg-2" style="width: 30%">
+					<input type="text" class="form-control" id="start_time_one"
+							  style="width:150px;display:inline-block"
+						
+						> <label for=""
+						style="padding: 0 35px;">至</label> <input type="text"
+						class="form-control" id="end_time_one"
+					  style="width:150px;display:inline-block">
+			</div>
+			<div class="col-lg-offset-3">
+					<button id="search" type="button" style="width: 100px;"
+						class="btn btn-default sendbtn3">查询</button>
+				</div>
+		</div>
+		</div>
+		<hr />
+		<div class="row" style="margin: 0 5px;">
+		
+			<table id="channel-application"></table>
+		</div>
+
+	</div>
+		<hr />
+		<div class="row" style="margin: 0 5px;">
+		
+			<table id="channel-application"></table>
+		</div>
+
+	</div>
+
+	<script src="../js/thirdParty/jquery.min.js"></script>
+    <script src="../js/thirdParty/bootstrap.js"></script>
+    <script src="../js/thirdParty/bootstrap-table.min.js"></script>
+    <script src="../js/thirdParty/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../js/thirdParty/bootstrap-datetimepicker.js"></script>
+	<script src="../js/thirdParty/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="../js/thirdParty/jquery.form.min.js"></script>
+	<script src="../js/thirdParty/bootstrap-multiselect.js"></script>
+
+	<script>
+
+	//初始化日期选择器
+	function init_date_choose($start, $end) {
+			$start.datetimepicker({
+				format : 'yyyy-mm-dd hh:ii',
+				autoclose : true,
+				todayBtn : true,
+				//startDate : new Date(),
+				language : 'zh-CN'
+			}).on("click", function() {
+				//$start.datetimepicker("setStartDate", new Date());
+			});
+			$end.datetimepicker({
+				format : 'yyyy-mm-dd hh:ii',
+				autoclose : true,
+				todayBtn : true,
+				language : 'zh-CN'
+			}).on("click", function() {
+				$end.datetimepicker("setStartDate", $start.val());
+			});
+		}
+		init_date_choose($('#start_time_one'), $('#end_time_one'));
+
+		
+		
+		(function() {
+			
+			$('#channel-application')
+					.bootstrapTable(
+							{
+								//表达自动增加上下页。。
+								striped : true,
+								cache: false,
+								pagination : true,
+								//	sidePagination: "server",//
+								pageNumber : 1,
+								pageSize : 10,
+								pageList : [10,20,30,40,50],
+
+								columns : [
+										{
+											field : 'id',
+											title : '回执单编号'
+										}, {
+											field : 'platform',
+											title : '平台名称'
+										}, {
+											field : 'platformUser',
+											title : '注册平台用户名'
+										}, {
+											field : 'phoneNumber',
+											title : '注册手机号'
+										}, {
+											field : 'investmentMoney',
+											title : '实际投资金额'
+											
+										},{
+											field : 'investmentDate',
+											title : '投资日期'
+										},{
+											field : 'submissionTime',
+											title : '提交日期'
+										}, {
+											field : 'investmentLimit',
+											title : '投资期限'
+										},{
+											field : 'gatheringUser',
+											title : '收款用户名'
+										}, {
+											field : 'gatherAccount',
+											title : '收款银行账户'
+										}, {
+											field : 'stateChinese',
+											title : '回执单状态'
+										},
+										 {
+											field : 'fanli',
+											title : '返利金额'
+										}, {
+											field : 'userID',
+											title : '推荐人ID'
+										},{
+											field : 'caozuo',
+											title : '审核',
+											formatter : function(value,row,index) {		
+												return '<a href="#" onclick="tongguo('+row.id+');" >'+ '通过'+ '</a>';
+											}
+										},
+										{
+											field : 'caozuo2',
+											title : '审核',
+											formatter : function(value,row,index) {		
+												return '<a href="#" onclick="bohui('+row.id+');">' + "驳回"+ '</a>';
+											}
+										}
+										],
+								data : []
+							});
+			$(document).ready(function() {
+
+			});
+		})();
+		
+		
+		$.ajax({
+
+			"url":"../receipt/getReceiptList.do",
+
+			"type":"post",
+
+			"data":{},
+
+			"datatype":"json",
+
+			"success":function(result){
+
+				if(result.code==0){
+					var data=result.content;
+					console.log(data);
+					   //console.log(data);
+					$('#channel-application').bootstrapTable("load",data);						
+
+				}
+
+			}
+
+		});
+		
+		
+		/*------------------------------获取对应平台下拉列表-------------------------------*/
+		
+		function deptlist(result, select, lv) {
+
+			for (var i = 0; i < result.length; i++) {
+
+				var option = '<option value="'+result[i].id+'">'
+				for (var k = 0; k < lv; k++) {
+					option = option + '&nbsp;&nbsp;&nbsp;&nbsp;';
+				}
+
+				option = option + result[i].text + '</option>';
+
+				select.append($(option));
+				if (result[i].children.length > 0) {
+					lv = lv + 1;
+					deptlist(result[i].children, select, lv);
+					lv = lv - 1;
+				}
+
+			}
+
+			return;
+		};
+		
+		
+		/* $.get("showDeptnoTree.do", function(result) {
+				if (result != null || result != "") {
+					var select = $("#startdept");
+					deptlist(result, select, 0);
+
+				}
+			}); */
+		
+			
+			 function tongguo(id){
+				 var r=confirm("通过审核");
+					if (r==true)
+					  {
+						$.get("../receipt/updateState.do?receiptID="+id+"&receiptState="+3,function(result){
+			        		if(result.code==0){
+			        			parent.layer.msg("通过审核");
+			        		}
+			        	});
+					  }
+					else
+					  {
+					  alert("取消!");
+					  }
+				 
+	        	
+	        }
+				
+			function bohui(id){
+				var r=confirm("是否驳回");
+				if (r==true)
+				  {
+					$.get("../receipt/updateState.do?receiptID="+id+"&receiptState="+4,function(result){
+		        		if(result.code==0){
+		        			parent.layer.msg("驳回成功");
+		        		}
+		        	});
+				  }
+				else
+				  {
+				  alert("取消!");
+				  }
+				
+			}
+		
+		
+			
+			
+			$(".sendbtn3").click(function () {
+				var platform= $("#platformID").val();
+				var receiptState= $("#receiptState").val();
+				var start_time_one= $("#start_time_one").val();
+				var end_time_one= $("#end_time_one").val();
+			
+				
+				
+				$.ajax({
+
+					"url":"../receipt/getReceiptList.do",
+
+					"type":"post",
+
+					"data":{"platform":platform,"receiptState":receiptState,"start_time_one":start_time_one,"end_time_one":end_time_one,},
+
+					"datatype":"json",
+
+					"success":function(result){
+
+						if(result.code==0){
+							var data=result.content;
+							console.log(data);
+							   //console.log(data);
+							$('#channel-application').bootstrapTable("load",data);						
+							parent.layer.msg("查询成功");
+						}
+
+					}
+
+				});
+				
+			});
+			
+	</script>
+
+</body>
+
+</html>

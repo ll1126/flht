@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<title>回执单存档列表</title>
+<link rel="stylesheet" href="css/thirdParty/bootstrap.css">
+<link rel="stylesheet" href="css/thirdParty/bootstrap-table.min.css">
+<!-- <link rel="stylesheet" href="plugins/layui/css/layui.css">
+<link rel="stylesheet" href="css/thirdParty/font-awesome.min.css">
+<link rel="stylesheet" href="css/modules/index.css"> -->
+<style>
+.row {
+	margin-top: 10px;
+}
+
+label {
+	font-size: 16px;
+}
+
+.ui_flt {
+	float: left;
+}
+
+.ui_frt {
+	float: right;
+}
+</style>
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-12">
+				<h1>回执单存档</h1>
+			</div>
+		</div>
+		<hr />
+		<div class="channel-sreach">
+			<div class="row">
+				
+				<div class="col-lg-1">
+					<label for="">回执单搜索:</label>
+				</div>
+				<div class="col-lg-2">
+					<input id="txtSeach" class="form-control" />
+				</div>
+				<div class="col-lg-offset-3">
+					<button id="search" type="button" style="width: 100px;"
+						class="btn btn-default">查询</button>
+				</div>
+			</div>
+		</div>
+		<hr />
+		<div class="row" style="margin: 0 5px;">
+		
+			<table id="channel-application"></table>
+		</div>
+
+	</div>
+
+	<script src="js/thirdParty/jquery.min.js"></script>
+	<script src="js/thirdParty/bootstrap.js"></script>
+	<script src="js/thirdParty/bootstrap-table.min.js"></script>
+	<script src="js/thirdParty/bootstrap-table-zh-CN.min.js"></script>
+
+
+	<script>
+
+		(function() {
+			
+			$('#channel-application')
+					.bootstrapTable(
+							{
+								//表达自动增加上下页。。
+								striped : true,
+								cache: false,
+								pagination : true,
+								//	sidePagination: "server",//
+								pageNumber : 1,
+								pageSize : 10,
+								pageList : [10,20,30,40,50],
+
+								columns : [
+											{
+												field : 'Id',
+												title : '回执单编号'
+											},
+											{
+												field : 'Name',
+												title : '实际投资金额',
+												formatter : function(value,row,index) {		
+													return '<a onclick="fff('+row.Id+');">' + value+ '</a>';
+												}
+											}, {
+												field : 'TypeName',
+												title : '注册手机号'
+											}, {
+												field : 'nType',
+												title : '投资日期'
+											}, {
+												field : 'department',
+												title : '收款用户名'
+											}, {
+												field : 'name1',
+												title : '收款银行账户'
+											},],	
+								data : []
+							});
+			$(document).ready(function() {
+
+			});
+		})();
+	</script>
+
+</body>
+
+</html>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.wsloan.fanLiWang.dao.CountMessageDao">
+	<select id="getCountMessage" resultType="com.wsloan.fanLiWang.entity.CountMessage">
+		with view1 as
+		(select pp.Platform ,pp.PhoneNumber, pp.ReceiptState,  pp.fanli,pp.PlatformID ,pp.ID,pp.InvestmentMoney,pp.UserID ,pp.SubmissionTime from
+		(select rpt.ID,rpt.PhoneNumber,rpt.ReceiptState,rpt.fanli,rpt.PlatformID,rpt.UserID,rpt.InvestmentMoney,rpt.SubmissionTime,bi.Platform from Receipt rpt left join
+		BrandInformation bi on bi.ID=rpt.PlatformID) as pp where 1=1
+		<if test="submissionTimeStart!=null and submissionTimeStart!=''">
+			and pp.SubmissionTime<![CDATA[>=]]>CONVERT(datetime,#{submissionTimeStart} )
+		</if>
+		<if test="submissionTimeEnd!=null and submissionTimeEnd!=''">
+			and pp.SubmissionTime<![CDATA[<=]]>CONVERT(datetime,#{submissionTimeEnd} )
+		</if> )
+
+		select view1.Platform as platform ,count(view1.Platform) as platformNum,
+		count(distinct view1.UserID) as registerNum,
+		sum(CASE WHEN view1.ReceiptState=3 THEN view1.fanli ELSE 0 END) as rebateMoney,
+		sum(CASE WHEN view1.ReceiptState=3 THEN view1.InvestmentMoney ELSE 0 END) as investMoney,
+	    sum(CASE WHEN view1.ReceiptState in (1,2,3,4) THEN view1.ReceiptState ELSE 0 END) as commitReceiptNum,
+		sum(CASE WHEN view1.ReceiptState = 1 THEN view1.ReceiptState ELSE 0 END) as checkReceiptNum,
+		--sum(CASE WHEN view1.ReceiptState = 2 THEN '5' ELSE 0 END) as dd,
+		sum(CASE WHEN view1.ReceiptState = 3 THEN view1.ReceiptState ELSE 0 END) as auditedReceiptNum,
+		sum(CASE WHEN view1.ReceiptState = 4 THEN view1.ReceiptState ELSE 0 END) as rejectReceiptNum
+
+		from view1
+		group by view1.Platform union all
+		select '总计' as coun,
+		count(view1.Platform) as platformNum,
+		count(distinct view1.UserID) as registerNum,
+		sum(CASE WHEN view1.ReceiptState=3 THEN view1.fanli ELSE 0 END) as rebateMoney,
+		sum(CASE WHEN view1.ReceiptState=3 THEN view1.InvestmentMoney ELSE 0 END) as investMoney,
+		sum(CASE WHEN view1.ReceiptState in (1,2,3,4) THEN view1.ReceiptState ELSE 0 END) as commitReceiptNum,
+		sum(CASE WHEN view1.ReceiptState = 1 THEN view1.ReceiptState ELSE 0 END) as checkReceiptNum,
+		--sum(CASE WHEN view1.ReceiptState = 2 THEN '5' ELSE 0 END) as dd,
+		sum(CASE WHEN view1.ReceiptState = 3 THEN view1.ReceiptState ELSE 0 END) as auditedReceiptNum,
+		sum(CASE WHEN view1.ReceiptState = 4 THEN view1.ReceiptState ELSE 0 END) as rejectReceiptNum
+
+		from view1
+
+	</select>
+
+	<!--昨日注册人数统计-->
+	<!--<select id="getRegistPeople" resultType="map">
+		SELECT  COUNT (0) AS RegistPeople from InvestmentUser WHERE
+		RegistrationTime LIKE concat(concat('%',#{yesterday}),'%')
+	</select>
+
+	&lt;!&ndash;昨日绑卡人数&ndash;&gt;
+	<select id="getZuoRiBangKa" resultType="map">
+		SELECT  COUNT (0) AS  bangkaPeople FROM InvestmentUser WHERE
+		 CardNo!='NULL'AND cBkTime LIKE concat(concat('%',#{yesterday}),'%')
+	</select>
+
+	&lt;!&ndash;昨日审核通过回单数&ndash;&gt;
+	<select id="getZuoRiReceipt" resultType="map">
+		SELECT COUNT (0) AS ReceiptNumber from Receipt WHERE SubmissionTime=#{yesterday}
+		and ReceiptState=3;
+	</select>
+	&lt;!&ndash;已审核的回单总额&ndash;&gt;
+<select id="getInvestMoney" resultType="map">
+	SELECT COALESCE(SUM(InvestmentMoney),0) AS InvestmentMoney  FROM Receipt WHERE SubmissionTime=#{yesterday}
+		and ReceiptState=3;
+</select>-->
+
+<!--根据时间获取注册人数-->
+	<select id="getRegistPeople" resultType="map">
+		SELECT  COUNT (0) AS RegistPeople from InvestmentUser WHERE 1=1
+		<if test="date_start!=null and date_start!=''">
+			and RegistrationTime <![CDATA[>=]]>#{date_start}
+		</if>
+		<if test="date_end!=null and date_end!=''">
+			and RegistrationTime<![CDATA[<=]]>#{date_end}
+		</if>
+	</select>
+
+	<!--根据时间获取绑卡人数-->
+	<select id="getZuoRiBangKa" resultType="map">
+		SELECT  COUNT (0) AS  bangkaPeople FROM InvestmentUser WHERE
+		CardNo!='NULL'
+		<if test="date_start!=null and date_start!=''">
+			and cBkTime <![CDATA[>=]]>#{date_start}
+		</if>
+		<if test="date_end!=null and date_end!=''">
+			and cBkTime<![CDATA[<=]]>#{date_end}
+		</if>
+	</select>
+
+	<!--根据时间获取已审核回执单数量-->
+	<select id="getZuoRiReceipt" resultType="map">
+		SELECT COUNT (0) AS ReceiptNumber from Receipt WHERE  ReceiptState=3
+		<if test="date_start!=null and date_start!=''">
+			and SubmissionTime <![CDATA[>=]]>#{date_start}
+		</if>
+		<if test="date_end!=null and date_end!=''">
+			and SubmissionTime<![CDATA[<=]]>#{date_end}
+		</if>
+	</select>
+
+	<!--根据时间获取已审核回执单总额-->
+	<select id="getInvestMoney" resultType="map">
+		SELECT COALESCE(SUM(InvestmentMoney),0) AS InvestmentMoney  FROM Receipt WHERE ReceiptState=3
+		<if test="date_start!=null and date_start!=''">
+			and SubmissionTime <![CDATA[>=]]>#{date_start}
+		</if>
+		<if test="date_end!=null and date_end!=''">
+			and SubmissionTime<![CDATA[<=]]>#{date_end}
+		</if>
+	</select>
+
+	<!--总注册人数-->
+	<select id="getRegistPeopleSum" resultType="map">
+		SELECT  COUNT(0) AS  RegistPeopleSum FROM  InvestmentUser;
+	</select>
+
+	<!--总绑卡人数-->
+	<select id="getBangKaSum" resultType="map">
+		SELECT  COUNT(0) AS  BangKaSum FROM  InvestmentUser WHERE CardNo!='NULL' ;
+	</select>
+	<!--总审核通过回单数-->
+	<select id="getReceiptSum" resultType="map">
+		SELECT COUNT (0) AS ReceiptSum from Receipt WHERE  ReceiptState=3;
+	</select>
+	<!--已审核的回单总额-->
+	<select id="getInvestMoneySum" resultType="map">
+		SELECT COALESCE(SUM(InvestmentMoney),0) AS InvestmentMoneySum  FROM Receipt WHERE  ReceiptState=3;
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

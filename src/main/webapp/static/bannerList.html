@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Banner列表</title>
+    <link rel="stylesheet" href="../css/thirdParty/bootstrap.css">
+    <link rel="stylesheet" href="../css/thirdParty/bootstrap-table.min.css">
+    <style>
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+	<img id ="img" src="">
+	<input type="hidden" id="State" value="3"/>
+    <div class="container-fluid">
+        <!--<div class="row">
+            <div class="col-lg-12">
+                <h1>Banner列表</h1>
+            </div>
+        </div>-->
+        <hr />
+        <hr />
+        <div class="row" style="margin:0 5px;">
+            <table id="channel-application"></table>
+
+        </div>
+
+    </div>
+    <script src="../js/thirdParty/jquery.min.js"></script>
+    <script src="../js/thirdParty/bootstrap.js"></script>
+    <script src="../js/thirdParty/bootstrap-table.min.js"></script>
+    <script src="../js/thirdParty/bootstrap-table-zh-CN.min.js"></script>
+    <script>
+        $('#channel-application').bootstrapTable({
+        	striped: true,
+        	pagination: true, 			//是否显示分页（*）
+        	pageNumber:1,               //初始化加载第一页，默认第一页                
+        	pageSize: 8,               //每页的记录行数（*）
+            pageList: [10, 25, 50, 100],
+            columns: [{
+                field: 'id',
+                title: 'Banner编号'
+            }
+          /*  , {
+                field: 'image',
+                title: 'PC图片'
+               /!* formatter: function(value,row,index){
+                    return '<img  src="'+value+'" width=50 class="img-rounded" >';
+                }*!/
+            }*/
+            , {
+                field: 'wangzhi',
+                title: 'PC网址'
+            }, {
+                field: 'shuoming',
+                title: 'PC说明'
+            }, {
+                field: 'paixu',
+                title: 'PC排序'
+            }
+           /* , {
+                field: 'appimage',
+                title: 'APP图片'
+            }*/
+            , {
+                field: 'appwangzhi',
+                title: 'APP网址'
+            }, {
+                field: 'appshuoming',
+                title: 'APP说明'
+            }, {
+                field: 'apppaixu',
+                title: 'APP排序'
+            }, {
+                field: 'caozuo',	
+                title:'操作',
+                formatter:function(value,row){
+                	 return '<a href="#" onclick="update( \'' + row.id + '\',\''+row.wangzhi+'\');" >'+ '修改'+ '</a>'
+                	 +'<br>'+'<a href="#" onclick="delete1('+row.id+');" >'+ '删除'+ '</a>';
+                 }
+            }
+            ],
+            data: []
+        });
+
+        function delete1(id){
+        	var r=confirm("是否删除");
+			if (r==true)
+			  {
+        	 $.get("../banner/deleteBanner.do?bannerID="+id,function(result){
+        		if(result.code==0){
+                    parent.layer.msg("Banner删除成功");
+                    $.ajax({
+
+                        "url":"../banner/getBannerList.do",
+
+                        "type":"post",
+
+                        "datatype":"json",
+
+                        "success":function(result){
+
+                            if(result.code==0){
+                                var data=result.content;
+                                $('#channel-application').bootstrapTable("load",data);
+                            }
+
+                        }
+
+                    });
+
+        		}
+        	}); 
+			  }else{
+				  alert("取消！");
+			  } 
+        	 
+        }
+        
+        function update(id,wangzhi){
+            parent.$("#iframeid").val(id);
+        	if(wangzhi==null ||wangzhi=='null'||wangzhi==undefined){
+                document.location.href="updateAPPBanner.html";
+            }else {
+                document.location.href="updatePCBanner.html";
+            }
+        }
+        
+        $.ajax({
+
+				"url":"../banner/getBannerList.do",
+
+				"type":"post",
+
+				"data":{},
+
+				"datatype":"json",
+
+				"success":function(result){
+
+					if(result.code==0){
+						var data=result.content;
+						$('#channel-application').bootstrapTable("load",data);
+					}
+
+				}
+
+			});
+
+    </script>
+</body>
+
+</html>

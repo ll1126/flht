@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<title >通知公告录入</title>
+
+<link rel="stylesheet" href="../css/thirdParty/bootstrap.css">
+    <link rel="stylesheet" href="../css/thirdParty/bootstrap-table.min.css">
+ <!--  <link rel="stylesheet" href="../plugins/layui/css/layui.css">  -->
+ <link rel="stylesheet" href="../css/thirdParty/font-awesome.min.css">
+<link rel="stylesheet" href="../css/modules/index.css">  
+<link rel="stylesheet" href="../css/thirdParty/bootstrap-datetimepicker.css">
+
+
+<style>
+.row {
+	margin-top: 10px;
+}
+
+label {
+	font-size: 16px;
+}
+</style>
+
+
+
+<link rel="stylesheet" href="../editor/themes/default/default.css" />
+	<link rel="stylesheet" href="../editor/plugins/code/prettify.css" />
+	<script charset="utf-8" src="../editor/kindeditor-all-min.js"></script>
+	<script charset="utf-8" src="../editor/lang/zh-CN.js"></script>
+	<script charset="utf-8" src="../editor/plugins/code/prettify.js"></script>
+	
+
+</head>
+
+<body>
+
+		<form id="fff" name="fff" action="../notice/addNotice.do"  enctype="multipart/form-data"
+			method="post">
+		<!--<div class="row">
+			<div class="col-lg-12"  >
+				<h1 >通知公告录入</h1>
+			</div>
+		</div>-->
+		<hr />
+			<input type="hidden" id="Id"  name="BrandID" value=""/>
+
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact" >公告标题:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="noticeTitle"
+							name="noticeTitle" required placeholder="公告标题">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact">公告内容:</label>
+					</div>
+					<div class="col-lg-2" style="width:650px;height:300px" >
+					
+				<textarea name="noticeContent" cols="100" rows="8" style="width:700px;height:200px;visibility:hidden;"></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+					<label for="" style="padding-right: 37px;">公告时间:</label> 
+					</div>
+					
+					<div class="col-lg-2" style="width: 30%">
+					<input type="text" class="form-control" id="start_time_one"
+							name="noticeTime"  style="width:150px;display:inline-block">
+					</div>
+				</div>
+		</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-offset-3">
+						<button type="submit" style="width: 100px;"
+							class="btn btn-default apply">提交</button>
+					</div>
+				</div>
+			</div>
+	</form>
+	<script src="../js/thirdParty/jquery.min.js"></script>
+    <script src="../js/thirdParty/bootstrap.js"></script>
+    <script src="../js/thirdParty/bootstrap-table.min.js"></script>
+    <script src="../js/thirdParty/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../js/thirdParty/bootstrap-datetimepicker.js"></script>
+	<script src="../js/thirdParty/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="../js/thirdParty/jquery.form.min.js"></script>
+	<script src="../js/thirdParty/bootstrap-multiselect.js"></script>
+	<script>
+	//初始化日期选择器
+	function init_date_choose($start, $end) {
+			$start.datetimepicker({
+				format : 'yyyy-mm-dd',
+				autoclose : true,
+				todayBtn : true,
+				minView: 2,
+				//startDate : new Date(),
+				language : 'zh-CN'
+			}).on("click", function() {
+				//$start.datetimepicker("setStartDate", new Date());
+			});
+			$end.datetimepicker({
+				format : 'yyyy-mm-dd',
+				autoclose : true,
+				todayBtn : true,
+				minView: 2,
+				language : 'zh-CN'
+			}).on("click", function() {
+				$end.datetimepicker("setStartDate", $start.val());
+			});
+		}
+		init_date_choose($('#start_time_one'), $('#end_time_one'));
+	
+	
+	
+		(function() {
+
+			var $channel_type_one = $(".channel-type-one");
+			var $channel_type_two = $(".channel-type-two");
+			var $channel_type_three = $(".channel-type-three");
+			var $channel_type = $('.channel-type');
+			var $channel_type_four = $(".channel-type-four");
+			var $app = $("#app");
+			var $pc = $("#pc");
+			var $internal = $("#internal");
+			var $abroad = $("#abroad");
+			var $other = $("#other");
+			
+				$('#fileinput').on('change', function() {
+					var filename = this.value;
+					var filepoint = filename.lastIndexOf('.');
+					var fileext = filename.substr(filepoint + 1);
+
+					if (isfiletype(fileext) === 0) {
+						$('.fileinputhelp').text('不支持该文件类型上传');
+						this.value = '';
+					} else {
+						$('.fileinputhelp').text('');
+					}
+				});
+
+				function isfiletype(fileext) {
+					var fileextarr = [ 'docx', 'doc', 'jpg', 'png', 'pdf','xls','txt' ];
+					var isfile = 0;
+					for (var i = 0; i < fileextarr.length; i++) {
+						if (fileext === fileextarr[i]) {
+							isfile++;
+							return;
+						}
+					}
+					return isfile;
+				}
+
+				$('.deletefilebtn').on('click', function(e) {
+					e.preventDefault();
+					$('#fileinput').val('');
+				});
+			
+
+			//异步提交表单
+			function bindsumbit() {
+				
+				var $submit_application = $('#fff');
+				var options = {
+					beforeSubmit : function() {
+						$('.loginbtn').button('loading');
+					},
+					success : function(data) {
+						if (data.code == 0) {
+							$submit_application.resetForm();
+							parent.layer.msg(data.message);
+						}
+						parent.layer.msg(data.message);
+						$('.loginbtn').button('reset');
+					},
+					error : function() {
+						parent.layer.msg("录入失败");
+					}
+				};
+				$submit_application.ajaxForm(options);
+			}
+			$(document).ready(function() {
+				$channel_type.append($channel_type_one);
+				init_date_choose($('#start-date-one'), $('#end-date-one'));
+				bindsumbit();
+			});
+
+		})();
+	
+		
+	</script>
+	
+<script>
+KindEditor.ready(function(K) {
+	var editor1 = K.create('textarea[name="noticeContent"]', {
+		cssPath : '../editor/plugins/code/prettify.css',
+		uploadJson : '../editor/jsp/upload_json.jsp',
+		fileManagerJson : '../editor/jsp/file_manager_json.jsp',
+		allowFileManager : true,
+		afterCreate : function() {
+			var self = this;
+			K.ctrl(document, 13, function() {
+				self.sync();
+				document.forms['fff'].submit();
+			});
+			K.ctrl(self.edit.doc, 13, function() {
+				self.sync();
+				document.forms['fff'].submit();
+			});
+		}
+	});
+	prettyPrint();
+});
+
+</script>
+
+</body>
+
+</html>

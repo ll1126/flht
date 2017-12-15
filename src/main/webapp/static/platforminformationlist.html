@@ -1,0 +1,280 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>平台信息列表</title>
+    <link rel="stylesheet" href="../css/thirdParty/bootstrap.css">
+    <link rel="stylesheet" href="../css/thirdParty/bootstrap-table.min.css">
+    <style>
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+	<img id ="img" src="">
+	<input type="hidden" id="State" value="3"/>
+    <div class="container-fluid">
+        <!--<div class="row">
+            <div class="col-lg-12">
+                <h1>平台信息列表</h1>
+            </div>
+        </div>-->
+        <hr />
+        <div class="channel-sreach">
+            <div class="row">
+                
+                <div class="col-lg-1">
+                    <label for="">上下架:</label>
+                </div>
+                <div class="col-lg-2">
+                    <div class="dowebok">
+							<select class="form-control" name="shangjia" id="shangjia"  >
+								<option></option>
+								<option value="2">下架</option>
+								<option value="1">上架</option>
+							</select>
+						</div>
+                </div>
+            </div>
+        </div>
+        <div class="channel-sreach">
+            <div class="row">
+                
+                <div class="col-lg-1">
+                    <label for="">平台名称关键字搜索:</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" class="form-control" id="txtSearch"
+							name="limitedDuration" required placeholder="">
+                </div>
+                <div class="col-lg-offset-3">
+                    <button type="button" style="width:100px;" class="btn btn-default btn1">查询</button>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row" style="margin:0 5px;">
+            <table id="channel-application"></table>
+            
+        </div>
+
+    </div>
+    <script src="../js/thirdParty/jquery.min.js"></script>
+    <script src="../js/thirdParty/bootstrap.js"></script>
+    <script src="../js/thirdParty/bootstrap-table.min.js"></script>
+    <script src="../js/thirdParty/bootstrap-table-zh-CN.min.js"></script>
+    <script>
+        $('#channel-application').bootstrapTable({
+        	striped: true,
+        	pagination: true, 			//是否显示分页（*）
+        	pageNumber:1,               //初始化加载第一页，默认第一页                
+        	pageSize: 8,               //每页的记录行数（*）               
+        	pageList: [10, 25, 50, 100],
+            columns: [{
+                field: 'id',
+                title: '平台编号'
+            }, {
+                field: 'platform',
+                title: '平台名称'
+            }, {
+                field: 'operator',
+                title: '运营公司'
+            }, {
+                field: 'onlineTime',
+                title: '上线时间'
+            }, {
+                field: 'interestRate',
+                title: '利息水平'
+            }, {
+                field: 'investmentHorizon',
+                title: '投资期限'
+            }, {
+                field: 'registeredFund',
+                title: '注册资金'
+            }, {
+                field: 'depositFund',
+                title: '资金存管'
+            }, {
+                field: 'guaranteeCompany',
+                title: '担保公司'
+            }, {
+                field: 'withdraw',
+                title: '提现到账'
+            } , {
+                field: 'phoneNumber',
+                title: '客服电话'
+            }, {
+                field: 'backgroundPedestal',
+                title: '平台背景'
+            }, {
+                field: 'backgroundFinancing',
+                title: '融资背景'
+            }, {
+                field: 'address',
+                title: '公司地址'
+            }, {
+                field: 'shangjia',
+                title: '平台状态',
+                formatter:function (value,row,index) {
+                    if(row.shangjia==1){
+                        return '上架';
+                    }else {
+                        return '下架';
+                    }
+                }
+            }, {
+                field: 'caozuo',
+                title: '操作',
+                formatter: function (value, row, index) {
+                    return '<a href="#" onclick="update(' + row.id + ');" >' + '修改' + '</a>'
+                        + '<br>' + '<a href="#" onclick="delete1(' + row.id + ');" >' + '删除' + '</a>';
+                }
+            },{
+                field: 'xiajiaba',
+                title:'操作',
+                formatter:function(value,row,index){
+                    return '<a href="#" onclick="xiajia('+row.id+');" >'+ '平台下架'+ '</a>';
+                }
+            
+            },{
+                field: 'shangjiaba',
+                title:'操作',
+                formatter:function(value,row,index){
+                    return '<a href="#" onclick="shangjia('+row.id+');" >'+ '平台上架'+ '</a>';
+                }
+
+            }
+            
+            ],
+            data: []
+        });
+
+        function delete1(id){
+        	var r=confirm("是否删除");
+			if (r==true)
+			  {
+        	$.get("../brandInformation/deleteBrand.do?brandID="+id,function(result){
+        		if(result.code==0){
+        			parent.layer.msg("平台删除成功");
+        			 $.ajax({
+
+        					"url":"../brandInformation/getBrandList.do",
+
+        					"type":"post",
+
+        					"data":{},
+
+        					"datatype":"json",
+
+        					"success":function(result){
+
+        						if(result.code==0){
+        							var data=result.content;
+        							console.log(data);
+        							$('#channel-application').bootstrapTable("load",data);						
+        						}
+
+        					}
+
+        				});
+        		}
+        	});
+			  }else{
+				  alert("取消！");
+			  }
+        	
+        }
+        
+        function update(id){
+        	parent.$("#iframeid").val(id);
+        	document.location.href="updatePlatformInformation.html";
+        	
+        }
+        
+        function xiajia(id) {
+            var r=confirm("是否下架");
+            if (r==true)
+            {
+                $.get("../brandInformation/xiajiaBrand.do?brandID="+id+"&platState="+2,function(result){
+                    if(result.code==0){
+                        parent.layer.msg("平台下架成功");
+                    }
+                });
+            }else{
+                alert("取消！");
+            }
+        }
+
+        function shangjia(id) {
+            var r=confirm("是否上架");
+            if (r==true)
+            {
+                $.get("../brandInformation/xiajiaBrand.do?brandID="+id+"&platState="+1,function(result){
+                    if(result.code==0){
+                        parent.layer.msg("平台上架成功");
+                    }
+                });
+            }else{
+                alert("取消！");
+            }
+        }
+        
+        $.ajax({
+
+				"url":"../brandInformation/getBrandList.do",
+
+				"type":"post",
+
+				"data":{},
+
+				"datatype":"json",
+
+				"success":function(result){
+
+					if(result.code==0){
+						var data=result.content;
+						console.log(data);
+						$('#channel-application').bootstrapTable("load",data);						
+						$("#img").attr("src",data[1].platformLogo);
+					}
+
+				}
+
+			});
+        
+    	
+    	 $(".btn1").click(function () {
+ 			var platform= $("#txtSearch").val();
+ 			var shangjia=$("#shangjia").val();
+ 			 $.ajax({
+
+ 					"url":"../brandInformation/getBrandList.do",
+
+ 					"type":"post",
+
+ 					"data":{"platform":platform,"shangjia":shangjia},
+
+ 					"datatype":"json",
+
+ 					"success":function(result){
+
+ 						if(result.code==0){
+ 							var data=result.content;
+ 							console.log(data);
+ 							$('#channel-application').bootstrapTable("load",data);
+ 							parent.layer.msg("查询成功");
+ 						}
+
+ 					}
+
+ 				});
+ 			
+ 		});
+    </script>
+</body>
+
+</html>

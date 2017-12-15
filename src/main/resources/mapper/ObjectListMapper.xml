@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.wsloan.fanLiWang.dao.ObjectListDao">
+	
+
+	<!--标的信息录入  -->
+
+	<insert id="addObject" parameterType="com.wsloan.fanLiWang.entity.ObjectList" keyProperty="id" useGeneratedKeys="true" >
+		INSERT INTO ObjectList
+		(<trim suffixOverrides=",">
+		<if test="platformID !=null ">PlatformID</if>
+		<if test="platform !=null ">,Platform</if>
+		<if test="platformLogo !=null ">,platformLogo</if>
+		<if test="type !=null">,Type</if>
+		<if test="annualizedReturnsMin !=null">,AnnualizedReturnsMin</if>
+		<if test="annualizedReturnsMax !=null">,AnnualizedReturnsMax</if>
+		<if test="annualSectionMin !=null">,AnnualSectionMin</if>
+		<if test="annualSectionMax !=null">,AnnualSectionMax</if>
+		<if test="objectDeadline !=null">,ObjectDeadline</if>
+		<if test="minMoney !=null">,MinMoney</if>
+		<if test="maxMoney !=null">,MaxMoney</if>
+		<if test="tag !=null">,Tag</if>
+		<if test="platformAddress !=null">,PlatformAddress</if>
+		<if test="objectUpTime !=null">,ObjectUpTime</if>
+		<if test="maxReturnMoney !=null">,MaxReturnMoney</if>
+		<if test="investmentSection !=null">,InvestmentSection</if>
+		<if test="objectTian !=null">,ObjectTian</if>
+		<if test="objectState !=null">,ObjectState</if>
+		<if test="zhiding !=null">,zhiding</if>
+		<if test="zdljpc !=null">,zdljpc</if>
+		<if test="zdljapp !=null">,zdljapp</if>
+		<if test="pcapp !=null">,pcapp</if>
+		<if test="zhuanWeiTian !=null">,ZhuanWeiTian</if>
+		<if test="participants !=null">,Participants</if>
+		<if test="paixu !=null">,paixu</if>
+		</trim>)
+	  VALUES
+		(<trim suffixOverrides=",">
+		<if test="platformID !=null">#{platformID}</if>
+		<if test="platform !=null ">,#{platform}</if>
+		<if test="platformLogo !=null ">,#{platformLogo}</if>
+		<if test="type !=null">,#{type}</if>
+		<if test="annualizedReturnsMin !=null">,#{annualizedReturnsMin}</if>
+		<if test="annualizedReturnsMax !=null">,#{annualizedReturnsMax}</if>
+		<if test="annualSectionMin !=null">,#{annualSectionMin}</if>
+		<if test="annualSectionMax !=null">,#{annualSectionMax}</if>
+		<if test="objectDeadline !=null">,#{objectDeadline}</if>
+		<if test="minMoney !=null">,#{minMoney}</if>
+		<if test="maxMoney !=null">,#{maxMoney}</if>
+		<if test="tag !=null">,#{tag}</if>
+		<if test="platformAddress !=null">,#{platformAddress}</if>
+		<if test="objectUpTime!=null">,#{objectUpTime}</if>
+		<if test="maxReturnMoney !=null">,#{maxReturnMoney}</if>
+		<if test="investmentSection !=null">,#{investmentSection}</if>
+		<if test="objectTian !=null">,#{objectTian}</if>
+		<if test="objectState !=null">,#{objectState}</if>
+		<if test="zhiding !=null">,#{zhiding}</if>
+		<if test="zdljpc !=null">,#{zdljpc}</if>
+		<if test="zdljapp !=null">,#{zdljapp}</if>
+		<if test="pcapp !=null">,#{pcapp}</if>
+		<if test="zhuanWeiTian !=null">,#{zhuanWeiTian}</if>
+		<if test="participants !=null">,#{participants}</if>
+		<if test="paixu !=null">,#{paixu}</if>
+		</trim>)
+	</insert>
+
+	<!-- 标的删除 -->
+	<delete id="deleteObject" parameterType="integer" >
+		delete from ObjectList where ID=#{objectID}
+		
+	</delete>
+	
+	
+	<!-- 标的的修改  -->
+	
+	<update id="updateObject" parameterType="map">
+		UPDATE ObjectList
+       SET  
+       		<if test="platform !=null and platform != ''">Platform=#{platform}</if>
+			<if test="platformLogo !=null and platformLogo !=''">,PlatformLogo=#{platformLogo}</if>
+			<if test="type !=null and type !=''">,Type=#{type}</if>
+			<if test="annualizedReturnsMin !=null and annualizedReturnsMin != ''">,AnnualizedReturnsMin=#{annualizedReturnsMin}</if>
+			<if test="annualizedReturnsMax !=null and annualizedReturnsMax != ''">,AnnualizedReturnsMax=#{annualizedReturnsMax}</if>
+			<if test="annualSectionMin !=null and annualSectionMin != ''">,AnnualSectionMin=#{annualSectionMin}</if>
+			<if test="annualSectionMax !=null and annualSectionMax != ''">,AnnualSectionMax=#{annualSectionMax}</if>
+			<if test="objectDeadline !=null and objectDeadline != ''">,ObjectDeadline=#{objectDeadline}</if>
+			<if test="minMoney !=null and minMoney != ''">,MinMoney=#{minMoney}</if>
+			<if test="maxMoney !=null and maxMoney != ''">,MaxMoney=#{maxMoney}</if>
+			<if test="tag !=null and tag != ''">,Tag=#{tag}</if>
+			<if test="platformAddress !=null and platformAddress != ''">,PlatformAddress=#{platformAddress}</if>
+			<if test="objectUpTime !=null and objectUpTime != ''">,ObjectUpTime=#{objectUpTime}</if>
+			<if test="objectState !=null and objectState != ''">,ObjectState=#{objectState}</if>
+			<if test="maxReturnMoney !=null and maxReturnMoney != ''">,MaxReturnMoney=#{maxReturnMoney}</if>
+			<if test="investmentSection !=null and investmentSection != ''">,InvestmentSection=#{investmentSection}</if>
+			<if test="objectTian !=null and objectTian != ''">,ObjectTian=#{objectTian}</if>
+			<if test="zhiding !=null">,Zhiding=#{zhiding}</if>
+			<if test="zdljpc !=null and zdljpc != ''">,zdljpc=#{zdljpc}</if>
+			<if test="zdljapp !=null and zdljapp != ''">,zdljapp=#{zdljapp}</if>
+			<if test="pcapp !=null and pcapp != ''">,pcapp=#{pcapp}</if>
+			<if test="zhuanWeiTian !=null and zhuanWeiTian != ''">,ZhuanWeiTian=#{zhuanWeiTian}</if>
+			<if test="paixu !=null and paixu != ''">,paixu=#{paixu}</if>
+			where ID=#{ID}
+	</update>
+	
+	<!--标的列表查询  -->
+	<select id="queryObjectList"  resultType="com.wsloan.fanLiWang.entity.ObjectList">
+		select * from ObjectList 
+			where 1=1
+			<if test="shangjia!=null">
+				and ObjectState=#{shangjia}
+			</if>
+			<if test="platform!=null and platform!=''">
+				and Platform LIKE concat(concat('%',#{platform}),'%')
+			</if>
+			
+		 order by ID desc
+
+	</select>
+	
+	<!-- 标的记录数的查询 -->
+
+	<select id="getCountObject" resultType="integer">
+		select count(*) from ObjectList
+	</select>	
+	<!-- 查看一条标的详细信息 -->
+	<select id="getOneObject" parameterType="integer"  resultType="com.wsloan.fanLiWang.entity.ObjectList">
+	
+		select * from ObjectList ot where  ot.ID=#{objectID}
+	</select>
+	
+	
+	<!-- 
+	 <resultMap type="com.wsloan.fanLiWang.entity.ObjectList" id="objectMap">
+         <id property="id" column="c_id"/>
+         <result property="name" column="c_name"/>
+         ofType指定students集合中的对象类型
+         <collection property="tag" ofType="com.wsloan.fanLiWang.entity.Tag">
+            <id property="ID" column="ID"/>
+             <result property="tag" column="Tag"/>
+        </collection>
+    </resultMap> -->
+	
+	
+	
+	
+	<!-- 删除标，则删除所有返利方案 -->
+	<select id="getAllScheme" parameterType="integer" resultType="com.wsloan.fanLiWang.entity.RebateScheme">
+	
+		select * from RebateScheme rs left join  ObjectList ol
+		on rs.objectID=ol.ID 
+		where ol.ID=#{ID} 
+	
+	</select>
+	
+	<!--删除平台，删除所有的标  -->
+	<delete id="deleteAllSchemeList" parameterType="integer">
+		delete  from RebateScheme where ID=#{ID}
+	
+	</delete>
+	
+	<!--修改项目排序，在项目列表单独修改-->
+	<update id="updatePaixu">
+		UPDATE ObjectList SET paixu=#{paixu} where ID=#{id}
+	</update>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

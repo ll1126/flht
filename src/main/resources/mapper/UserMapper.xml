@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.wsloan.fanLiWang.dao.UserDao">
+	<!--用户登录-->
+	 <select id="login" resultType="com.wsloan.fanLiWang.entity.BackgroundUser">
+		select * from BackgroundUser
+		where
+		UserName = #{username}
+	</select>  
+	<!--修改密码-->
+	<update id="updatePwd">
+		UPDATE  BackgroundUser SET Password = #{newpwd} where UserName = #{userName};
+	</update>
+
+	<!-- 获取用户信息 -->
+	
+	<select id="getUserList" resultType="com.wsloan.fanLiWang.entity.User">
+		<!--SELECT
+		iu.[ID]
+      ,iu.[UserName]
+      , iu.[Password]
+      , iu.[PhoneNumber]
+      , iu.[CardNo]
+      , iu.[ReferrerID]
+      , iu.[ReferrerCode]
+      , iu.[LoginVerifyTime]
+      , iu.[SecurityCode]
+      , iu.[RegistrationTime]
+      , iu.[LoginTime]
+      , iu.[LJProfit]
+      , iu.[JRProfit]
+	  ,iu.[Blacklist]
+      ,iu.[skr]
+	  ,iu.[comefrom]
+	  ,iu.[RegistrationTime]
+      ,bls.BlackState as blackListChinese
+       from InvestmentUser iu
+      left join BlackListState bls on
+      bls.ID= iu.Blacklist
+       where 1=1
+		<if test="phoneNumber!=null and phoneNumber!=''">
+			and iu.PhoneNumber=#{phoneNumber}
+		</if>
+		order by iu.ID desc-->
+		select * from
+		(SELECT
+		ROW_NUMBER() over(order by iu.ID desc) row,
+		iu.[ID]
+		,iu.[UserName]
+		, iu.[Password]
+		, iu.[PhoneNumber]
+		, iu.[CardNo]
+		, iu.[ReferrerID]
+		, iu.[ReferrerCode]
+		, iu.[LoginVerifyTime]
+		, iu.[SecurityCode]
+		, iu.[LoginTime]
+		, iu.[LJProfit]
+		, iu.[JRProfit]
+		,iu.[Blacklist]
+		,iu.[skr]
+		,iu.[comefrom]
+		,iu.[RegistrationTime]
+		,iu.beAgent
+		,bls.BlackState as blackListChinese
+		from InvestmentUser iu
+		left join BlackListState bls on
+		bls.ID= iu.Blacklist
+		where 1=1
+		<if test="phoneNumber!=null and phoneNumber!=''">
+			and iu.PhoneNumber=#{phoneNumber}
+		</if>
+		) as t  where
+		t.row between #{min} and #{max} order by t.ID desc
+	</select>
+
+<!--获取总的记录条数-->
+	<select id="getTotal" resultType="integer">
+		SELECT  count(0) FROM  InvestmentUser
+		<where>
+			<if test="phoneNumber!=null and phoneNumber!=''">
+				PhoneNumber=#{phoneNumber}
+			</if>
+		</where>
+
+	</select>
+	<!-- 拉入黑名单 -->
+	
+	<update id="updateUserState" >
+		update InvestmentUser set Blacklist=2 where ID=#{userID} 
+	</update>
+	
+<!--  查看用户对应的回执单-->
+	<select id="getUserReceipt" resultType="com.wsloan.fanLiWang.entity.Receipt">
+	
+		select  rpt.[ID]
+		      ,rpt.[PlatformUser]
+		      ,rpt.[PhoneNumber]
+		      ,rpt.[InvestmentDate]
+		      ,rpt.[InvestmentLimit]
+		      ,rpt.[InvestmentMoney]
+		      ,rpt.[GatheringUser]
+		      ,rpt.[GatheringAccount]
+		      ,rpt.[ReceiptState]
+		      ,rpt.[SubmissionTime]
+		      ,iu.ReferrerID as UserID
+		  	  ,iu.CardNo as GatherAccount
+		  	  ,br.Platform as platform
+		  	  from Receipt rpt
+		       left join BrandInformation br
+		       on rpt.PlatformID= br.ID
+		       left join InvestmentUser iu 
+		       on rpt.PhoneNumber = iu.PhoneNumber
+		       where 1=1
+				<if test="phoneNumber!=null and phoneNumber!=''">
+					and rpt.PhoneNumber=#{phoneNumber}
+				</if>
+		</select>	
+		
+		<!--  获取一条用户信息根据ID-->
+		
+		<select id="getUserDetails" resultType="com.wsloan.fanLiWang.entity.User">
+		
+			select * from InvestmentUser where ID=#{userID}
+		</select>
+		
+			<!-- 获取用户信息 -->
+	
+	<select id="getTuijianren" resultType="com.wsloan.fanLiWang.entity.User">
+		SELECT 
+		iu.[ID]
+      ,iu.[UserName]
+      , iu.[Password]
+      , iu.[PhoneNumber]
+      , iu.[CardNo]
+      , iu.[ReferrerID]
+      , iu.[ReferrerCode]
+      , iu.[LoginVerifyTime]
+      , iu.[SecurityCode]
+      , iu.[RegistrationTime]
+      , iu.[LoginTime]
+      , iu.[LJProfit]
+      , iu.[JRProfit]
+      ,iu.[skr]
+      ,bls.BlackState as blackListChinese
+       from InvestmentUser iu
+      left join BlackListState bls on
+      bls.ID= iu.Blacklist
+       where iu.ReferrerID=#{refferredID}
+		order by iu.ID desc
+	</select>
+
+	<!--查询注册验证码-->
+	<select id="getZhuCeCode" resultType="integer">
+		SELECT  zhuceYZM  FROM  ZhuCe WHERE  phone=#{phoneNumber}
+	</select>
+
+	<!--查询更换密码验证码-->
+	<select id="getSecurityCode" resultType="map">
+		SELECT  securityCode FROM  InvestmentUser WHERE  PhoneNumber= #{phoneNumber}
+	</select>
+
+	<!--Excel导出用户信息-->
+	<select id="exportUser"  resultType="com.wsloan.fanLiWang.entity.User">
+		SELECT ID,PhoneNumber,skr,CardNo,ReferrerID,comefrom,cBkTime FROM  InvestmentUser
+		WHERE CardNo!='NULL'
+		<if test="start_time_one!=null and start_time_one!=''">
+			and cBkTime<![CDATA[>=]]>CONVERT(datetime,#{start_time_one} )
+		</if>
+		<if test="end_time_one!=null and end_time_one!=''">
+			and cBkTime<![CDATA[<=]]>CONVERT(datetime,#{end_time_one} )
+		</if>
+	</select>
+
+	<!--成为代理商-->
+	<update id="beAgent">
+		UPDATE  InvestmentUser SET  beAgent=#{beAgent} WHERE  ID=#{userID};
+	</update>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

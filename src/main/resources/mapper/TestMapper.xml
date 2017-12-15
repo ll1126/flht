@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.wsloan.fanLiWang.dao.TestDao">
+	<select id="getUserList" resultType="com.wsloan.fanLiWang.entity.User">
+		select * from (select ROW_NUMBER() over(order by a.ID desc) row,a.* from
+			InvestmentUser a)as t where
+			t.row between #{min} and #{max}
+
+	</select>
+
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

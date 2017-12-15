@@ -1,0 +1,441 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<title >返利方案修改</title>
+
+<link rel="stylesheet" href="../css/thirdParty/bootstrap.css">
+<link rel="stylesheet"
+	href="../css/thirdParty/bootstrap-datetimepicker.css">
+<link rel="stylesheet" href="../css/thirdParty/bootstrap-multiselect.css">
+
+
+<style>
+.row {
+	margin-top: 10px;
+}
+
+label {
+	font-size: 16px;
+}
+</style>
+
+
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-12"  >
+				<h1 >返利方案修改</h1>
+			</div>
+		</div>
+		<hr />
+		<form id="submit-application" action="../rebate/updateScheme.do" 
+			method="post">
+			<input type="hidden" id="Id"  name="BrandID" value=""/>
+
+			<div class="channel-type"></div>
+
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-offset-3">
+						<button type="submit" style="width: 100px;"
+							class="btn btn-default apply">提交</button>
+					</div>
+				</div>
+			</div>
+		</form>
+		<div class="channel-type-one" style="display: none; disabled: true;">
+		
+		<div class="form-group" style="display:none">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="channelname">方案编号:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="schemeID"
+							name="ID" required placeholder="">
+					</div>
+				</div>
+			</div>
+			<!-- <div class="form-group">
+				<div class="row">
+				<div class="col-lg-1">
+						<label for="channelname">项目平台信息:</label>
+					</div>
+					<div class="col-lg-2">
+						<div class="dowebok">
+							<select class="form-control" name="objectID" id="objectID"  >
+								<option></option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div> -->
+			
+			
+			<div class="form-group">
+				<div class="row">
+				<div class="col-lg-1">
+						<label for="channelname">有效期限:</label>
+					</div>
+					<div class="col-lg-2">
+						<div class="dowebok">
+							<input type="text" class="form-control" id="limitedDuration"
+							name="limitedDuration" required placeholder="">
+						</div>
+					</div>
+					<div class="col-lg-1">
+						<label for="operator">有效项目:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="effectiveProject"
+							name="effectiveProject" required placeholder="">
+					</div>
+					
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact" >投资额度:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="investmentLimit"
+							name="investmentLimit" required placeholder="请输入数字">
+					</div>
+					
+					 <div class="col-lg-1">
+						<label for="contactway">即刻返利:</label>
+					</div> 
+					<div class="col-lg-2">
+						 <input type="text" class="form-control" id="rebateImmediately" required placeholder="请输入数字"
+						  name="rebateImmediately"> 
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact">原平台利息:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="platformRate"
+							name="platformRate" required placeholder="请输入数字">
+					</div>
+					<div class="col-lg-1">
+						<label for="contactway">红包:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="redPacket"
+							name="redPacket" required placeholder="请输入数字">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact">其他:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="rest"
+							name="rest" required placeholder="请输入数字">
+					</div>
+					<div class="col-lg-1">
+						<label for="contactway">总收益:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="totalRevenue"
+							name="totalRevenue" required placeholder="请输入数字">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact">原年化:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="primaryRate"
+							name="primaryRate" required placeholder="请输入数字">
+					</div>
+					<div class="col-lg-1">
+						<label for="contactway">综合年化:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="synthesizeRate"
+							name="synthesizeRate" required placeholder="请输入数字">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contact">返利周期:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="rebateDuration"
+							name="rebateDuration" required placeholder="">
+					</div>
+					<div class="col-lg-1">
+						<label for="contact">上下架:</label>
+					</div>
+					<div class="col-lg-1">
+						<label class="radio-inline"> <input type="radio"
+							name="shangjia" id="app" value="1"> 上架
+						</label>
+					</div>
+					<div class="col-lg-1">
+						<label class="radio-inline"> <input type="radio"
+							name="shangjia" id="pc" value="2"> 下架
+						</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label>第三方平台返点：	</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="disanfang" name="disanfang">%
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label for="contactway">我方平台返利方式:</label>
+					</div>
+					<div class="col-lg-2">
+						<select  style="width:200px;display: block;height: 34px;padding: 6px 12px;font-size: 14px;
+							line-height: 1.42857143;color: #555;
+						    background-color: #fff;
+						    background-image: none;
+						    border: 1px solid #ccc;" name="fanDian" id="fanDian">
+						    <option ></option>
+						  <option value ="0">区间式</option>
+						  <option value ="1">浮点式</option>
+						</select>
+					</div>
+					<div style="display:none;" id="fdz">
+						<div class="col-lg-1">
+							<label for="contact" id="fdzLable">返点百分比:</label>
+						</div>
+						<div class="col-lg-2">
+							<input type="text" class="form-control" id="fanDianScheme1"
+								name="fanDianScheme" placeholder="请输入数字" style="width:110px;display:inline-block">
+								<span id="dw" style="display:none">%</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+				<div class="form-group">
+					<div class="row">
+						<div class="col-lg-1">
+							<label>代理商返利方式:</label>
+						</div>
+						<div class="col-lg-2">
+							<select  style="width:200px;display: block;height: 34px;padding: 6px 12px;font-size: 14px;
+							line-height: 1.42857143;color: #555;
+						    background-color: #fff;
+						    background-image: none;
+						    border: 1px solid #ccc;" name="agentFanDian" id="agent">
+								<option ></option>
+								<option value ="0">区间式</option>
+								<option value ="1">浮点式</option>
+							</select>
+						</div>
+						<div style="display:none;" id="fdz2">
+							<div class="col-lg-1">
+								<label id="fdzLable2">返点百分比:</label>
+							</div>
+							<div class="col-lg-2">
+								<input type="text" class="form-control" id="agentScheme"
+									   name="agentFanDianScheme" placeholder="请输入数字" style="width:110px;display:inline-block">
+								<span id="dw2" style="display:none">%</span>
+							</div>
+						</div>
+					</div>
+				</div>
+		<hr />
+		</div>
+	</div>
+	<script src="../js/thirdParty/jquery.min.js"></script>
+	<script src="../js/thirdParty/bootstrap.js"></script>
+	<script src="../js/thirdParty/bootstrap-datetimepicker.js"></script>
+	<script src="../js/thirdParty/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="../js/thirdParty/jquery.form.min.js"></script>
+	<script src="../js/thirdParty/bootstrap-multiselect.js"></script>
+	<script>
+	
+	$('[name="shangjia"]').change(function(){
+		$('[name="shangjia"]').prop('checked','false');
+		$(this).prop('checked','true');
+	});
+	
+
+		var id = parent.$("#iframeid").val();
+		$.get("../rebate/getOneScheme.do?schemeID="+id,function(result){
+			$("#schemeID").val(id);
+			$("#objectID").val(result.content.objectName);
+			$("#limitedDuration").val(result.content.limitedDuration);
+			$("#effectiveProject").val(result.content.effectiveProject);
+			$("#platformRate").val(result.content.platformRate);
+			$("#investmentLimit").val(result.content.investmentLimit);
+			$("#rebateImmediately").val(result.content.rebateImmediately);
+			$("#redPacket").val(result.content.redPacket);
+			$("#rest").val(result.content.rest);
+			$("#totalRevenue").val(result.content.totalRevenue);
+			$("#primaryRate").val(result.content.primaryRate);
+			$("#synthesizeRate").val(result.content.synthesizeRate);
+			$("#rebateDuration").val(result.content.rebateDuration);
+			$("#annualSectionMax").val(result.content.annualSectionMax);
+			$("#fanDianScheme1").val(result.content.fanDianScheme);
+			$("#disanfang").val(result.content.disanfang);
+			$("#agentScheme").val(result.content.agentFanDianScheme);
+			var a = result.content.shangjia;
+			if(a=='2'){
+				$("#pc").prop('checked','true');
+			}
+			else {
+				$("#app").prop('checked','true');
+			}
+			
+		});
+
+		(function() {
+
+				$("#fanDian").change(function(){
+					$("#fdz").show();
+					if($(this).val() == 1) {
+						$("#fdzLable").text("返点百分比:");
+						$("#dw").show();
+					}  else {
+						$("#fdzLable").text("返利金额:");
+						$("#dw").hide();
+					}
+				});
+
+            $("#agent").change(function(){
+                $("#fdz2").show();
+                if($(this).val() == 1) {
+                    $("#fdzLable2").text("返点百分比:");
+                    $("#dw2").show();
+                }  else {
+                    $("#fdzLable2").text("返利金额:");
+                    $("#dw2").hide();
+                }
+            });
+			
+			
+				$('#fileinput').on('change', function() {
+					var filename = this.value;
+					var filepoint = filename.lastIndexOf('.');
+					var fileext = filename.substr(filepoint + 1);
+
+					if (isfiletype(fileext) === 0) {
+						$('.fileinputhelp').text('不支持该文件类型上传');
+						this.value = '';
+					} else {
+						$('.fileinputhelp').text('');
+					}
+				});
+
+				function isfiletype(fileext) {
+					var fileextarr = [ 'docx', 'doc', 'jpg', 'png', 'pdf','xls','txt' ];
+					var isfile = 0;
+					for (var i = 0; i < fileextarr.length; i++) {
+						if (fileext === fileextarr[i]) {
+							isfile++;
+							return;
+						}
+					}
+					return isfile;
+				}
+
+				$('.deletefilebtn').on('click', function(e) {
+					e.preventDefault();
+					$('#fileinput').val('');
+				});
+			
+
+			//初始化日期选择器
+			function init_date_choose($start, $end) {
+				$start.datetimepicker({
+					format : 'yyyy-mm-dd',
+					minView : 'month',
+					autoclose : true,
+					//startDate : new Date(),
+					language : 'zh-CN'
+				}).on("click", function() {
+					$start.datetimepicker("setStartDate", new Date());
+				});
+				$end.datetimepicker({
+					format : 'yyyy-mm-dd',
+					minView : 'month',
+					autoclose : true,
+					language : 'zh-CN'
+				}).on("click", function() {
+					$end.datetimepicker("setStartDate", $start.val());
+				});
+			}
+
+			var $channel_type_one = $(".channel-type-one");
+			var $channel_type_two = $(".channel-type-two");
+			var $channel_type_three = $(".channel-type-three");
+			var $channel_type = $('.channel-type');
+			var $channel_type_four = $(".channel-type-four");
+			var $app = $("#app");
+			var $pc = $("#pc");
+			var $internal = $("#internal");
+			var $abroad = $("#abroad");
+			var $other = $("#other");
+			
+
+			//异步提交表单
+			function bindsumbit() {
+				
+				var $submit_application = $('#submit-application');
+				var options = {
+					beforeSubmit : function() {
+						$('.loginbtn').button('loading');
+					},
+					success : function(data) {
+						if (data.code == 0) {
+					//		$submit_application.resetForm();
+							parent.layer.msg("修改方案成功");
+							parent.$("#main").attr("src","static/schemeList.html");
+						}
+					},
+					error : function() {
+						parent.layer.msg("录入失败");
+						$('.apply').button('reset');
+					}
+				};
+				$submit_application.ajaxForm(options);
+			}
+			$(document).ready(function() {
+				$channel_type.append($channel_type_one);
+				init_date_choose($('#start-date-one'), $('#end-date-one'));
+				$channel_type_one.show();
+				bindsumbit();
+
+			});
+			$('#channel-type').multiselect();
+			$('#channelshowfour').multiselect();
+
+		})();
+	
+		/*--------------------------------------用于生成标的对应平台列表----------------------------------------*/	
+		
+		
+	</script>
+	</div>
+</body>
+
+</html>

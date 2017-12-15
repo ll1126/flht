@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>公告列表</title>
+    <link rel="stylesheet" href="../css/thirdParty/bootstrap.css">
+    <link rel="stylesheet" href="../css/thirdParty/bootstrap-table.min.css">
+    <style>
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+	<img id ="img" src="">
+	<input type="hidden" id="State" value="3"/>
+    <div class="container-fluid">
+        <!--<div class="row">
+            <div class="col-lg-12">
+                <h1>公告列表</h1>
+            </div>
+        </div>-->
+        <hr />
+        <hr />
+        <div class="row" style="margin:0 5px;">
+            <table id="channel-application"></table>
+            
+        </div>
+
+    </div>
+    <script src="../js/thirdParty/jquery.min.js"></script>
+    <script src="../js/thirdParty/bootstrap.js"></script>
+    <script src="../js/thirdParty/bootstrap-table.min.js"></script>
+    <script src="../js/thirdParty/bootstrap-table-zh-CN.min.js"></script>
+    <script>
+        $('#channel-application').bootstrapTable({
+        	striped: true,
+        	pagination: true, 			//是否显示分页（*）
+        	pageNumber:1,               //初始化加载第一页，默认第一页                
+        	pageSize: 8,               //每页的记录行数（*）
+            striped: true,
+            pageList: [10, 25, 50, 100],
+            columns: [{
+                field: 'id',
+                title: '公告编号'
+            }, {
+                field: 'noticeTitle',
+                title: '公告标题'
+                
+            }, {
+                field: 'noticeTime',
+                title: '公告时间'
+            }, {
+                field: 'caozuo',
+                title:'操作',
+                formatter:function(value,row,index){
+                	 return '<a href="#" onclick="update('+row.id+');" >'+ '修改'+ '</a>'
+                	 +'<br>'+'<a href="#" onclick="delete1('+row.id+');" >'+ '删除'+ '</a>';
+            }
+            
+            }
+            
+            ],
+            data: []
+        });
+
+        function delete1(id){
+        	var r=confirm("是否删除");
+			if (r==true)
+			  {
+				$.get("../notice/deleteNotice.do?noticeID="+id,function(result){
+	        		if(result.code==0){
+	        			parent.layer.msg("公告删除成功");
+	        			 $.ajax({
+
+	        					"url":"../notice/getNoticeList.do",
+
+	        					"type":"post",
+
+	        					"data":{},
+
+	        					"datatype":"json",
+
+	        					"success":function(result){
+
+	        						if(result.code==0){
+	        							var data=result.content;
+	        							console.log(data);
+	        							$('#channel-application').bootstrapTable("load",data);						
+	        					//		$("#img").attr("src",data[1].platformLogo);
+	        						}
+
+	        					}
+
+	        				});
+	        		//	parent.window.location.reload();
+	        		//	document.frames('framemain').location.reload();
+	        		}
+	        	});
+			  }
+			else
+			  {
+			  alert("取消!");
+			  }
+        	
+        }
+        
+        function update(id){
+        	parent.$("#iframeid").val(id);
+        	document.location.href="updateNotice.html";
+        	
+        }
+        
+        
+        $.ajax({
+
+				"url":"../notice/getNoticeList.do",
+
+				"type":"post",
+
+				"data":{},
+
+				"datatype":"json",
+
+				"success":function(result){
+
+					if(result.code==0){
+						var data=result.content;
+						console.log(data);
+						$('#channel-application').bootstrapTable("load",data);						
+				//		$("#img").attr("src",data[1].platformLogo);
+					}
+
+				}
+
+			});
+    </script>
+</body>
+
+</html>

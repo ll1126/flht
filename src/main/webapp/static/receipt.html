@@ -1,0 +1,463 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<title>待审核回执单列表</title>
+<link rel="stylesheet" href="../css/thirdParty/bootstrap.css">
+<link rel="stylesheet" href="../css/thirdParty/bootstrap-table.min.css">
+<link rel="stylesheet" href="../css/thirdParty/font-awesome.min.css">
+<link rel="stylesheet" href="../css/modules/index.css">  
+<link rel="stylesheet" href="../css/thirdParty/bootstrap-datetimepicker.css">
+
+<style>
+.row {
+	margin-top: 10px;
+}
+
+label {
+	font-size: 16px;
+}
+
+</style>
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="channel-sreach">
+		<div class="form-group">
+			<div class="row">
+				<div class="col-lg-1">
+					<label for="">回执单编号:</label>
+				</div>
+				<div class="col-lg-2">
+					<input class="form-control" id="receiptID" STYLE="width: 170px"/>
+				</div>
+				<div class="col-lg-1">
+					<label for="">手机号:</label>
+				</div>
+				<div class="col-lg-2">
+					<input class="form-control" id="phoneNumber" style="width: 170px"/>
+				</div>
+				<div class="col-lg-1">
+					<label for="">平台筛选:</label>
+				</div>
+				<div class="col-lg-2">
+					<input class="form-control" id="platformID" style="width: 170px"/>
+				</div>
+				<div class="col-lg-1">
+					<label for="">回执单状态:</label>
+				</div>
+				<div class="col-lg-2">
+					<select  style="width:150.83px;display: block;height: 34px;padding: 6px 12px;font-size: 14px;
+							line-height: 1.42857143;color: #555;
+						    background-color: #fff;
+						    background-image: none;
+						    border: 1px solid #ccc;" name="receiptState" id="receiptState">
+						<option ></option>
+						<option value="" >全部</option>
+						<option value ="1">待审核</option>
+						<option value ="2">审核中</option>
+						<option value ="4">驳回</option>
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="row" >
+				<div class="col-lg-1" >
+					<label for="" style="padding-right: 37px;">提交时间:</label> 
+					</div>
+					
+					<div class="col-lg-2" style="width: 30%">
+					<input type="text" class="form-control" id="start_time_one"
+							  style="width:170px;display:inline-block"
+						
+						> <label for=""
+						style="padding: 0 35px;">至</label> <input type="text"
+						class="form-control" id="end_time_one"
+					  style="width:170px;display:inline-block">
+			</div>
+			<div class="col-lg-offset-3">
+					<button id="search" type="button" style="width: 100px;"
+						class="btn btn-default sendbtn3">查询</button>
+				</div>
+				</div>
+		</div>
+		
+		<div class="form-group">
+			<div class="row">
+				<button type="button" id="download" style="width: 150px;margin-left: 1500px"  class="btn btn-primary" >数据导出Excel</button>
+			</div>
+		</div>
+
+		<hr />
+		<div class="row" style="margin: 0 5px;">
+		
+			<table id="channel-application"></table>
+		</div>
+
+	</div>
+
+	<script src="../js/thirdParty/jquery.min.js"></script>
+    <script src="../js/thirdParty/bootstrap.js"></script>
+    <script src="../js/thirdParty/bootstrap-table.min.js"></script>
+    <script src="../js/thirdParty/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../js/thirdParty/bootstrap-datetimepicker.js"></script>
+	<script src="../js/thirdParty/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="../js/thirdParty/jquery.form.min.js"></script>
+	<script src="../js/thirdParty/bootstrap-multiselect.js"></script>
+
+	<script>
+
+	//初始化日期选择器
+	function init_date_choose($start, $end) {
+			$start.datetimepicker({
+				format : 'yyyy-mm-dd',
+				autoclose : true,
+				todayBtn : true,
+                minView: 2,
+				//startDate : new Date(),
+				language : 'zh-CN'
+			}).on("click", function() {
+				//$start.datetimepicker("setStartDate", new Date());
+			});
+			$end.datetimepicker({
+				format : 'yyyy-mm-dd',
+				autoclose : true,
+                minView: 2,
+				todayBtn : true,
+				language : 'zh-CN'
+			}).on("click", function() {
+				$end.datetimepicker("setStartDate", $start.val());
+			});
+		}
+		init_date_choose($('#start_time_one'), $('#end_time_one'));
+
+	
+		(function() {
+			
+			$('#channel-application').bootstrapTable(
+							{
+                                method: 'post',
+                                contentType: "application/x-www-form-urlencoded",//必须要有！！！！
+                                striped: true, //是否显示行间隔色
+                                pageNumber:1,               //初始化加载第一页，默认第一页
+                                pageSize: 10,               //每页的记录行数（*）
+                                url: "../receipt/getReceiptList222.do",//要请求数据的文件路径
+                                dataField: "rows",//bootstrap table 可以前端分页也可以后端分页，这里
+                                queryParamsType:'',
+                                queryParams:queryParams,//请求服务器时所传的参数
+                                sidePagination:'server',//指定服务器端分页
+//                                showRefresh:true,//刷新按钮
+//                                showColumns:true,
+                                toolbarAlign:'right',//工具栏对齐方式
+                                buttonsAlign:'right',//按钮对齐方式
+                                toolbar:'#toolbar',//指定工作栏
+                                pagination: true, 			//是否显示分页（*）
+                                pageList: [10, 25, 50, 100],//分页步进值
+                                responseHandler:responseHandler,//请求数据成功后，渲染表格前的方法
+                                singleSelect: false,//单选CheckBox
+//								showFooter: true,//求和
+								columns : [
+
+										{
+                                            field: 'checkStatus',
+											checkbox: true
+										},{
+											field : 'id',
+											title : '回单编号'
+										}, {
+											field : 'platform',
+											title : '平台名称'
+										}, {
+											field : 'disanfang',
+											title : '第三方利率',
+											formatter:function (value) {
+												return value+'%';
+                                            }
+										}, {
+											field : 'fandian',
+											title : '返利方式',
+											formatter:function (value,row) {
+											    if(value=='0'){
+											        return '区间式';
+												}else{
+											        return '浮点式';
+												}
+                                            }
+										}, {
+											field : 'rebateScheme',
+											title : '返现金额/利率',
+											formatter:function (value,row) {
+											    if(row.fandian==1){
+											        return value+'%';
+												}else {
+											        return value+'元';
+												}
+												
+                                            }
+										},{
+											field : 'platformUser',
+											title : '注册用户名'
+										}, {
+											field : 'phoneNumber',
+											title : '注册手机号'
+										}, {
+											field : 'investmentMoney',
+											title : '投资金额'
+											
+										},{
+											field : 'submissionTime',/*,{field : 'investmentDate',title : '投资日期'}*/
+											title : '提交日期'
+										}, {
+											field : 'investmentLimit',
+											title : '投资期限'
+										}, {
+											field : 'gatherAccount',
+											title : '收款银行账户',
+											formatter : function(value,row,index) {
+												return row.gatheringUser+value;
+											}
+										}, {
+											field : 'alipayId',
+											title : '支付宝账户',
+											formatter : function(value,row,index) {
+												return row.alipayName+'：'+value;
+											}
+										}, {
+											field : 'stateChinese',
+											title : '回执单状态'
+										}, {
+											field : 'beAgent',
+											title : '是否代理',
+											formatter:function (value,row) {
+												if(row.beAgent==1){
+												    return '是';
+												}else {
+												    return '否';
+												}
+                                            }
+										}, {
+											field : 'fanli',
+											title : '返利金额'
+											/*,
+											footerFormatter: function (value) {
+                                                var count = 0;
+                                                for (var i in value) {
+                                                    count += value[i].fanli;
+                                                }
+                                                return count;
+                                            }*/
+										}, {
+											field : 'userID',
+											title : '推荐人ID'
+										},
+										{
+											field : 'caozuo',
+											title : '审核',
+											formatter : function(value,row,index) {		
+												if(row.stateChinese == '审核中'){
+													return '<a href="#" class="oooo" >'+ '审核中'+ '</a>';
+												}else{
+													return '<a href="#" class="oooo" onclick="tongguo('+row.id+',this);" >'+ '通过'+ '</a>';
+												}
+												
+											}
+										},
+										{
+											field : 'caozuo2',
+											title : '审核',
+											formatter : function(value,row,index) {		
+												return '<a href="#" onclick="weitongguo('+row.id+');">' + "驳回"+ '</a>';
+											}
+										}
+										]
+							});
+			$(document).ready(function() {
+
+			});
+		})();
+
+		/*加载总的返利金额*/
+		$.ajax({
+			url:"../receipt/getFanLiSum.do",
+			method:"post",
+			data:{receiptState:1},
+			success:function(result){
+				if(result.code==0){
+				    $("#fanliSum").val(result.content.fanliSum);
+				}
+			}
+
+		});
+	/*随着筛选条件的改变，动态变化返利金额*/
+    $(".sendbtn3").click(function () {
+        var receiptID=$("#receiptID").val();
+        var phoneNumber=$("#phoneNumber").val();
+        var platform= $("#platformID").val();
+        var receiptState= $("#receiptState").val();
+        var start_time_one= $("#start_time_one").val();
+        var end_time_one= $("#end_time_one").val();
+        $.ajax({
+            url:"../receipt/getFanLiSum.do",
+            method:"post",
+            data:{receiptID:receiptID,platform:platform,phoneNumber:phoneNumber,receiptState:receiptState,
+					start_time_one:start_time_one,end_time_one:end_time_one},
+            success:function (result) {
+                if(result.code==0){
+                    $("#fanliSum").val(result.content.fanliSum);
+                }
+            }
+        });
+    });
+		 function tongguo(id,_this){
+			 if ($(_this).attr("clicked")) {
+				 return false;
+			 }
+			 $(_this).attr("clicked", "true");
+
+			 var r=confirm("通过审核");
+				if (r==true)
+				  {
+						$.get("../receipt/updateState.do?receiptID="+id+"&receiptState="+2,function(result){
+			        		if(result.code==0){
+			        			parent.layer.msg("通过审核");
+			        			parent.$("#main").attr("src","static/receipt.html");
+			        		}
+			        	});
+				  }
+				else
+				  {
+				  alert("取消!");
+				  }
+			 
+        	
+        }
+
+
+
+		function weitongguo(id){
+			var r=confirm("是否驳回");
+			if (r==true)
+			  {
+				$.get("../receipt/updateState.do?receiptID="+id+"&receiptState="+4,function(result){
+	        		if(result.code==0){
+	        			parent.layer.msg("驳回成功");
+                     //   $('#channel-application').bootstrapTable('refresh');
+	        			parent.$("#main").attr("src","static/receipt.html");
+	        		}
+	        	});
+			  }
+			else
+			  {
+			  alert("取消!");
+			  }
+			
+		}
+		
+		$("#download").click(function(){
+		    var receiptID=$("#receiptID").val();
+		    var phoneNumber=$("#phoneNumber").val();
+            var platform= $("#platformID").val();
+            var receiptState= $("#receiptState").val();
+            var start_time_one= $("#start_time_one").val();
+            var end_time_one= $("#end_time_one").val();
+            window.location="../receipt/exportExcel.do?receiptID="+receiptID+"&phoneNumber="+phoneNumber+"&platform="+platform+"&receiptState="+receiptState+"&start_time_one="
+			+start_time_one+"&end_time_one="+end_time_one;
+
+		});
+
+
+    $(".sendbtn3").click(function () {
+        $('#channel-application').bootstrapTable('refresh', {url: '../receipt/getReceiptList.do'});
+    });
+
+    //请求服务数据时所传参数
+    function queryParams(params){
+        return{
+            //每页多少条数据
+            pageSize: params.pageSize,
+            //请求第几页
+            pageNumber:params.pageNumber,
+			receiptID:$("#receiptID").val(),
+			phoneNumber:$("#phoneNumber").val(),
+            platform: $("#platformID").val(),
+            start_time_one: $("#start_time_one").val(),
+            end_time_one: $("#end_time_one").val(),
+            receiptState: $("#receiptState").val()
+        }
+    }
+
+    //请求成功方法
+    function responseHandler(result){
+        var errcode = result.code;//在此做了错误代码的判断
+        if(errcode != 0){
+            parent.layer.msg("网络错误，查询失败");
+            return;
+        }
+        //如果没有错误则返回数据，渲染表格
+        return {
+            total : result.content.total, //总页数,前面的key必须为"total"
+            rows : result.content.rows //行数据，前面的key要与之前设置的dataField的值一致.
+        };
+    }
+	</script>
+
+		<div class="form-group">
+			<div class="row">
+				<div class="col-lg-1">
+					<input type="button" id="yijianshenhe" style="width: 160px"  class="btn btn-primary" value="批量审核通过" onclick="yijianshenhe()"/>
+				</div>
+				<div class="col-lg-1" style="margin-left: 1200px">
+					<label style="color: #0d8ddb">返利总金额：</label>
+				</div>
+				<div class="col-lg-1" >
+					<input type="text" readonly="true" style="color:red; border: none" id="fanliSum"/>
+				</div>
+			</div>
+
+
+		</div>
+
+		<script>
+			function  yijianshenhe() {
+                var r=confirm("全部审核通过？");
+                if (r==true)
+                {
+                    var  rows = $("#channel-application").bootstrapTable('getSelections');
+                    if (rows.length== 0) {
+                        alert("请先选择要审核的记录!");
+                        return;
+                    }
+                    var ids = '';
+                    for (var i = 0; i < rows.length; i++) {
+                        ids += rows[i]['id'] + ",";
+                    }
+                    ids = ids.substring(0, ids.length - 1);
+                    $.ajax({
+						url:"../receipt/updateBatchState.do",
+						type:"post",
+						data:{ids:ids,receiptState:2},
+						success:function (result) {
+                            if(result.code==0){
+                                parent.layer.msg("批量审核成功");
+                                parent.$("#main").attr("src","static/receipt.html");
+                            }
+                        }
+					});
+                }
+                else
+                {
+                    alert("取消!");
+                }
+
+
+            }
+
+		</script>
+	</div>
+</body>
+
+</html>

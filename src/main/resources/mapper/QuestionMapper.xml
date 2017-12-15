@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.wsloan.fanLiWang.dao.QuestionDao">
+
+	<!-- 查看对应平台的回执单 -->
+	<insert id="addQuestion" parameterType="com.wsloan.fanLiWang.entity.Question"  >
+		insert into Question
+		(<trim suffixOverrides=",">
+			<if test="questionTitle !=null ">QuestionTitle</if>
+			<if test="questionContent !=null">,QuestionContent</if>
+			,b_enable
+		</trim>)
+		values
+		(<trim suffixOverrides=",">
+			<if test="questionTitle !=null ">#{questionTitle}</if>
+			<if test="questionContent !=null">,#{questionContent}</if>
+		,1
+		</trim>)
+	</insert>
+
+	<select id="getQuestion" resultType="com.wsloan.fanLiWang.entity.Question">
+		SELECT ID,QuestionTitle,QuestionContent from Question WHERE  ID=#{questionID} AND b_enable=1;
+
+	</select>
+
+	<!--常见问题列表-->
+	<select id="getQuestionList" resultType="com.wsloan.fanLiWang.entity.Question">
+		SELECT  ID,QuestionTitle,QuestionContent FROM  Question WHERE  b_enable='1' ORDER BY ID DESC ;
+
+	</select>
+
+	<!--删除常见问题-->
+	<update id="deleteQuestion" >
+		UPDATE Question set b_enable=0 where ID=#{questionID}
+	</update>
+
+	<!--修改常见问题-->
+	<update id="updateQuestion"  parameterType="com.wsloan.fanLiWang.entity.Question">
+		UPDATE Question set
+		<if test="questionTitle!=null and questionTitle!=''" >QuestionTitle=#{questionTitle}</if>
+		<if test="questionContent !=null and questionContent!=''">,QuestionContent=#{questionContent}</if>
+		where ID=#{ID}
+	</update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+

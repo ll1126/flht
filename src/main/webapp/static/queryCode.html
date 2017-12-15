@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>查询用户验证码</title>
+    <link rel="stylesheet" href="../css/thirdParty/bootstrap.css">
+    <link rel="stylesheet" href="../css/thirdParty/bootstrap-table.min.css">
+    <script src="../js/thirdParty/jquery.min.js"></script>
+    <script src="../js/thirdParty/jquery.form.min.js"></script>
+    <style>
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>用户验证码查询</h1>
+            </div>
+        </div>
+        <hr />
+        <div class="channel-sreach">
+            <div class="row">
+                <div class="col-lg-1">
+                    <label for="">注册手机号:</label>
+                </div>
+                <div class="col-lg-2">
+                    <input class="form-control" type="text" id="phoneNumber"/>
+                </div>
+                <div class="col-lg-offset-3">
+                    <button type="button" style="width:100px;" class="btn btn-default btn1">查询</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-1">
+                    <label>注册验证码:</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" readonly="true" style="color:red;text-align: center;width: 100px;border: none" id="zhuceYZM"/>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-1">
+                    <label>更换密码验证码:</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" readonly="true" style="color:red;text-align: center;width: 100px;border: none" id="securityCode" />
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $('.btn1').click(function(){
+            var phoneNumber = $("#phoneNumber").val();
+            $.get("../user/getCode.do?phoneNumber="+phoneNumber,function (result) {
+                if(result.code==0){
+                    $("#zhuceYZM").val(result.content.zhuceYZM);
+                    if(result.content.securityCode!=null){
+                        $("#securityCode").val(result.content.securityCode);
+                    }
+                }
+            })
+        });
+    </script>
+</body>
+
+</html>

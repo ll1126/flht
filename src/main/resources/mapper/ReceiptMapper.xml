@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.wsloan.fanLiWang.dao.ReceiptDao">
+
+
+	<!-- 查看回执单列表 -->
+	<select id="getReceiptList"   resultType="com.wsloan.fanLiWang.entity.Receipt">
+		SELECT  * FROM
+		(SELECT ROW_NUMBER() OVER(order by rpt.[ID]) row
+		,rpt.[ID]
+		,rpt.[PhoneNumber]
+		,rpt.[InvestmentDate]
+		,rpt.[InvestmentLimit]
+		,rpt.[InvestmentMoney]
+		,rpt.[GatheringUser]
+		,rpt.[GatheringAccount]
+		,rpt.[ReceiptState]
+		,rpt.[SubmissionTime]
+		,rpt.disanfang
+		,rpt.fanDian
+		,rpt.fanDianScheme as rebateScheme
+		,st.State as StateChinese
+		,iu.alipayId
+		,iu.alipayName
+		,iu.ReferrerID as UserID
+		,iu.CardNo as GatherAccount
+		,iu.beAgent
+		,br.Platform as platform
+		,rpt.fanli as fanli
+		from Receipt rpt left join State st on rpt.ReceiptState=st.ID
+		left join InvestmentUser iu
+		on iu.ID=rpt.UserID
+		left join BrandInformation br
+		on rpt.PlatformID= br.ID
+		where 1=1
+		<if test="receiptID!=null ">
+			and rpt.ID=#{receiptID}
+		</if>
+		<if test="receiptState!=null and receiptState!=''">
+			and rpt.ReceiptState=#{receiptState}
+		</if>
+		<if test="phoneNumber!=null and phoneNumber!=''">
+			and rpt.PhoneNumber=#{phoneNumber}
+		</if>
+		<if test="platform!=null and platform!=''">
+			and br.Platform=#{platform}
+		</if>
+		<if test="submissionTimeStart!=null and submissionTimeStart!=''">
+			and rpt.SubmissionTime<![CDATA[>=]]>CONVERT(datetime,#{submissionTimeStart} )
+		</if>
+		<if test="submissionTimeEnd!=null and submissionTimeEnd!=''">
+			and rpt.SubmissionTime<![CDATA[<=]]>CONVERT(datetime,#{submissionTimeEnd} )
+		</if>
+		) as t  where t.row between #{min} and #{max}
+	</select>
+
+	<!--获取回单记录数，通用-->
+	<select id ="getTotalYiBoHui" resultType="integer">
+		SELECT  COUNT (0) FROM  Receipt WHERE  ReceiptState=#{receiptState};
+	</select>
+	
+	<!-- 获取对应平台的回单记录数  -->
+	<select id="getReceiptCount" parameterType="integer" resultType="integer">
+		select count(*) from Receipt rpt where rpt.PlatformID = #{platformID} 
+		
+		<if test="receiptState!=null">
+					and rpt.ReceiptState=#{receiptState}
+		</if>
+	</select>
+	
+	<!-- 修改回执单状态 -->
+	<update id="updateState"  parameterType="integer">
+		update 
+				Receipt
+		set 
+				ReceiptState = #{receiptState}
+		where
+				ID=#{receiptID}
+	</update>
+	
+	<!-- 查询回单列表中对应的平台列表 -->
+	
+	<select id="getBrandList" resultType="com.wsloan.fanLiWang.entity.BrandInformation">
+		select * from BrandInformation bi left join Receipt rpt
+		on bi.ID= rpt.PlatformID 
+	
+	</select>
+	
+	<!-- 根据id找回执单 -->
+
+
+<select resultType="map" id="selectReceipt"> select * from Receipt where ID = #{receiptID} </select>
+
+<!-- 根据id找用户 -->
+
+
+<select resultType="map" id="selectUser"> select * from InvestmentUser where ID = #{userid} </select>
+
+<!-- 往红包表里插入一个分享红包给邀请人 -->
+
+
+	<insert id="diuRed"> insert into Red (redType,time,jine,UserID,GLRPhone,State,hzdid) values ('分享红包',#{time},#{jine},#{id},#{phone},'已审核',#{hzdid}); </insert>
+
+<!-- 更新新手红包状态 -->
+
+
+<update id="updateRed"> update Red set State = '已审核' where id=#{redid} </update>
+
+<!-- 查询红包 -->
+
+
+<select resultType="map" id="selred"> select * from Red where UserID = #{userid} and redType='新手红包' </select>
+
+<!-- 更新用户新手状态(改为不是新手) -->
+
+
+<update id="updateUser"> update InvestmentUser set xinshou = 1 where ID=#{userid} </update>
+
+<!-- 往总表中插入数据 -->
+
+
+
+	<insert id="insertUY">
+	insert into fMoney (usfz,ucard,uphone,uname,umoney,uAlipayName,uAlipayId,fReceiptState
+	<if test="ysfz!=null">,ysfz</if>
+
+	<if test="ycard!=null">,ycard</if>
+
+	<if test="yphone!=null">,yphone</if>
+
+	<if test="yname!=null">,yname</if>
+
+	<if test="ymoney!=null">,ymoney</if>
+
+	<if test="yAlipayName!=null">,yAlipayName</if>
+
+	<if test="yAlipayId!=null">,yAlipayId</if>
+
+	<if test="userid!=null">,uid</if>
+
+	<if test="time!=null">,time</if>
+
+	<if test="receiptID!=null">,receiptID</if>
+
+	<if test="payType!=null">,payType</if>
+
+	) values (#{usfz},#{ucard},#{uphone},#{uname},#{umoney},#{uAlipayName},#{uAlipayId},0
+	<if test="ysfz!=null">,#{ysfz}</if>
+
+	<if test="ycard!=null">,#{ycard}</if>
+
+	<if test="yphone!=null">,#{yphone}</if>
+
+	<if test="yname!=null">,#{yname}</if>
+
+	<if test="ymoney!=null">,#{ymoney}</if>
+
+	<if test="yAlipayName!=null">,#{yAlipayName}</if>
+
+	<if test="yAlipayId!=null">,#{yAlipayId}</if>
+
+	<if test="userid!=null">,#{userid}</if>
+
+	<if test="time!=null">,#{time}</if>
+
+	<if test="receiptID!=null">,#{receiptID}</if>
+
+	<if test="payType!=null">,#{payType}</if>
+	);
+</insert>
+
+<!-- 根据回执单id查询分享红包 -->
+
+
+<select resultType="map" id="selyred"> select * from Red where hzdid = #{hzdid} </select>
+	
+	<!-- 更新用户累计收益 -->
+
+
+<update id="updateUser2"> update InvestmentUser set LJProfit = #{lj} where ID=#{userid} </update>
+	
+	<!-- 查询平台信息 -->
+	<select id="selband" resultType="map">
+		select ReceiptNum from BrandInformation where ID=#{id}
+	</select>
+	<select id="selObject" resultType="map">
+		select Participants from ObjectList where PlatformID=#{id}
+	</select>
+	<!-- 修改平台成功回执单数量 -->
+	<update id="updateband"> update BrandInformation set ReceiptNum = #{num} where ID=#{id} </update>
+	<update id="updateobject"> update ObjectList set Participants = #{num2} where PlatformID=#{id} </update>
+
+
+	<!-- 财务默认看到的回单 -->
+		<select id="getCaiWuList" resultType="com.wsloan.fanLiWang.entity.Receipt">
+			SELECT  * FROM
+			(SELECT  ROW_NUMBER() OVER(order by rpt.ID) row
+			  , rpt.[ID]
+		      ,rpt.[PlatformUser]
+		      ,rpt.[PhoneNumber]
+		      ,rpt.[InvestmentDate]
+		      ,rpt.[InvestmentLimit]
+		      ,rpt.[InvestmentMoney]
+		      ,rpt.[GatheringUser]
+		      ,rpt.[GatheringAccount]
+		      ,rpt.[ReceiptState]
+		      ,rpt.[SubmissionTime]
+		      ,rpt.disanfang
+		      ,rpt.fanDian
+		      ,rpt.fanDianScheme as rebateScheme
+		      ,st.State as StateChinese
+		      ,iu.alipayId
+		      ,iu.alipayName
+		      ,iu.xinshou
+		      ,iu.ReferrerID
+		      ,iu.ReferrerID as UserID
+		  	  ,iu.CardNo as GatherAccount
+		  	  ,iu.beAgent
+		  	  ,br.Platform as platform
+		  	  ,rpt.fanli as fanli
+		       from Receipt rpt left join State st on rpt.ReceiptState=st.ID
+		       left join InvestmentUser iu
+		       on iu.ID=rpt.UserID
+		       left join BrandInformation br
+		       on rpt.PlatformID= br.ID
+		       where rpt.ReceiptState=2 )AS t
+		       where t.row between #{min} and #{max}
+		</select>
+		
+		
+		<!--一审查看的回单-->
+		<select id="getReceiptList222"   resultType="com.wsloan.fanLiWang.entity.Receipt">
+			SELECT  * FROM
+			(SELECT  ROW_NUMBER() OVER(order by rpt.ID desc) row
+			  ,rpt.[ID]
+		      ,rpt.[PlatformUser]
+		      ,rpt.[PhoneNumber]
+		      ,rpt.[InvestmentDate]
+		      ,rpt.[InvestmentLimit]
+		      ,rpt.[InvestmentMoney]
+		      ,rpt.[GatheringUser]
+		      ,rpt.[GatheringAccount]
+		      ,rpt.[ReceiptState]
+		      ,rpt.[SubmissionTime]
+		      ,rpt.disanfang
+		      ,rpt.fanDian
+		      ,rpt.fanDianScheme as rebateScheme
+		      ,iu.alipayId
+		      ,iu.alipayName
+		      ,iu.beAgent
+		      ,st.State as StateChinese
+		      ,iu.ReferrerID as UserID
+		  	  ,iu.CardNo as GatherAccount
+		  	  ,br.Platform as platform
+		  	  ,rpt.fanli as fanli
+		       from Receipt rpt left join State st on rpt.ReceiptState=st.ID
+		       left join InvestmentUser iu 
+		       on iu.ID=rpt.UserID
+		       left join BrandInformation br
+		       on rpt.PlatformID= br.ID
+		       where  rpt.ReceiptState =1) AS t
+				where t.row between #{min} and #{max} order by t.ID desc
+	</select>
+
+	<!--查看Excel的回执单-->
+	<select id="getExcelList"   resultType="com.wsloan.fanLiWang.entity.Receipt">
+
+		select  rpt.[ID]
+		,br.Platform as platform
+		,rpt.[PhoneNumber]
+		,rpt.[PlatformUser]
+		,rpt.[InvestmentDate]
+		,rpt.[InvestmentLimit]
+		,rpt.[InvestmentMoney]
+		,rpt.[SubmissionTime]
+		,iu.ReferrerID as UserID
+		,iu.beAgent
+		,iu.skr
+		,rpt.fanli as fanli
+		,rpt.disanfang
+		,rpt.fanDian
+		,rpt.fanDianScheme as rebateScheme
+		from Receipt rpt left join State st on rpt.ReceiptState=st.ID
+		/*LEFT  JOIN  RebateScheme rs ON  rs.ID= rpt.hzdbh*/
+		left join InvestmentUser iu
+		on iu.ID=rpt.UserID
+		left join BrandInformation br
+		on rpt.PlatformID= br.ID
+		where 1=1
+
+		<if test="receiptID!=null">
+			and rpt.ID=#{receiptID}
+		</if>
+		<if test="receiptState!=null and receiptState!=''">
+			and rpt.ReceiptState=#{receiptState}
+		</if>
+		<if test="phoneNumber!=null and phoneNumber!=''">
+			and rpt.PhoneNumber=#{phoneNumber}
+		</if>
+		<if test="platform!=null and platform!=''">
+			and br.Platform=#{platform}
+		</if>
+		<if test="submissionTimeStart!=null and submissionTimeStart!=''">
+			and rpt.SubmissionTime<![CDATA[>=]]>CONVERT(datetime,#{submissionTimeStart} )
+		</if>
+		<if test="submissionTimeEnd!=null and submissionTimeEnd!=''">
+			and rpt.SubmissionTime<![CDATA[<=]]>CONVERT(datetime,#{submissionTimeEnd} )
+		</if>
+		order by rpt.ID desc
+	</select>
+
+	<!--查看Excel财务待打款的回执单-->
+	<select id="getExcelList2"   resultType="com.wsloan.fanLiWang.entity.DaiDaKuan">
+
+		select
+		rpt.[ID]
+		,rpt.[GatheringUser]
+		,rpt.[GatheringAccount]
+		,iu.[province] as province
+		,iu.[city] as city
+		,iu.[khh] as khh
+		,rpt.fanli as fanli
+		from Receipt rpt left join State st on rpt.ReceiptState=st.ID
+		left join InvestmentUser iu
+		on iu.ID=rpt.UserID
+		left join BrandInformation br
+		on rpt.PlatformID= br.ID
+		where 1=1
+		<if test="platform!=null and platform!=''">
+			and br.Platform=#{platform}
+		</if>
+		<if test="submissionTimeStart!=null and submissionTimeStart!=''">
+			and rpt.SubmissionTime<![CDATA[>=]]>CONVERT(datetime,#{submissionTimeStart} )
+		</if>
+		<if test="submissionTimeEnd!=null and submissionTimeEnd!=''">
+			and rpt.SubmissionTime<![CDATA[<=]]>CONVERT(datetime,#{submissionTimeEnd} )
+		</if>
+		order by rpt.ID desc
+	</select>
+
+	<!--财务最终打款查看-->
+	<select id="getfmoney" resultType="com.wsloan.fanLiWang.entity.FMoney">
+		SELECT  * FROM (SELECT  ROW_NUMBER() OVER(order by time desc) row, id,
+		usfz,ucard,uphone,uname,uAlipayName,uAlipayId,umoney,ysfz,ycard,yphone,yname,
+		yAlipayName,yAlipayId,ymoney,time,receiptID,fReceiptState as receiptState from fMoney
+		where 1=1
+		<if test="receiptID!=null">
+			and receiptID = #{receiptID}
+		</if>
+		<if test="receiptState!=null">
+			AND fReceiptState=#{receiptState}
+		</if>
+		<if test="phoneNumber!='' and phoneNumber!=null">
+			and uphone = #{phoneNumber}
+		</if>
+
+		<if test="submissionTimeStart!=null and submissionTimeStart!=''">
+			and time <![CDATA[>=]]> #{submissionTimeStart}
+		</if>
+		<if test="submissionTimeEnd!=null and submissionTimeEnd!=''">
+			and time <![CDATA[<=]]> #{submissionTimeEnd}
+		</if>
+		) as t where t.row between #{min} and #{max}
+
+	</select>
+
+	<!--财务待打款总的记录数-->
+	<select id="getWeiDaKuan" resultType="integer">
+		SELECT  COUNT (id) FROM  fMoney WHERE  fReceiptState=0;
+	</select>
+
+	<!--获取财务打款总的记录条数-->
+	<select id="getTotalCaiWu" resultType="integer">
+		SELECT COUNT (id) FROM  fMoney WHERE  1=1
+		<if test="receiptID!=null">
+			and receiptID = #{receiptID}
+		</if>
+		<if test=" receiptState!=null">
+			and fReceiptState = #{receiptState}
+		</if>
+		<if test="phoneNumber!='' and phoneNumber!=null">
+			and uphone = #{phoneNumber}
+		</if>
+		<if test="submissionTimeStart!=null and submissionTimeStart!=''">
+			and time<![CDATA[>=]]>#{submissionTimeStart}
+		</if>
+		<if test="submissionTimeEnd!=null and submissionTimeEnd!=''">
+			and time<![CDATA[<=]]>#{submissionTimeEnd}
+		</if>
+
+
+	</select>
+
+	<!-- 财务导出的Excel表格-->
+	<select id="getfmoney2" resultType="com.wsloan.fanLiWang.entity.FMoney">
+
+		select usfz,ucard,uphone,uname,uAlipayName,uAlipayId,umoney,ysfz,ycard,yphone,yname,yAlipayName,yAlipayId,ymoney,time,receiptID,payType from fMoney
+		where 1=1
+		<if test="receiptID!=null">
+			and receiptID = #{receiptID}
+		</if>
+		<if test=" receiptState!=null">
+			and fReceiptState = #{receiptState}
+		</if>
+		<if test="phoneNumber!='' and phoneNumber!=null">
+			and uphone = #{phoneNumber}
+		</if>
+		<if test="submissionTimeStart!=null and submissionTimeStart!=''">
+			and time<![CDATA[>=]]>#{submissionTimeStart}
+		</if>
+		<if test="submissionTimeEnd!=null and submissionTimeEnd!=''">
+			and time<![CDATA[<=]]>#{submissionTimeEnd}
+		</if>
+			order by time desc;
+	</select>
+
+	<select id="getTotalReceipt" resultType="integer">
+		SELECT  COUNT (0) FROM
+		 Receipt rpt left join State st on rpt.ReceiptState=st.ID
+		left join InvestmentUser iu
+		on iu.ID=rpt.UserID
+		left join BrandInformation br
+		on rpt.PlatformID= br.ID
+		where 1=1
+		<if test="receiptID!=null ">
+			and rpt.ID=#{receiptID}
+		</if>
+		<if test="receiptState!=null and receiptState!=''">
+			and rpt.ReceiptState=#{receiptState}
+		</if>
+		<if test="phoneNumber!=null and phoneNumber!=''">
+			and rpt.PhoneNumber=#{phoneNumber}
+		</if>
+		<if test="platform!=null and platform!=''">
+			and br.Platform=#{platform}
+		</if>
+		<if test="submissionTimeStart!=null and submissionTimeStart!=''">
+			and rpt.SubmissionTime<![CDATA[>=]]>CONVERT(datetime,#{submissionTimeStart} )
+		</if>
+		<if test="submissionTimeEnd!=null and submissionTimeEnd!=''">
+			and rpt.SubmissionTime<![CDATA[<=]]>CONVERT(datetime,#{submissionTimeEnd} )
+		</if>
+
+	</select>
+
+	<!--更新Fmoney表中打款状态-->
+	<update id="updateFmoney">
+		UPDATE  fMoney SET  fReceiptState = 1 WHERE  ID=#{fmoneyID}
+	</update>
+
+	<!--一审中批量审核-->
+	<!--collection:表示类型,这里参数是数组,就写成array,如果是集合,就写成list-->
+	<update id="updateBatchState">
+		update  Receipt set ReceiptState = #{receiptState}
+		where ID in
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<!--待审核,财务审核页面返利总金额-->
+	<select id="getFanLiSum" resultType="double">
+		SELECT sum(fanli)  FROM
+		Receipt  rpt left join State st on rpt.ReceiptState=st.ID
+		left join InvestmentUser iu
+		on iu.ID=rpt.UserID
+		left join BrandInformation br
+		on rpt.PlatformID= br.ID
+		where 1=1
+		<if test="receiptID!=null ">
+			and rpt.ID=#{receiptID}
+		</if>
+		<if test="receiptState!=null and receiptState!=''">
+			and rpt.ReceiptState=#{receiptState}
+		</if>
+		<if test="phoneNumber!=null and phoneNumber!=''">
+			and rpt.PhoneNumber=#{phoneNumber}
+		</if>
+		<if test="platform!=null and platform!=''">
+			and br.Platform=#{platform}
+		</if>
+		<if test="submissionTimeStart!=null and submissionTimeStart!=''">
+			and rpt.SubmissionTime<![CDATA[>=]]>CONVERT(datetime,#{submissionTimeStart} )
+		</if>
+		<if test="submissionTimeEnd!=null and submissionTimeEnd!=''">
+			and rpt.SubmissionTime<![CDATA[<=]]>CONVERT(datetime,#{submissionTimeEnd} )
+		</if>
+	</select>
+
+	<!--待打款用户返利总金额-->
+	<select id="getFmoneySum" resultType="double">
+		SELECT sum(umoney) FROM  fMoney
+		where 1=1
+		<if test="receiptID!=null">
+			and receiptID = #{receiptID}
+		</if>
+		<if test="receiptState!=null">
+			AND fReceiptState=#{receiptState}
+		</if>
+		<if test="phoneNumber!='' and phoneNumber!=null">
+			and uphone = #{phoneNumber}
+		</if>
+		<if test="submissionTimeStart!=null and submissionTimeStart!=''">
+			and time<![CDATA[>=]]>#{submissionTimeStart}
+		</if>
+		<if test="submissionTimeEnd!=null and submissionTimeEnd!=''">
+			and time<![CDATA[<=]]>#{submissionTimeEnd}
+		</if>
+	</select>
+
+	<!--批量打款通过-->
+	<!--collection:表示类型,这里参数是数组,就写成array,如果是集合,就写成list-->
+	<update id="updateBatchFmoneyState">
+		update  fMoney set fReceiptState = #{receiptState}
+		where id in
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+
+<head>
+<meta charset="utf-8" />
+<title >Banner修改</title>
+
+<link rel="stylesheet" href="../css/thirdParty/bootstrap.css">
+    <link rel="stylesheet" href="../css/thirdParty/bootstrap-table.min.css">
+ <link rel="stylesheet" href="../css/thirdParty/font-awesome.min.css">
+<link rel="stylesheet" href="../css/modules/index.css">  
+
+
+<style>
+.row {
+	margin-top: 10px;
+}
+.submit-application2{
+	margin-bottom:50px;
+}
+.submit-application2 {
+	border:1px solid #cccccc;
+	padding:20px;
+}
+.title {
+	font-weight: bord;
+	text-align: center;
+	margin-bottom:10px;
+	font-size:22px;
+}
+</style>
+
+</head>
+
+<body>
+
+		<form id="ggg" name="ggg"  class="submit-application2" action="../banner/updateAPPBanner.do" method="post" enctype="multipart/form-data">
+			<div class="title" > APP端banner修改</div>
+			<div style="display: none">
+				<input name="id" id="bannerID" type="text"/>
+
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label>APP焦点图片:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="file" class="form-control" id="appFile"
+							   name="appFile">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label>APP网址:</label>
+					</div>
+					<div class="col-lg-2" >
+						<input type="text" class="form-control" id="appwangzhi" name="appwangzhi"  style="width: 500px"
+							   placeholder="APP网址">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label>APP说明:</label>
+					</div>
+					<div class="col-lg-2">
+						<input type="text" class="form-control" id="appshuoming" name="appshuoming" style="width: 500px"
+							   placeholder="APP说明">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-1">
+						<label>APP排序:</label>
+					</div>
+					<div class="col-lg-2" style="width: 20%">
+						<input type="number" class="form-control" id="apppaixu" name="apppaixu" style="width: 100px;display: inline-block;margin-right:20px;" value="0"
+							   placeholder="只能输入数字">默认为0，数字越小越靠前
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="row">
+					<div class="col-lg-offset-3">
+						<button type="submit" style="width: 100px;"
+							class="btn btn-default apply">提交</button>
+					</div>
+				</div>
+			</div>
+	</form>
+	<script src="../js/thirdParty/jquery.min.js"></script>
+    <script src="../js/thirdParty/bootstrap.js"></script>
+	<script src="../js/thirdParty/jquery.form.min.js"></script>
+	<script>
+
+        var id = parent.$("#iframeid").val();
+        $.ajax({
+
+            "url":"../banner/getOneBanner.do",
+
+            "type":"post",
+
+            "data":{"bannerID":id},
+
+            "datatype":"json",
+
+            "success":function(result){
+
+                if(result.code==0){
+                    var data=result.content;
+                  /*  $("#bannerID").val(data.id);
+                    $("#wangzhi").val(data.wangzhi);
+                    $("#shuoming").val(data.shuoming);
+                    $("#paixu").val(data.paixu);*/
+                    $("#bannerID").val(data.id);
+                    $("#appwangzhi").val(data.appwangzhi);
+                    $("#appshuoming").val(data.appshuoming);
+                    $("#apppaixu").val(data.apppaixu);
+                }
+
+            }
+
+        });
+
+            function bindsumbit2() {
+
+                var $submit_application = $('#ggg');
+                var options = {
+                    success : function(data) {
+                        if (data.code == 0) {
+                            parent.$("#main").attr("src","static/bannerList.html");
+                            parent.layer.msg("修改成功！");
+
+                        }
+                    },
+                    error : function() {
+                        parent.layer.msg("修改失败");
+                    }
+                };
+                $submit_application.ajaxForm(options);
+            }
+            $(document).ready(function() {
+                bindsumbit2();
+            });
+
+	</script>
+	
+</body>
+
+</html>

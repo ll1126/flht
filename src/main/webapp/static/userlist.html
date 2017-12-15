@@ -1,0 +1,275 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>用户信息列表</title>
+    <link rel="stylesheet" href="../css/thirdParty/bootstrap.css">
+    <link rel="stylesheet" href="../css/thirdParty/bootstrap-table.min.css">
+    <link rel="stylesheet" href="../css/thirdParty/bootstrap-datetimepicker.css">
+    <style>
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+	<input type="hidden" id="State" value="3"/>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>用户信息列表</h1>
+            </div>
+        </div>
+        <hr />
+        <hr class="channel-sreach">
+            <div class="row">
+                
+                <div class="col-lg-1">
+                    <label for="">手机号搜索:</label>
+                </div>
+                <div class="col-lg-2">
+                    <input class="form-control" id="txtSearch"/>
+                </div>
+                <div class="col-lg-offset-3">
+                    <button type="button" style="width:100px;" class="btn btn-default btn1">查询</button>
+                </div>
+            </div>
+            <hr>
+           <div class="channel-sreach">
+               <div class="row">
+                   <div class="col-lg-1">
+                       <label for="" style="padding-right: 37px;">绑卡时间:</label>
+                   </div>
+
+                   <div class="col-lg-2" style="width: 30%">
+                       <input type="text" class="form-control" id="start_time_one" style="width:150px;display:inline-block">
+                         <label for="" style="padding: 0 35px;">至</label>
+                       <input type="text"  class="form-control" id="end_time_one"  style="width:150px;display:inline-block">
+                   </div>
+
+                   <div class="col-lg-3">
+                       <button type="button" id="download" style="margin-left:50px"  class="btn btn-primary" >按时间导出绑卡用户</button>
+                   </div>
+
+               </div>
+           </div>
+
+        </div>
+        <hr />
+        <div class="row" style="margin:0 5px;">
+            <table id="channel-application"></table>
+            
+        </div>
+
+    </div>
+    <script src="../js/thirdParty/jquery.min.js"></script>
+    <script src="../js/thirdParty/bootstrap.js"></script>
+    <script src="../js/thirdParty/bootstrap-table.min.js"></script>
+    <script src="../js/thirdParty/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../js/thirdParty/bootstrap-datetimepicker.js"></script>
+    <script src="../js/thirdParty/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script>
+        $('#channel-application').bootstrapTable({
+            method: 'post',
+            contentType: "application/x-www-form-urlencoded",//必须要有！！！！
+            striped: true, //是否显示行间隔色
+            pageNumber:1,               //初始化加载第一页，默认第一页
+            pageSize: 10,               //每页的记录行数（*）
+            url: "../user/getUserList.do",//要请求数据的文件路径
+            dataField: "rows",//bootstrap table 可以前端分页也可以后端分页，这里
+            //我们使用的是后端分页，后端分页时需返回含有total：总记录数,这个键值好像是固定的
+            //rows： 记录集合 键值可以修改  dataField 自己定义成自己想要的就好
+            //   queryParamsType:'limit',//查询参数组织方式
+            queryParamsType:'',
+            queryParams:queryParams,//请求服务器时所传的参数
+            sidePagination:'server',//指定服务器端分页
+            showRefresh:true,//刷新按钮
+            showColumns:true,
+            toolbarAlign:'right',//工具栏对齐方式
+            buttonsAlign:'right',//按钮对齐方式
+            toolbar:'#toolbar',//指定工作栏
+        	pagination: true, 			//是否显示分页（*）
+        	pageList: [10, 25, 50, 100],//分页步进值
+            responseHandler:responseHandler,//请求数据成功后，渲染表格前的方法
+            columns: [{
+                field: 'id',
+                title: '用户编号'
+            }, {
+                field: 'phoneNumber',
+                title: '手机号'
+            }, {
+                field: 'skr',
+                title: '真实姓名'
+            }, {
+                field: 'bangka',
+                title: '绑卡状态'
+            }, {
+                field: 'cardNo',
+                title: '收款银行账户'
+            }, {
+                field: 'referrerID',
+                title: '推荐人ID',
+                formatter:function(value,row,index){
+                	return '<a href="#" onclick="loaddetails('+value+');">'+value+'</a>'
+                }
+            }, {
+                field: 'comefromChinese',
+                title: '用户来源'
+            }, {
+                field: 'registrationTime',
+                title: '注册时间'
+            }, {
+                field: 'beAgent',
+                title: '是否为代理商',
+                formatter:function (value,row,index) {
+                    if(value==1){
+                        return '是';
+                    }else {
+                        return '否';
+                    }
+                }
+
+            }, {
+                field: 'agent',
+                title: '成为代理商',
+                formatter:function (value,row,index) {
+                    return '<a href="#" onclick="beAgent('+row.id+');" >'+ '设为代理商'+ '</a>'
+                        +'<a href="#" onclick="notBeAgent('+row.id+');" >'+ '   取消代理商'+ '</a>';
+
+                }
+            }, {
+                field: 'blacklist',
+                title: '用户当前状态',
+                formatter:function (value,row,index) {
+                    if(row.blacklist==2){
+                        return '已冻结';
+                    }else{
+                        return '正常';
+                    }
+                }
+            }, {
+                field: 'caozuo1',
+                title:'用户个人回单管理',
+                formatter:function(value,row,index){
+                	 return '<a href="#" onclick="chakan('+row.id+');" >'+ '查看个人回执单'+ '</a>';
+                }
+            }, {
+                field: 'caozuo',
+                title:'冻结账户',
+                formatter:function(value,row,index){
+                	 return '<a href="#" onclick="xiugai('+row.id+');" >'+ '冻结'+ '</a>';
+            }
+            }
+            ]
+        });
+
+
+        //初始化日期选择器
+        function init_date_choose($start, $end) {
+            $start.datetimepicker({
+                format : 'yyyy-mm-dd',
+                autoclose : true,
+                todayBtn : true,
+                minView: 2,
+                //startDate : new Date(),
+                language : 'zh-CN'
+            }).on("click", function() {
+                //$start.datetimepicker("setStartDate", new Date());
+            });
+            $end.datetimepicker({
+                format : 'yyyy-mm-dd',
+                autoclose : true,
+                minView: 2,
+                todayBtn : true,
+                language : 'zh-CN'
+            }).on("click", function() {
+                $end.datetimepicker("setStartDate", $start.val());
+            });
+        }
+        init_date_choose($('#start_time_one'), $('#end_time_one'));
+        
+        $('.btn1').click(function(){
+            $('#channel-application').bootstrapTable('refresh', {url: '../user/getUserList.do'});
+        });
+        
+        function chakan(id){
+        	parent.$("#iframeid").val(id);
+        	document.location.href="userReceipt.html";
+        	
+        }
+        
+        function xiugai(id){
+        	var r=confirm("是否冻结用户");
+			if (r==true)
+			  {
+        	$.get("../user/updateUserState.do?userID="+id,function(){
+        		parent.layer.msg("成功冻结用户！");
+        		
+        	})
+			  }else{
+				  
+				  alert("取消");
+			  }
+        }
+        
+         function loaddetails(value){
+        	 parent.$("#iframeid").val(value);
+         	 document.location.href="tuijianrenList.html";
+        	
+        }
+
+        //请求服务数据时所传参数
+        function queryParams(params){
+            return{
+                //每页多少条数据
+                pageSize: params.pageSize,
+                //请求第几页
+                pageNumber:params.pageNumber,
+                phoneNumber:$('#txtSearch').val()
+            }
+        }
+
+        //请求成功方法
+        function responseHandler(result){
+            var errcode = result.code;//在此做了错误代码的判断
+            console.log(result.content.rows);
+            if(errcode != 0){
+                parent.layer.msg("网络错误，查询失败");
+                return;
+            }
+            //如果没有错误则返回数据，渲染表格
+            return {
+                total : result.content.total, //总页数,前面的key必须为"total"
+                rows : result.content.rows //行数据，前面的key要与之前设置的dataField的值一致.
+            };
+        }
+
+        $("#download").click(function(){
+            var start_time_one = $("#start_time_one").val();
+            var  end_time_one = $("#end_time_one").val();
+            window.location="../user/exportUser.do?start_time_one="+start_time_one+"&end_time_one="+end_time_one;
+        });
+
+        /*成为代理商*/
+        function  beAgent(id) {
+            $.get("../user/beAgent.do?userID="+id+"&beAgent=1",function(result){
+                if(result.code==0){
+                    parent.layer.msg("设为代理商成功！");
+                }
+            });
+        }
+
+        function notBeAgent(id) {
+            $.get("../user/beAgent.do?userID="+id+"&beAgent=0",function(result){
+                if(result.code==0){
+                    parent.layer.msg("取消代理商成功！");
+                }
+            });
+
+        }
+    </script>
+</body>
+
+</html>

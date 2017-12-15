@@ -1,0 +1,265 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<title>已驳回回执单列表</title>
+<link rel="stylesheet" href="../css/thirdParty/bootstrap.css">
+	<link rel="stylesheet" href="../css/thirdParty/bootstrap-table.min.css">
+ <link rel="stylesheet" href="../css/thirdParty/font-awesome.min.css">
+<link rel="stylesheet" href="../css/modules/index.css">  
+<link rel="stylesheet" href="../css/thirdParty/bootstrap-datetimepicker.css">
+<!-- <link rel="stylesheet" href="../css/pagination.css"> -->
+
+<style>
+.row {
+	margin-top: 10px;
+}
+
+label {
+	font-size: 16px;
+}
+
+</style>
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="channel-sreach">
+		<div class="form-group">
+			<div class="row">
+				<div class="col-lg-1">
+					<label for="">回执单编号:</label>
+				</div>
+				<div class="col-lg-2">
+					<input class="form-control" id="receiptID" style="width: 170px"/>
+				</div>
+				<div class="col-lg-1">
+					<label for="">平台筛选:</label>
+				</div>
+				<div class="col-lg-2">
+					 <input class="form-control" id="platformID"/>
+				</div>
+			</div>
+		</div>
+
+			<div class="form-group">
+			<div class="row">
+			<div class="col-lg-1">
+					<label for="" style="padding-right: 37px;">提交时间:</label> 
+					</div>
+					
+					<div class="col-lg-2" style="width: 30%">
+					<input type="text" class="form-control" id="start_time_one"
+							  style="width:170px;display:inline-block"
+						
+						> <label for=""
+						style="padding: 0 35px;">至</label> <input type="text"
+						class="form-control" id="end_time_one"
+					  style="width:170px;display:inline-block">
+			</div>
+			<div class="col-lg-offset-3">
+					<button id="search" type="button" style="width: 100px;"
+						class="btn btn-default sendbtn3">查询</button>
+				</div>
+				</div>
+		</div>
+
+		<hr />
+		<div class="row" style="margin: 0 5px;">
+		
+			<table id="channel-application"></table>
+		</div>
+
+	</div>
+
+	<script src="../js/thirdParty/jquery.min.js"></script>
+    <script src="../js/thirdParty/bootstrap.js"></script>
+    <script src="../js/thirdParty/bootstrap-table.min.js"></script>
+    <script src="../js/thirdParty/bootstrap-table-zh-CN.min.js"></script>
+    <script src="../js/thirdParty/bootstrap-datetimepicker.js"></script>
+	<script src="../js/thirdParty/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="../js/thirdParty/jquery.form.min.js"></script>
+	<script src="../js/thirdParty/bootstrap-multiselect.js"></script>
+
+	<script>
+
+	//初始化日期选择器
+	function init_date_choose($start, $end) {
+			$start.datetimepicker({
+				format : 'yyyy-mm-dd',
+				autoclose : true,
+				todayBtn : true,
+                minView: 2,
+				//startDate : new Date(),
+				language : 'zh-CN'
+			}).on("click", function() {
+				//$start.datetimepicker("setStartDate", new Date());
+			});
+			$end.datetimepicker({
+				format : 'yyyy-mm-dd',
+                minView: 2,
+				autoclose : true,
+				todayBtn : true,
+				language : 'zh-CN'
+			}).on("click", function() {
+				$end.datetimepicker("setStartDate", $start.val());
+			});
+		}
+		init_date_choose($('#start_time_one'), $('#end_time_one'));
+
+	
+		(function() {
+			
+			$('#channel-application').bootstrapTable(
+							{
+                                method: 'post',
+                                contentType: "application/x-www-form-urlencoded",//必须要有！！！！
+                                striped: true, //是否显示行间隔色
+                                pageNumber:1,               //初始化加载第一页，默认第一页
+                                pageSize: 10,               //每页的记录行数（*）
+                                url: "../receipt/getReceiptList.do",//要请求数据的文件路径
+                                dataField: "rows",//bootstrap table 可以前端分页也可以后端分页，这里
+                                //我们使用的是后端分页，后端分页时需返回含有total：总记录数,这个键值好像是固定的
+                                //rows： 记录集合 键值可以修改  dataField 自己定义成自己想要的就好
+                                //   queryParamsType:'limit',//查询参数组织方式
+                                queryParamsType:'',
+                                queryParams:queryParams,//请求服务器时所传的参数
+                                sidePagination:'server',//指定服务器端分页
+                                showRefresh:true,//刷新按钮
+                                showColumns:true,
+                                toolbarAlign:'right',//工具栏对齐方式
+                                buttonsAlign:'right',//按钮对齐方式
+                                toolbar:'#toolbar',//指定工作栏
+                                pagination: true, 			//是否显示分页（*）
+                                pageList: [10, 25, 50, 100],//分页步进值
+                                responseHandler:responseHandler,//请求数据成功后，渲染表格前的方法
+								columns : [
+										{
+											field : 'id',
+											title : '回执单编号'
+										}, {
+											field : 'platform',
+											title : '平台名称'
+										},{
+											field : 'platformUser',
+											title : '注册平台用户名'
+										}, {
+											field : 'phoneNumber',
+											title : '注册手机号'
+										}, {
+											field : 'investmentMoney',
+											title : '实际投资金额'
+											
+										},{
+											field : 'investmentDate',
+											title : '投资日期'
+										},{
+											field : 'submissionTime',
+											title : '提交日期'
+										}, {
+											field : 'investmentLimit',
+											title : '投资期限'
+										},{
+											field : 'gatheringUser',
+											title : '收款用户名'
+										}, {
+											field : 'gatherAccount',
+											title : '收款银行账户'
+										},{
+											field : 'alipayName',
+											title : '支付宝用户名'
+										}, {
+											field : 'alipayId',
+											title : '支付宝账户'
+										}, {
+											field : 'stateChinese',
+											title : '回执单状态'
+										}, {
+											field : 'fanli',
+											title : '返利金额'
+										}, {
+											field : 'userID',
+											title : '推荐人ID'
+										},
+										{
+											field : 'caozuo',
+											title : '审核',
+											formatter : function(value,row,index) {		
+												if(row.stateChinese == '审核中'){
+													return '<a href="#" class="oooo" >'+ '审核中'+ '</a>';
+												}else{
+													return '<a href="#" class="oooo" onclick="tongguo('+row.id+',this);" >'+ '通过'+ '</a>';
+												}
+												
+											}
+										}
+										]
+							});
+			$(document).ready(function() {
+
+			});
+		})();
+	
+		 function tongguo(id,_this){
+			 if ($(_this).attr("clicked")) {
+				 return false;
+			 }
+			 $(_this).attr("clicked", "true");
+
+			 var r=confirm("通过审核");
+				if (r==true)
+				  {
+						$.get("../receipt/updateState.do?receiptID="+id+"&receiptState="+1,function(result){
+			        		if(result.code==0){
+			        			parent.layer.msg("通过审核");
+                            //    $('#channel-application').bootstrapTable('refresh');
+			        			parent.$("#main").attr("src","static/rejectReceipt.html");
+			        		}
+			        	});
+				  }
+				else
+				  {
+				  alert("取消!");
+				  }
+			 
+        	
+        }
+    $(".sendbtn3").click(function () {
+        $('#channel-application').bootstrapTable('refresh', {url: '../receipt/getReceiptList.do'});
+    });
+
+    //请求服务数据时所传参数
+    function queryParams(params){
+        return{
+            //每页多少条数据
+            pageSize: params.pageSize,
+            //请求第几页
+            pageNumber:params.pageNumber,
+			receiptID:$("#receiptID").val(),
+            platform: $("#platformID").val(),
+        	start_time_one: $("#start_time_one").val(),
+        	end_time_one: $("#end_time_one").val(),
+            receiptState:4
+        }
+    }
+
+    //请求成功方法
+    function responseHandler(result){
+        var errcode = result.code;//在此做了错误代码的判断
+        if(errcode != 0){
+            parent.layer.msg("网络错误，查询失败");
+            return;
+        }
+        //如果没有错误则返回数据，渲染表格
+        return {
+            total : result.content.total, //总页数,前面的key必须为"total"
+            rows : result.content.rows //行数据，前面的key要与之前设置的dataField的值一致.
+        };
+    }
+		
+	</script>
+
+</body>
+
+</html>
